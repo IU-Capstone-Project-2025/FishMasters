@@ -1,0 +1,11 @@
+services:
+    front:
+        build:
+            context: ./mobile_app
+    container_name: flutter
+
+    back:
+        build:
+            context: ./back
+        container_name: back
+
