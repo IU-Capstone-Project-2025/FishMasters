@@ -6,8 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class FishMastersApplicationTests {
 
+    //test for checking spring boot correction
     @Test
-    void contextLoads() {
-    }
+    void contextLoads() {}
 
 }
