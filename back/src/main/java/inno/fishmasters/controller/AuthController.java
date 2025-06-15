@@ -1,5 +1,6 @@
 package inno.fishmasters.controller;
 
+import inno.fishmasters.dto.auth.CreateFisherRequest;
 import inno.fishmasters.service.FisherService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class AuthController {
 
     @Operation(summary = "Добавить пользователя")
     @PostMapping("/create")
-    public ResponseEntity<String> addUser(@RequestBody @Validated CreateUserRequest request) {
-        userService.create(request);
+    public ResponseEntity<String> addUser(@RequestBody @Validated CreateFisherRequest request) {
+        fisherService.create(request);
         return ResponseEntity.ok("Пользователь успешно добавлен");
     }
 
