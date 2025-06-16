@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/assets/assets.dart';
 import 'package:mobile_app/pages/pages.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PrimaryPage extends StatelessWidget {
   const PrimaryPage({super.key});
@@ -43,7 +44,7 @@ class PrimaryBody extends StatelessWidget {
           right: 25,
           child: PrimaryFloatingButton(
             heroTag: 'catchButton',
-            icon: const Icon(Icons.directions_boat),
+            icon: const Icon(FontAwesomeIcons.fishFins),
             page: CatchPage(),
           ),
         ),
