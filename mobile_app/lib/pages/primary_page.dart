@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/assets/assets.dart';
 import 'package:mobile_app/assets/main_app_drawer.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class PrimaryPage extends StatelessWidget {
+  const PrimaryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(),
-      body: HomeBody(),
+      body: PrimaryBody(),
       drawer: MainAppDrawer(),
     );
   }
 }
 
-class HomeBody extends StatelessWidget {
-  const HomeBody({super.key});
+class PrimaryBody extends StatelessWidget {
+  const PrimaryBody({super.key});
 
   @override
   Widget build(BuildContext context) {
