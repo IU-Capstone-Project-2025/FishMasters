@@ -1,6 +1,8 @@
 package inno.fishmasters.controller;
 
-import inno.fishmasters.dto.auth.CreateFisherRequest;
+import inno.fishmasters.dto.request.auth.CreateFisherRequest;
+import inno.fishmasters.dto.request.auth.LoginFisherRequest;
+import inno.fishmasters.entity.Fisher;
 import inno.fishmasters.service.FisherService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +20,20 @@ public class AuthController {
 
     private final FisherService fisherService;
 
-    @Operation(summary = "Добавить пользователя")
-    @PostMapping("/create")
-    public ResponseEntity<String> addUser(@RequestBody @Validated CreateFisherRequest request) {
-        fisherService.create(request);
-        return ResponseEntity.ok("Пользователь успешно добавлен");
+    @Operation(summary = "Зарегистрировать рыбака")
+    @PostMapping("/register")
+    public ResponseEntity<Fisher> registerFisher(@RequestBody @Validated CreateFisherRequest request) {;
+        return ResponseEntity
+                .status(200)
+                .body(fisherService.register(request));
+    }
+
+    @Operation(summary = "Вход для рыбака")
+    @PostMapping("/login")
+    public ResponseEntity<Fisher> loginFisher(@RequestBody @Validated LoginFisherRequest request) {
+        return ResponseEntity
+                .status(200)
+                .body(fisherService.login(request));
     }
 
 }
