@@ -6,6 +6,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: MainAppBar(),
       body: Stack(
@@ -16,10 +17,7 @@ class HomePage extends StatelessWidget {
             left: 25,
             child: FloatingActionButton(
               shape: CircleBorder(
-                side: BorderSide(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 2.0,
-                ),
+                side: BorderSide(color: colorScheme.primary, width: 2.0),
               ),
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -37,10 +35,7 @@ class HomePage extends StatelessWidget {
             right: 25,
             child: FloatingActionButton(
               shape: CircleBorder(
-                side: BorderSide(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 2.0,
-                ),
+                side: BorderSide(color: colorScheme.primary, width: 2.0),
               ),
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -58,10 +53,7 @@ class HomePage extends StatelessWidget {
             right: 25,
             child: FloatingActionButton(
               shape: CircleBorder(
-                side: BorderSide(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 2.0,
-                ),
+                side: BorderSide(color: colorScheme.primary, width: 2.0),
               ),
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -79,10 +71,7 @@ class HomePage extends StatelessWidget {
             left: 25,
             child: FloatingActionButton(
               shape: CircleBorder(
-                side: BorderSide(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 2.0,
-                ),
+                side: BorderSide(color: colorScheme.primary, width: 2.0),
               ),
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -112,21 +101,22 @@ class HomePage extends StatelessWidget {
                 },
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all<Color>(
-                    Theme.of(context).colorScheme.primaryContainer,
+                    colorScheme.primaryContainer,
                   ),
                   shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 2.0,
-                      ),
+                      side: BorderSide(color: colorScheme.primary, width: 2.0),
                     ),
                   ),
                 ),
                 child: const Text(
                   'GO',
-                  style: TextStyle(fontSize: 24, color: Colors.black87),
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
               ),
             ),
