@@ -10,6 +10,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return AppBar(
+      automaticallyImplyLeading: false,
       title: Text(
         'FishMasters',
         style: TextStyle(color: theme.colorScheme.onPrimary),
