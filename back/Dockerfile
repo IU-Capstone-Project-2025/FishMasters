@@ -12,6 +12,8 @@ FROM openjdk:21
 
 WORKDIR /app
 
-COPY --from=build /app/target/system-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/FishMasters-0.0.1-SNAPSHOT.jar app.jar
+
+COPY --from=build /app/db/init /app/db/init
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
