@@ -12,10 +12,25 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.secondary,
         foregroundColor: colorScheme.onSecondary,
       ),
-      body: Center(
-        child: Text(
-          'Profile Page',
-          style: Theme.of(context).textTheme.headlineMedium,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: AssetImage(
+                'lib/assets/sample/profile_picture.png',
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text('Username', style: Theme.of(context).textTheme.headlineLarge),
+            const SizedBox(height: 8),
+            Text(
+              'Bio: Fishing enthusiast, love exploring new spots!',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
         ),
       ),
     );
