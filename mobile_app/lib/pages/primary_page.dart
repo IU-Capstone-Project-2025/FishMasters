@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/assets/assets.dart';
-import 'package:mobile_app/pages/pages.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PrimaryPage extends StatelessWidget {
@@ -21,42 +20,47 @@ class PrimaryBody extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(child: MapWidget()),
+
         Positioned(
           top: 25,
           left: 25,
           child: PrimaryFloatingButton(
             heroTag: 'menuButton',
             icon: const Icon(Icons.menu),
-            page: MenuPage(),
+            page: '/menu',
           ),
         ),
+
         Positioned(
           top: 25,
           right: 25,
           child: PrimaryFloatingButton(
             heroTag: 'profileButton',
             icon: const Icon(Icons.person),
-            page: ProfilePage(),
+            page: '/profile',
           ),
         ),
+
         Positioned(
           bottom: 25,
           right: 25,
           child: PrimaryFloatingButton(
             heroTag: 'catchButton',
             icon: const Icon(FontAwesomeIcons.fishFins),
-            page: CatchPage(),
+            page: '/catch',
           ),
         ),
+
         Positioned(
           bottom: 25,
           left: 25,
           child: PrimaryFloatingButton(
             heroTag: 'chatButton',
             icon: const Icon(Icons.chat_bubble),
-            page: ChatPage(),
+            page: '/chat',
           ),
         ),
+
         Positioned(
           bottom: 25,
           left: MediaQuery.of(context).size.width / 2 - 50,

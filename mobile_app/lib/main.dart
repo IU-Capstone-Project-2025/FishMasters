@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/pages/primary_page.dart';
+import 'package:mobile_app/pages/about_page.dart';
+import 'package:mobile_app/pages/pages.dart';
+import 'package:mobile_app/pages/settings_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -8,15 +10,27 @@ void main() {
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
+  static var themeData = ThemeData(
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
+    useMaterial3: true,
+  );
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FishMasters',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
-      ),
-      home: PrimaryPage(),
+      theme: themeData,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => PrimaryPage(),
+        '/menu': (context) => const MenuPage(),
+        '/profile': (context) => const ProfilePage(),
+        '/catch': (context) => const CatchPage(),
+        '/chat': (context) => const ChatPage(),
+        '/settings': (context) => const SettingsPage(),
+        '/about': (context) => const AboutPage(),
+      },
     );
   }
 }

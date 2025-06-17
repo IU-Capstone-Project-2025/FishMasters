@@ -10,7 +10,7 @@ class PrimaryFloatingButton extends StatelessWidget {
 
   final String heroTag;
   final Icon icon;
-  final Widget page;
+  final String page;
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +21,7 @@ class PrimaryFloatingButton extends StatelessWidget {
         side: BorderSide(color: colorScheme.primary, width: 2.0),
       ),
       onPressed: () {
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (context) => page));
+        Navigator.pushNamed(context, page);
       },
       child: icon,
     );

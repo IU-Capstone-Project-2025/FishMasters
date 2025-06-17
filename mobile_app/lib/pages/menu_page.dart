@@ -12,11 +12,24 @@ class MenuPage extends StatelessWidget {
         backgroundColor: colorScheme.secondary,
         foregroundColor: colorScheme.onSecondary,
       ),
-      body: Center(
-        child: Text(
-          'Menu Page',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
+      body: ListView(
+        padding: const EdgeInsets.all(16.0),
+        children: [
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {
+              Navigator.pushNamed(context, '/settings');
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.info),
+            title: const Text('About'),
+            onTap: () {
+              Navigator.pushNamed(context, '/about');
+            },
+          ),
+        ],
       ),
     );
   }
