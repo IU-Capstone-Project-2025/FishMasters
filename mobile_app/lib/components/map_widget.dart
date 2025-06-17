@@ -13,12 +13,20 @@ class MapWidget extends StatelessWidget {
           initialCenter: LatLng(55.775000, 49.123611),
           initialZoom: 13.0,
           onTap: (tapPosition, point) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Marker'),
                 content: Text(
-                  'Tapped at: ${point.latitude}, ${point.longitude}',
+                  '${point.latitude}, ${point.longitude}\n\n'
+                  'Здесь могла быть ваша рыбалка!',
                 ),
-                duration: const Duration(seconds: 2),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Close'),
+                  ),
+                ],
               ),
             );
           },
