@@ -26,7 +26,7 @@ class MainApp extends StatelessWidget {
         '/profile': (context) => const ProfilePage(),
         '/catch': (context) => const CatchPage(),
         '/discussion': (context) => const DiscussionPage(),
-        '/chat': (context) => const ChatPage(),
+        '/notifications': (context) => const NotificationsPage(),
         '/settings': (context) => const SettingsPage(),
         '/about': (context) => const AboutPage(),
       },
