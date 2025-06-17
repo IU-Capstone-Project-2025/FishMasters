@@ -122,14 +122,25 @@ class _CatchPageState extends State<CatchPage> {
               bottom: 0,
               left: 0,
               right: 0,
-              child: Container(
-                height: 48,
-                color: colorScheme.secondary,
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.keyboard_arrow_down,
-                  color: colorScheme.onSecondary,
-                ),
+              child: Builder(
+                builder: (context) {
+                  final bottomInset = MediaQuery.of(context).viewPadding.bottom;
+
+                  return Container(
+                    color: colorScheme.secondary,
+                    padding: EdgeInsets.only(
+                      top: 16,
+                      bottom: bottomInset > 0 ? 0 : 16,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: bottomInset),
+                      child: Icon(
+                        Icons.keyboard_arrow_down,
+                        color: colorScheme.onSecondary,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
         ],

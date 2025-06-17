@@ -64,35 +64,37 @@ class PrimaryBody extends StatelessWidget {
         Positioned(
           bottom: 25,
           left: MediaQuery.of(context).size.width / 2 - 50,
-          child: SizedBox(
-            width: 100,
-            height: 60,
-            child: ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Go Button Pressed!'),
-                    duration: const Duration(seconds: 2),
+          child: SafeArea(
+            child: SizedBox(
+              width: 100,
+              height: 60,
+              child: ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Go Button Pressed!'),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all<Color>(
+                    colorScheme.primaryContainer,
                   ),
-                );
-              },
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(
-                  colorScheme.primaryContainer,
-                ),
-                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                    side: BorderSide(color: colorScheme.primary, width: 2.0),
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      side: BorderSide(color: colorScheme.primary, width: 2.0),
+                    ),
                   ),
                 ),
-              ),
-              child: const Text(
-                'GO',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                child: const Text(
+                  'GO',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
               ),
             ),
