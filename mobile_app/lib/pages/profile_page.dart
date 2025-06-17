@@ -17,10 +17,18 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage(
-                'lib/assets/sample/profile_picture.png',
+            Container(
+              width: 110,
+              height: 110,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: colorScheme.primary, width: 5.0),
+              ),
+              child: CircleAvatar(
+                radius: 50,
+                backgroundImage: AssetImage(
+                  'assets/images/profile_picture.png',
+                ),
               ),
             ),
             const SizedBox(height: 16),
