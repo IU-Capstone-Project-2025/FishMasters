@@ -36,6 +36,14 @@ class MapWidget extends StatelessWidget {
                           'Здесь могла быть ваша рыбалка!',
                         ),
                         actions: [
+                          Card(
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/discussion');
+                              },
+                              child: const Text('Discussion'),
+                            ),
+                          ),
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(),
                             child: const Text('Close'),
