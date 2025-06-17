@@ -7,7 +7,7 @@
 
         cd mobile_app && flutter doctor
 
-- Resolve primary dependencies:
+- Resolve dependencies:
   - Android SDK (can be installed with [Android Studio](https://developer.android.com/studio))
   - [XCode](https://developer.apple.com/xcode/) (MacOS only)
 - Install required packages:
@@ -18,6 +18,6 @@
 
         flutter build apk --release
 
-- Build iOS Application:
+- Build iOS Application (MacOS only):
 
         flutter build ios --release
