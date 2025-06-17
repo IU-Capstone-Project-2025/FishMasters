@@ -12,24 +12,7 @@ class MapWidget extends StatelessWidget {
         options: MapOptions(
           initialCenter: LatLng(55.775000, 49.123611),
           initialZoom: 13.0,
-          onTap: (tapPosition, point) {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text('Marker'),
-                content: Text(
-                  '${point.latitude}, ${point.longitude}\n\n'
-                  'Здесь могла быть ваша рыбалка!',
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Close'),
-                  ),
-                ],
-              ),
-            );
-          },
+          onTap: null,
         ),
         children: [
           TileLayer(
@@ -42,10 +25,30 @@ class MapWidget extends StatelessWidget {
             markers: [
               Marker(
                 point: LatLng(55.775000, 49.1236111),
-                child: const Icon(
-                  Icons.location_on,
-                  color: Colors.red,
-                  size: 40.0,
+                child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Marker'),
+                        content: Text(
+                          '55.775000, 49.1236111\n\n'
+                          'Здесь могла быть ваша рыбалка!',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.location_on,
+                    color: Colors.red,
+                    size: 40.0,
+                  ),
                 ),
               ),
             ],
