@@ -1,0 +1,25 @@
+name: mobile_app
+description: "FishMasters Mobile Application"
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_map: ^8.1.1
+  font_awesome_flutter: ^10.8.0
+  latlong2: ^0.9.1
+  provider: ^6.1.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
