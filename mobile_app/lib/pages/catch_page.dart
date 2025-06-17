@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/components/fish_item.dart';
+import 'package:mobile_app/components/components.dart';
 
 class CatchPage extends StatefulWidget {
   const CatchPage({super.key});
