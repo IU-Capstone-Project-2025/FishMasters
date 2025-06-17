@@ -10,7 +10,7 @@ class MapWidget extends StatelessWidget {
     return Center(
       child: FlutterMap(
         options: MapOptions(
-          initialCenter: LatLng(55.796289, 49.108795),
+          initialCenter: LatLng(55.775000, 49.123611),
           initialZoom: 13.0,
           onTap: (tapPosition, point) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -33,7 +33,7 @@ class MapWidget extends StatelessWidget {
           MarkerLayer(
             markers: [
               Marker(
-                point: LatLng(55.796289, 49.108795),
+                point: LatLng(55.775000, 49.1236111),
                 child: const Icon(
                   Icons.location_on,
                   color: Colors.red,
