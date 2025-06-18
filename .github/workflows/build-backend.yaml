@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "essence-666-ci" ]
   pull_request:
     branches: [ "main" ]
 
@@ -13,5 +13,5 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build back --tag java-backend:$(date +%s)
+      run: ls && docker build back --tag java-backend:$(date +%s)
 
