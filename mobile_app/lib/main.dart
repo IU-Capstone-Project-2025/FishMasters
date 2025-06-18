@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/pages/pages.dart';
+import 'package:mobile_app/functions/functions.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   static var themeData = ThemeData(
     colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
@@ -16,19 +19,34 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FishMasters',
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
+      title: 'Fish Masters',
       theme: themeData,
       initialRoute: '/',
       routes: {
-        '/': (context) => PrimaryPage(),
-        '/menu': (context) => const MenuPage(),
+        '/': (context) => FutureBuilder<bool>(
+          future: hasLoggedInBefore(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.data == true) {
+              return const PrimaryPage();
+            } else {
+              return const LoginPage();
+            }
+          },
+        ),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => const RegisterPage(),
+        '/home': (context) => const PrimaryPage(),
         '/profile': (context) => const ProfilePage(),
-        '/catch': (context) => const CatchPage(),
-        '/discussion': (context) => const DiscussionPage(),
-        '/chat': (context) => const ChatPage(),
         '/settings': (context) => const SettingsPage(),
         '/about': (context) => const AboutPage(),
+        '/menu': (context) => const MenuPage(),
+        '/catch': (context) => const CatchPage(),
+        '/notifications': (context) => const NotificationsPage(),
       },
     );
   }

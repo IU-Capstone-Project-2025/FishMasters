@@ -55,9 +55,9 @@ class PrimaryBody extends StatelessWidget {
           bottom: 25,
           left: 25,
           child: PrimaryFloatingButton(
-            heroTag: 'chatButton',
-            icon: const Icon(Icons.chat_bubble),
-            page: '/chat',
+            heroTag: 'notificationsButton',
+            icon: const Icon(Icons.notifications),
+            page: '/notifications',
           ),
         ),
 
