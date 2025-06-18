@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/functions/functions.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,7 +15,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final _passwordController = TextEditingController();
 
-  void _submit() {
+  void _submit() async {
     if (_formKey.currentState!.validate()) {
       final email = _emailController.text.trim();
       final password = _passwordController.text;
@@ -26,6 +27,9 @@ class _LoginPageState extends State<LoginPage> {
           duration: const Duration(seconds: 2),
         ),
       );
+      await setLoggedIn(true);
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/home');
     }
   }
 
