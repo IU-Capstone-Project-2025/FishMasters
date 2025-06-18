@@ -29,4 +29,8 @@ public class Fishing {
 
     @OneToMany(mappedBy = "fishing", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CaughtFish> caughtFish;
+
+    @ManyToOne
+    @JoinColumn(name = "water_id", nullable = false)
+    private Water water;
 }
