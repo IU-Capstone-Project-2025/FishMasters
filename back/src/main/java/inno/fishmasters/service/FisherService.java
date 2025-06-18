@@ -32,7 +32,8 @@ public class FisherService {
                 request.email(),
                 request.name(),
                 request.surname(),
-                request.password()
+                request.password(),
+                    request.photo()
             ));
         }
     }

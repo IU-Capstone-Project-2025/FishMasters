@@ -23,4 +23,8 @@ public class Fisher {
     @Column(nullable = false, length = 255)
     private String password;
 
+    @Lob
+    @Column(nullable = true)
+    private byte[] photo;
+
 }
