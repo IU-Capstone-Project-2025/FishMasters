@@ -14,6 +14,7 @@ jobs:
       - name: Run docker-compose
         run: |
           cd back 
+          sops -d -i .env
           docker-compose down
           docker-compose up -d --build --remove-orphans
 
