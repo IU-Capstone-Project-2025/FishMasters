@@ -33,7 +33,8 @@ public class FisherService {
                 request.name(),
                 request.surname(),
                 request.password(),
-                    request.photo()
+                0, // initial score starts at 0
+                request.photo()
             ));
         }
     }
