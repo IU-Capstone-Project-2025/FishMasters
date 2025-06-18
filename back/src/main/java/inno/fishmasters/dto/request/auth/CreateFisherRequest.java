@@ -19,6 +19,7 @@ public record CreateFisherRequest(
         String surname,
         @NotNull
         @Size(min = 6, max = 255, message = "Пароль должен быть от 6 до 255 символов")
-        String password
+        String password,
+        byte[] photo
 ) {
 }

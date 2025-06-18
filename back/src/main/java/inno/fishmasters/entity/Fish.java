@@ -4,31 +4,24 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "fishers")
+@Table(name = "fish")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Fisher {
+public class Fish {
 
     @Id
-    @Column(nullable = false, unique = true, length = 255)
-    private String email;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(nullable = false, length = 255)
-    private String surname;
-
-    @Column(nullable = false, length = 255)
-    private String password;
-
     @Column(nullable = false)
-    private int score;
+    private double avgWeight;
 
     @Lob
     @Column(nullable = true)
     private byte[] photo;
-
 }
