@@ -38,6 +38,16 @@ class ProfilePage extends StatelessWidget {
               'Bio: Fishing enthusiast, love exploring new spots!',
               style: Theme.of(context).textTheme.bodySmall,
             ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/register'),
+              child: Text('Reg'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/login'),
+              child: Text('Login'),
+            ),
           ],
         ),
       ),

@@ -22,6 +22,8 @@ class MainApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => PrimaryPage(),
+        '/register': (context) => RegisterPage(),
+        '/login': (context) => LoginPage(),
         '/menu': (context) => const MenuPage(),
         '/profile': (context) => const ProfilePage(),
         '/catch': (context) => const CatchPage(),
