@@ -41,16 +41,6 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/register'),
-              child: Text('Reg'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/login'),
-              child: Text('Login'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
               onPressed: () async {
                 await setLoggedIn(false);
                 if (!context.mounted) return;
