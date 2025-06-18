@@ -13,5 +13,5 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build back --file Dockerfile --tag java-backend:$(date +%s)
+      run: docker build back --tag java-backend:$(date +%s)
 
