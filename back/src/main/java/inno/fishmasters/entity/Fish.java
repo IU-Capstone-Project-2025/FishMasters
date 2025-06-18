@@ -5,7 +5,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "fish")
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Fish {
