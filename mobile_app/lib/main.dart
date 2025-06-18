@@ -47,6 +47,7 @@ class MainApp extends StatelessWidget {
         '/menu': (context) => const MenuPage(),
         '/catch': (context) => const CatchPage(),
         '/notifications': (context) => const NotificationsPage(),
+        '/discussion': (context) => const DiscussionPage(),
       },
     );
   }
