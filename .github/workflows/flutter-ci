@@ -1,0 +1,34 @@
+name: Flutter ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+ flutter-ci:
+    name: Flutter Lint + Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile_app
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.x'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run Dart Analyzer
+        run: flutter analyze
+
+      - name: Run dart_code_metrics
+        run: dart run dart_code_metrics:metrics analyze lib
+
+      - name: Build APK (release)
+        run: flutter build apk --release
