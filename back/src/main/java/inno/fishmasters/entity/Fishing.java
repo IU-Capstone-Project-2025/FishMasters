@@ -27,7 +27,7 @@ public class Fishing {
     @Column(nullable = false)
     private LocalDateTime startTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime endTime;
 
     @OneToMany(mappedBy = "fishing", cascade = CascadeType.ALL, orphanRemoval = true)
