@@ -22,9 +22,12 @@ public class Fishing {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime startTime;
+    private String userEmail;
 
     @Column(nullable = false)
+    private LocalDateTime startTime;
+
+    @Column(nullable = true)
     private LocalDateTime endTime;
 
     @OneToMany(mappedBy = "fishing", cascade = CascadeType.ALL, orphanRemoval = true)

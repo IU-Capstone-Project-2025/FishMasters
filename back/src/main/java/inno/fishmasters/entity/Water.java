@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "water")
+@Table(name = "waters")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,7 +25,4 @@ public class Water {
 
     @Column(nullable = false)
     private double y;
-
-    @OneToMany(mappedBy = "water", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Fishing> fishings;
 }
