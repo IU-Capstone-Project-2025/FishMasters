@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   flutter_map: ^8.1.1
   font_awesome_flutter: ^10.8.0
+  http: ^1.4.0
   latlong2: ^0.9.1
   provider: ^6.1.5
   shared_preferences: ^2.5.3

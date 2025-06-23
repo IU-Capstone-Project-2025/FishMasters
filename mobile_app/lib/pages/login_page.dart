@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/functions/functions.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,7 +21,29 @@ class _LoginPageState extends State<LoginPage> {
       final email = _emailController.text.trim();
       final password = _passwordController.text;
 
+      final response = await http.post(
+        // Uri.parse('http://localhost:8080/auth/login'), // Uncomment this line for local testing
+        Uri.parse(
+          'http://capstone.aquaf1na.fun/auth/login',
+        ), // Use this line for production
+        headers: {'Content-Type': 'application/json'},
+        body: '{"email": "$email", "password": "$password"}',
+      );
+
+      if (response.statusCode != 200) {
+        debugPrint('Login failed: ${response.statusCode}');
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Login failed: ${response.reasonPhrase}'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        return;
+      }
+
       debugPrint('Logged in: $email, $password');
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Logged in: $email'),
