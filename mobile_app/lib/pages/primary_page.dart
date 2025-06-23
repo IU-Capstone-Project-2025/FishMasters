@@ -82,21 +82,23 @@ class _PrimaryBodyState extends State<PrimaryBody> {
           ),
         ),
 
-        Positioned(
-          bottom: 25,
-          left: MediaQuery.of(context).size.width / 2 - 50,
-          child: SafeArea(
-            child: SizedBox(
-              width: 100,
-              height: 60,
-              child: ValueListenableBuilder(
-                valueListenable: Hive.box('settings').listenable(),
-                builder: (context, Box box, _) {
-                  bool fishingStarted = box.get(
-                    'fishingStarted',
-                    defaultValue: false,
-                  );
-                  return ElevatedButton(
+        ValueListenableBuilder(
+          valueListenable: Hive.box('settings').listenable(),
+          builder: (context, Box box, _) {
+            bool fishingStarted = box.get(
+              'fishingStarted',
+              defaultValue: false,
+            );
+            return Positioned(
+              bottom: 25,
+              left:
+                  MediaQuery.of(context).size.width / 2 -
+                  (fishingStarted ? 100 : 50),
+              child: SafeArea(
+                child: SizedBox(
+                  width: fishingStarted ? 200 : 100,
+                  height: fishingStarted ? 80 : 60,
+                  child: ElevatedButton(
                     onPressed: () => _startFishing(context),
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all<Color>(
@@ -113,18 +115,18 @@ class _PrimaryBodyState extends State<PrimaryBody> {
                       ),
                     ),
                     child: Text(
-                      fishingStarted ? 'Ongoing...' : 'GO',
+                      fishingStarted ? 'Fishing ongoing...' : 'GO',
                       style: TextStyle(
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
                       ),
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );
