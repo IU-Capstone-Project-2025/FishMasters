@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 @Schema(description = "Запрос на создание водоема")
 public record WaterCreationRequest(
         @NotNull
-        double x,
+        Double x,
         @NotNull
-        double y
+        Double y
 ) {
 }

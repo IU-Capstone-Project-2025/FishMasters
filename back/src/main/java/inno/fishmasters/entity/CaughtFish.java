@@ -1,5 +1,6 @@
 package inno.fishmasters.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +19,15 @@ public class CaughtFish {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = true)
+    private Double avgWeight;
+
+    @Column(nullable = false)
+    private String fisher;
+
     @ManyToOne
     @JoinColumn(name = "fishing_id", nullable = false)
+    @JsonBackReference
     private Fishing fishing;
 
     @ManyToOne

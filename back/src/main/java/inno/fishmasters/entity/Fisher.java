@@ -1,7 +1,10 @@
 package inno.fishmasters.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "fishers")
@@ -25,10 +28,10 @@ public class Fisher {
     private String password;
 
     @Column(nullable = false)
-    private int score;
+    private Integer score;
 
     @Lob
     @Column(nullable = true)
-    private byte[] photo;
+    private Byte[] photo;
 
 }

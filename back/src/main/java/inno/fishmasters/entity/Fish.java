@@ -1,7 +1,10 @@
 package inno.fishmasters.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "fish")
@@ -18,10 +21,7 @@ public class Fish {
     @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(nullable = false)
-    private double avgWeight;
-
     @Lob
     @Column(nullable = true)
-    private byte[] photo;
+    private Byte[] photo;
 }

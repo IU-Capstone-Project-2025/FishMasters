@@ -20,27 +20,29 @@ public class FisherService {
 
     /**
      * Register a new fisher
+     *
      * @param request CreateFisherRequest containing fisher details
-     * @throws FisherIsExistException if a fisher with the same email already exists
      * @return Fisher entity
+     * @throws FisherIsExistException if a fisher with the same email already exists
      */
     public Fisher register(CreateFisherRequest request) {
         if (fisherRepository.existsById(request.email())) {
             throw new FisherIsExistException("Fisher with email " + request.email() + " already exists");
         } else {
             return fisherRepository.save(new Fisher(
-                request.email(),
-                request.name(),
-                request.surname(),
-                request.password(),
-                0, // initial score starts at 0
-                request.photo()
+                    request.email(),
+                    request.name(),
+                    request.surname(),
+                    request.password(),
+                    0, // initial score starts at 0
+                    request.photo()
             ));
         }
     }
 
     /**
      * Login a fisher
+     *
      * @param request LoginFisherRequest containing fisher email and password
      * @return Fisher entity if login is successful
      * @throws IllegalArgumentException if password is incorrect

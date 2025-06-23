@@ -5,7 +5,7 @@ public record FisherResponse(
         String name,
         String surname,
         String password,
-        int score,
-        byte[] photo
+        Integer score,
+        Byte[] photo
 ) {
 }
