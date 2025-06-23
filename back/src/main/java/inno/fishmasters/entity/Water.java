@@ -25,7 +25,4 @@ public class Water {
 
     @Column(nullable = false)
     private double y;
-
-    @OneToMany(mappedBy = "water", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Fishing> fishings;
 }
