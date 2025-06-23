@@ -8,6 +8,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final appDocDir = await getApplicationDocumentsDirectory();
   Hive.init(appDocDir.path);
+  Hive.openBox('settings');
   runApp(MainApp());
 }
 

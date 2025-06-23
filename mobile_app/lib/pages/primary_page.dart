@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class PrimaryPage extends StatelessWidget {
   const PrimaryPage({super.key});
@@ -12,9 +12,14 @@ class PrimaryPage extends StatelessWidget {
   }
 }
 
-class PrimaryBody extends StatelessWidget {
+class PrimaryBody extends StatefulWidget {
   const PrimaryBody({super.key});
 
+  @override
+  State<PrimaryBody> createState() => _PrimaryBodyState();
+}
+
+class _PrimaryBodyState extends State<PrimaryBody> {
   Future<void> _startFishing(BuildContext context) async {
     debugPrint('Start fishing button pressed');
 
@@ -84,27 +89,39 @@ class PrimaryBody extends StatelessWidget {
             child: SizedBox(
               width: 100,
               height: 60,
-              child: ElevatedButton(
-                onPressed: () => _startFishing(context),
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                    colorScheme.primaryContainer,
-                  ),
-                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      side: BorderSide(color: colorScheme.primary, width: 2.0),
+              child: ValueListenableBuilder(
+                valueListenable: Hive.box('settings').listenable(),
+                builder: (context, Box box, _) {
+                  bool fishingStarted = box.get(
+                    'fishingStarted',
+                    defaultValue: false,
+                  );
+                  return ElevatedButton(
+                    onPressed: () => _startFishing(context),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all<Color>(
+                        colorScheme.primaryContainer,
+                      ),
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          side: BorderSide(
+                            color: colorScheme.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                child: const Text(
-                  'GO',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
+                    child: Text(
+                      fishingStarted ? 'Ongoing...' : 'GO',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
