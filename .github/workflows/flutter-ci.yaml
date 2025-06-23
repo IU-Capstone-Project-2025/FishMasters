@@ -9,7 +9,7 @@ on:
 jobs:
  flutter-ci:
     name: Flutter Lint + Build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: mobile_app
