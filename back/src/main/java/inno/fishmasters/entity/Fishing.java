@@ -22,6 +22,9 @@ public class Fishing {
     private Long id;
 
     @Column(nullable = false)
+    private String userEmail;
+
+    @Column(nullable = false)
     private LocalDateTime startTime;
 
     @Column(nullable = false)
