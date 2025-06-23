@@ -12,6 +12,6 @@ public record FishingEventRequest(
         @NotNull
         String fisherEmail,
         @NotNull
-        Water waterId
+        Water water
 ) {
 }
