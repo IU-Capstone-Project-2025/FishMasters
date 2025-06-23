@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive/hive.dart';
 
 class PrimaryPage extends StatelessWidget {
   const PrimaryPage({super.key});
@@ -13,6 +14,21 @@ class PrimaryPage extends StatelessWidget {
 
 class PrimaryBody extends StatelessWidget {
   const PrimaryBody({super.key});
+
+  Future<void> _startFishing(BuildContext context) async {
+    debugPrint('Start fishing button pressed');
+
+    if (!Hive.isBoxOpen('settings')) {
+      await Hive.openBox('settings');
+    }
+    var box = Hive.box('settings');
+    box.put('fishingStarted', true);
+
+    debugPrint('Fishing started');
+
+    if (!context.mounted) return;
+    Navigator.pushNamed(context, '/fishing');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,14 +85,7 @@ class PrimaryBody extends StatelessWidget {
               width: 100,
               height: 60,
               child: ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Go Button Pressed!'),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                },
+                onPressed: () => _startFishing(context),
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all<Color>(
                     colorScheme.primaryContainer,
