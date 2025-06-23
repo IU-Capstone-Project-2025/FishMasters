@@ -2,6 +2,7 @@ package inno.fishmasters.service;
 
 import inno.fishmasters.entity.Fishing;
 import inno.fishmasters.entity.Water;
+import inno.fishmasters.exception.FishingIsExistException;
 import inno.fishmasters.repository.FishingRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class FishingService {
 
     public Fishing endFishing(Long fishingId) {
         Fishing fishing = fishingRepository.findById(fishingId).orElseThrow(
-                () -> new IllegalArgumentException("Fishing session not found with id: " + fishingId));
+                () -> new FishingIsExistException("Fishing session not found with id: " + fishingId));
         fishing.setEndTime(LocalDateTime.now());
         return fishingRepository.save(fishing);
     }

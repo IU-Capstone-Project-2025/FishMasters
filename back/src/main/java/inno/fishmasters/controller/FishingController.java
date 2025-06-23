@@ -17,7 +17,7 @@ public class FishingController {
 
     @PostMapping("/start")
     public ResponseEntity<Fishing> startFishing(@RequestBody FishingEventRequest request) {
-        Fishing fishing = fishingService.startFishing(request.fisherEmail(), request.waterId());
+        Fishing fishing = fishingService.startFishing(request.fisherEmail(), request.water());
         return ResponseEntity.ok(fishing);
     }
 
