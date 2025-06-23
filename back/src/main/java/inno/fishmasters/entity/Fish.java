@@ -18,7 +18,7 @@ public class Fish {
     @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private double avgWeight;
 
     @Lob
