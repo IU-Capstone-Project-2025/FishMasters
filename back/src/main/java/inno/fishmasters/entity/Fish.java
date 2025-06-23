@@ -18,9 +18,6 @@ public class Fish {
     @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(nullable = true)
-    private Double avgWeight;
-
     @Lob
     @Column(nullable = true)
     private Byte[] photo;

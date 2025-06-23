@@ -19,8 +19,11 @@ public class CaughtFish {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = true)
+    private Double avgWeight;
+
     @Column(nullable = false)
-    private String name;
+    private String fisher;
 
     @ManyToOne
     @JoinColumn(name = "fishing_id", nullable = false)

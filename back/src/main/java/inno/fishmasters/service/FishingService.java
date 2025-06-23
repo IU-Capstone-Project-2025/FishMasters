@@ -54,7 +54,8 @@ public class FishingService {
         CaughtFish caughtFish = new CaughtFish();
         caughtFish.setFishing(fishing);
         caughtFish.setFish(fish);
-        caughtFish.setName(fish.getName());
+        caughtFish.setAvgWeight(request.weight());
+        caughtFish.setFisher(fishing.getUserEmail());
 
         return caughtFishRepository.save(caughtFish);
     }
