@@ -17,13 +17,13 @@ public class FishingController {
 
     @PostMapping("/start")
     public ResponseEntity<Fishing> startFishing(@RequestBody FishingEventRequest request) {
-        Fishing fishing = fishingService.startFishing(request.fisherEmail(), request.water());
+        Fishing fishing = fishingService.startFishing(request);
         return ResponseEntity.ok(fishing);
     }
 
-    @PostMapping("/end/{fishingId}")
-    public ResponseEntity<Fishing> endFishing(@PathVariable Long fishingId) {
-        Fishing fishing = fishingService.endFishing(fishingId);
+    @PostMapping("/end")
+    public ResponseEntity<Fishing> endFishing(@RequestBody FishingEventRequest request) {
+        Fishing fishing = fishingService.endFishing(request);
         return ResponseEntity.ok(fishing);
     }
 
