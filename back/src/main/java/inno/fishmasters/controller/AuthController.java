@@ -22,7 +22,8 @@ public class AuthController {
 
     @Operation(summary = "Зарегистрировать рыбака")
     @PostMapping("/register")
-    public ResponseEntity<Fisher> registerFisher(@RequestBody @Validated CreateFisherRequest request) {;
+    public ResponseEntity<Fisher> registerFisher(@RequestBody @Validated CreateFisherRequest request) {
+        ;
         return ResponseEntity
                 .status(200)
                 .body(fisherService.register(request));
