@@ -15,21 +15,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+      - uses: flutter-actions/setup-flutter@v3
         with:
-          flutter-version: '3.25.0'
-          channel: beta
-
+          channel: 'stable'
+          flutter-version: '3.25.0' 
+          
       - name: Install dependencies
         run: flutter pub get
-
+        
       - name: Analyze code
         run: flutter analyze
-
+        
       - name: Run tests (if any)
         run: flutter test
-
+      
       - name: Build APK (release)
         run: flutter build apk --release
