@@ -2,7 +2,7 @@ create table if not exists fish (
     id serial primary key,
     name varchar(255) not null,
     avg_weight double precision null,
-    photo bytea
+    photo bytea null
 );
 
 create table if not exists caught_fish (

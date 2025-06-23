@@ -1,5 +1,6 @@
 package inno.fishmasters.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class Fishing {
     private LocalDateTime endTime;
 
     @OneToMany(mappedBy = "fishing", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<CaughtFish> caughtFish;
 
     @ManyToOne
