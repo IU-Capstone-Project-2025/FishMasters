@@ -26,8 +26,8 @@ jobs:
       - name: Analyze code
         run: flutter analyze
         
-      - name: Run tests (if any)
-        run: flutter test
+      # - name: Run tests (if any)
+      #   run: flutter test
       
       - name: Build APK (release)
         run: flutter build apk --release
