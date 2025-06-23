@@ -25,10 +25,10 @@ public class Fisher {
     private String password;
 
     @Column(nullable = false)
-    private int score;
+    private Integer score;
 
     @Lob
     @Column(nullable = true)
-    private byte[] photo;
+    private Byte[] photo;
 
 }

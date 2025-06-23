@@ -19,9 +19,9 @@ public class Fish {
     private String name;
 
     @Column(nullable = true)
-    private double avgWeight;
+    private Double avgWeight;
 
     @Lob
     @Column(nullable = true)
-    private byte[] photo;
+    private Byte[] photo;
 }

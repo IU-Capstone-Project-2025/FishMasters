@@ -21,8 +21,8 @@ public class Water {
     private Long id;
 
     @Column(nullable = false)
-    private double x;
+    private Double x;
 
     @Column(nullable = false)
-    private double y;
+    private Double y;
 }
