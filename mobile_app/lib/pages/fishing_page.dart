@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class FishingPage extends StatefulWidget {
   const FishingPage({super.key});
@@ -52,8 +52,12 @@ class _FishingPageState extends State<FishingPage> {
       await Hive.openBox('settings');
     }
     var box = Hive.box('settings');
+
+    // TODO: Send fishing data to server
+
     box.put('fishingStarted', false);
     box.delete('fishingTime');
+    box.delete('fishCaught');
 
     if (!context.mounted) return;
     Navigator.pop(context);
@@ -91,6 +95,39 @@ class _FishingPageState extends State<FishingPage> {
             Text(
               'Elapsed time: ${_formatDuration(_elapsedSeconds)}',
               style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Fish caught:"),
+                const SizedBox(width: 10),
+                ValueListenableBuilder(
+                  valueListenable: Hive.box(
+                    'settings',
+                  ).listenable(keys: ['fishCaught']),
+                  builder: (context, Box box, _) {
+                    int fishCaught =
+                        box.get('fishCaught', defaultValue: 0) as int;
+                    return Text(
+                      '$fishCaught',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                var box = Hive.box('settings');
+                int fishCaught = box.get('fishCaught', defaultValue: 0) as int;
+                box.put('fishCaught', fishCaught + 1);
+              },
+              child: const Text('Add Fish'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
