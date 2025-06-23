@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FishingPage extends StatefulWidget {
   const FishingPage({super.key});
@@ -130,6 +132,8 @@ class _FishingPageState extends State<FishingPage> {
               child: const Text('Add Fish'),
             ),
             const SizedBox(height: 20),
+            const ImageUploadField(),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _stopFishing(context),
               child: const Text('Stop Fishing'),
@@ -137,6 +141,77 @@ class _FishingPageState extends State<FishingPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ImageUploadField extends StatefulWidget {
+  const ImageUploadField({super.key});
+
+  @override
+  State<ImageUploadField> createState() => _ImageUploadFieldState();
+}
+
+class _ImageUploadFieldState extends State<ImageUploadField> {
+  File? _image;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+
+    if (picked != null) {
+      setState(() => _image = File(picked.path));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: _pickImage,
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(20),
+              image: _image != null
+                  ? DecorationImage(
+                      image: FileImage(_image!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+            ),
+            child: _image == null
+                ? const Icon(Icons.add_a_photo, size: 40, color: Colors.grey)
+                : null,
+          ),
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () {
+            if (_image != null) {
+              // TODO: Implement image upload
+
+              var box = Hive.box('settings');
+              int fishCaught = box.get('fishCaught', defaultValue: 0) as int;
+              box.put('fishCaught', fishCaught + 1);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Fish added successfully!')),
+              );
+              setState(() {
+                _image = null;
+              });
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Error: upload image first!')),
+              );
+            }
+          },
+          child: const Text('Upload Image'),
+        ),
+      ],
     );
   }
 }
