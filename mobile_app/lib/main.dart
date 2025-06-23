@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/pages/pages.dart';
 import 'package:mobile_app/functions/functions.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final appDocDir = await getApplicationDocumentsDirectory();
+  Hive.init(appDocDir.path);
+  Hive.openBox('settings');
   runApp(MainApp());
 }
 
@@ -48,6 +54,7 @@ class MainApp extends StatelessWidget {
         '/catch': (context) => const CatchPage(),
         '/notifications': (context) => const NotificationsPage(),
         '/discussion': (context) => const DiscussionPage(),
+        '/fishing': (context) => const FishingPage(),
       },
     );
   }

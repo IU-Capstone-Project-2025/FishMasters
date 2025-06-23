@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/functions/functions.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -23,7 +24,33 @@ class _RegisterPageState extends State<RegisterPage> {
       final email = _emailController.text.trim();
       final password = _passwordController.text;
 
+      final response = await http.post(
+        // Uri.parse(
+        //   'http://localhost:8080/auth/register',
+        // ), // Uncomment this line for local testing
+        Uri.parse(
+          'http://capstone.aquaf1na.fun:8080/auth/register',
+        ), // Use this line for production
+        headers: {'Content-Type': 'application/json'},
+        body:
+            '{"name": "$firstName", "surname": "$lastName", "email": "$email", "password": "$password"}',
+      );
+
+      if (response.statusCode != 200) {
+        debugPrint('Registration failed: ${response.statusCode}');
+        debugPrint('Response body: ${response.body}');
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Registration failed: ${response.reasonPhrase}'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        return;
+      }
+
       debugPrint('Registered: $firstName $lastName, $email, $password');
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Registered: $firstName $lastName, $email'),

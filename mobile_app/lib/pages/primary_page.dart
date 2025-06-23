@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class PrimaryPage extends StatelessWidget {
   const PrimaryPage({super.key});
@@ -11,8 +12,28 @@ class PrimaryPage extends StatelessWidget {
   }
 }
 
-class PrimaryBody extends StatelessWidget {
+class PrimaryBody extends StatefulWidget {
   const PrimaryBody({super.key});
+
+  @override
+  State<PrimaryBody> createState() => _PrimaryBodyState();
+}
+
+class _PrimaryBodyState extends State<PrimaryBody> {
+  Future<void> _startFishing(BuildContext context) async {
+    debugPrint('Start fishing button pressed');
+
+    if (!Hive.isBoxOpen('settings')) {
+      await Hive.openBox('settings');
+    }
+    var box = Hive.box('settings');
+    box.put('fishingStarted', true);
+
+    debugPrint('Fishing started');
+
+    if (!context.mounted) return;
+    Navigator.pushNamed(context, '/fishing');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,44 +82,51 @@ class PrimaryBody extends StatelessWidget {
           ),
         ),
 
-        Positioned(
-          bottom: 25,
-          left: MediaQuery.of(context).size.width / 2 - 50,
-          child: SafeArea(
-            child: SizedBox(
-              width: 100,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Go Button Pressed!'),
-                      duration: const Duration(seconds: 2),
+        ValueListenableBuilder(
+          valueListenable: Hive.box('settings').listenable(),
+          builder: (context, Box box, _) {
+            bool fishingStarted = box.get(
+              'fishingStarted',
+              defaultValue: false,
+            );
+            return Positioned(
+              bottom: 25,
+              left:
+                  MediaQuery.of(context).size.width / 2 -
+                  (fishingStarted ? 100 : 50),
+              child: SafeArea(
+                child: SizedBox(
+                  width: fishingStarted ? 200 : 100,
+                  height: fishingStarted ? 80 : 60,
+                  child: ElevatedButton(
+                    onPressed: () => _startFishing(context),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all<Color>(
+                        colorScheme.primaryContainer,
+                      ),
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          side: BorderSide(
+                            color: colorScheme.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
                     ),
-                  );
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                    colorScheme.primaryContainer,
-                  ),
-                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      side: BorderSide(color: colorScheme.primary, width: 2.0),
+                    child: Text(
+                      fishingStarted ? 'Fishing ongoing...' : 'GO',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
-                  ),
-                ),
-                child: const Text(
-                  'GO',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );
