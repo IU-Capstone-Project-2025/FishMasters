@@ -205,7 +205,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
               });
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Error: upload image first!')),
+                const SnackBar(content: Text('Error: attach image first!')),
               );
             }
           },
