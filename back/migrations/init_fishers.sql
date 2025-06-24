@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS fishers (
     surname varchar(255) not null,
     password varchar(255) not null,
     score integer not null default 0,
-    photo bytea default null
+    photo varchar default null
  );
