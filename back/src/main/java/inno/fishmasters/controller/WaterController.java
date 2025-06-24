@@ -3,6 +3,7 @@ package inno.fishmasters.controller;
 import inno.fishmasters.dto.request.water.WaterCreationRequest;
 import inno.fishmasters.entity.Water;
 import inno.fishmasters.service.WaterService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ public class WaterController {
         this.waterService = waterService;
     }
 
+    @Operation(summary = "Create a new water point")
     @PostMapping("/create")
     public ResponseEntity<Water> createWater(@RequestBody WaterCreationRequest request) {
         Water water = waterService.createWater(request);

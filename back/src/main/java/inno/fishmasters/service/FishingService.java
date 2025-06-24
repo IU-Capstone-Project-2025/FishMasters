@@ -6,7 +6,7 @@ import inno.fishmasters.entity.CaughtFish;
 import inno.fishmasters.entity.Fish;
 import inno.fishmasters.entity.Fishing;
 import inno.fishmasters.exception.FishIsExistException;
-import inno.fishmasters.exception.FishingIsExistException;
+import inno.fishmasters.exception.FishingIsNotExistException;
 import inno.fishmasters.repository.CaughtFishRepository;
 import inno.fishmasters.repository.FishRepository;
 import inno.fishmasters.repository.FishingRepository;
@@ -35,10 +35,11 @@ public class FishingService {
         return fishingRepository.save(fishing);
     }
 
+    //TODO: maybe get fishing also by id as in addCaughtFish method
     public Fishing endFishing(FishingEventRequest request) {
-        Fishing fishing = fishingRepository.findByUserEmailAndWaterAndEndTimeIsNull(
-                request.fisherEmail(), request.water()
-        ).orElseThrow(() -> new FishingIsExistException("Active fishing session not found"));
+        Fishing fishing = fishingRepository
+                .findByUserEmailAndWaterAndEndTimeIsNull(request.fisherEmail(), request.water())
+                .orElseThrow(() -> new FishingIsNotExistException("Active fishing session not found"));
 
         fishing.setEndTime(LocalDateTime.now());
         return fishingRepository.save(fishing);
@@ -46,7 +47,7 @@ public class FishingService {
 
     public CaughtFish addCaughtFish(CaughtFishRequest request) {
         Fishing fishing = fishingRepository.findByIdAndEndTimeIsNull(request.fishingId())
-                .orElseThrow(() -> new FishingIsExistException("Fishing session not found"));
+                .orElseThrow(() -> new FishingIsNotExistException("Fishing session not found"));
 
         Fish fish = fishRepository.findById(request.fishId())
                 .orElseThrow(() -> new FishIsExistException("Fish not found"));
