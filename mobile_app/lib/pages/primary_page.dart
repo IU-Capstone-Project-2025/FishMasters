@@ -27,6 +27,20 @@ class _PrimaryBodyState extends State<PrimaryBody> {
       await Hive.openBox('settings');
     }
     var box = Hive.box('settings');
+
+    var fishingLocationId = box.get('fishingLocationId');
+    if (fishingLocationId == null) {
+      debugPrint('No fishing location selected');
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a fishing location first.'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+      return;
+    }
+
     box.put('fishingStarted', true);
 
     debugPrint('Fishing started');
