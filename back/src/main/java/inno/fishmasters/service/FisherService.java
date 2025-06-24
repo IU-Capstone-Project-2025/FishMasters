@@ -35,7 +35,7 @@ public class FisherService {
                     request.surname(),
                     request.password(),
                     0, // initial score starts at 0
-                    request.photo()
+                    null // without photo for now
             ));
         }
     }

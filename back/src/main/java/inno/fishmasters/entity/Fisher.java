@@ -31,7 +31,7 @@ public class Fisher {
     private Integer score;
 
     @Lob
-    @Column(nullable = true)
-    private Byte[] photo;
+    @Column
+    private String photo;
 
 }

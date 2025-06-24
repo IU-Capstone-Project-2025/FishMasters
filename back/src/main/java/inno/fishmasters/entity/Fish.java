@@ -23,5 +23,5 @@ public class Fish {
 
     @Lob
     @Column(nullable = true)
-    private Byte[] photo;
+    private String photo;
 }
