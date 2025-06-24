@@ -20,16 +20,15 @@ public class AuthController {
 
     private final FisherService fisherService;
 
-    @Operation(summary = "Зарегистрировать рыбака")
+    @Operation(summary = "Register a new fisher")
     @PostMapping("/register")
     public ResponseEntity<Fisher> registerFisher(@RequestBody @Validated CreateFisherRequest request) {
-        ;
         return ResponseEntity
                 .status(200)
                 .body(fisherService.register(request));
     }
 
-    @Operation(summary = "Вход для рыбака")
+    @Operation(summary = "Login an existing fisher")
     @PostMapping("/login")
     public ResponseEntity<Fisher> loginFisher(@RequestBody @Validated LoginFisherRequest request) {
         return ResponseEntity
