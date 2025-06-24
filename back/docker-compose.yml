@@ -3,7 +3,7 @@ version: "3.8"
 services:
   database:
     image: postgres:14.17
-    container_name: calorie_tracker
+    container_name: fish_masters
     restart: always
     env_file:
       - .env
@@ -11,17 +11,46 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  liquibase-migrations:
+    container_name: migrations
+    image: liquibase/liquibase:4.29
+    depends_on:
+      database:
+        condition: service_healthy
+    env_file:
+      - .env
+    command:
+      - --searchPath=/changelog
+      - --changelog-file=/changelog/master.xml
+      - --driver=org.postgresql.Driver
+      - --url=jdbc:postgresql://fish_masters:5432/${POSTGRES_DB}
+      - --username=${POSTGRES_USER}
+      - --password=${POSTGRES_PASSWORD}
+      - update
+    volumes:
+      - ./migrations:/changelog
+    networks:
+      - app-network
+
   app:
     build: .
     container_name: tracker-app
     restart: always
     depends_on:
       - database
+      - liquibase-migrations
     env_file:
       - .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://calorie_tracker:5432/${POSTGRES_DB} #FROM .env file
+      SPRING_DATASOURCE_URL: jdbc:postgresql://fish_masters:5432/${POSTGRES_DB} #FROM .env file
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER} #FROM .env file
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD} #FROM .env file
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
@@ -29,5 +58,12 @@ services:
       SPRING_PROFILES_ACTIVE: docker
     ports:
       - "8080:8080"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
 volumes:
   postgres_data:

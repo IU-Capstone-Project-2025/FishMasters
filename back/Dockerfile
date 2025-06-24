@@ -5,7 +5,7 @@ COPY pom.xml .
 RUN mvn dependency:go-offline
 
 COPY src ./src
-COPY db/init /app/db/init
+COPY migrations/changelog /app/db/init
 RUN mvn clean package -DskipTests
 
 FROM openjdk:21
