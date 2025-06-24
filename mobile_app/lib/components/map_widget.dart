@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class MapWidget extends StatelessWidget {
   const MapWidget({super.key});
@@ -37,12 +38,28 @@ class MapWidget extends StatelessWidget {
                         ),
                         actions: [
                           Card(
-                            child: TextButton(
+                            child: IconButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/discussion');
+                                if (!Hive.isBoxOpen('settings')) {
+                                  Hive.openBox('settings');
+                                }
+                                var box = Hive.box('settings');
+                                box.put('fishingLocationId', 1);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Fishing location selected.'),
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
                               },
-                              child: const Text('Discussion'),
+                              icon: const Icon(Icons.place_outlined),
                             ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/discussion');
+                            },
+                            child: const Text('Discussion'),
                           ),
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(),

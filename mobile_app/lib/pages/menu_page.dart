@@ -29,6 +29,13 @@ class MenuPage extends StatelessWidget {
               Navigator.pushNamed(context, '/about');
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.developer_mode),
+            title: const Text('Developer'),
+            onTap: () {
+              Navigator.pushNamed(context, '/developer');
+            },
+          ),
         ],
       ),
     );

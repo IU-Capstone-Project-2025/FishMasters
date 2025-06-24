@@ -198,14 +198,20 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
               int fishCaught = box.get('fishCaught', defaultValue: 0) as int;
               box.put('fishCaught', fishCaught + 1);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Fish added successfully!')),
+                const SnackBar(
+                  content: Text('Fish added successfully!'),
+                  duration: Duration(seconds: 1),
+                ),
               );
               setState(() {
                 _image = null;
               });
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Error: attach image first!')),
+                const SnackBar(
+                  content: Text('Error: attach image first!'),
+                  duration: Duration(seconds: 1),
+                ),
               );
             }
           },

@@ -8,7 +8,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final appDocDir = await getApplicationDocumentsDirectory();
   Hive.init(appDocDir.path);
-  Hive.openBox('settings');
+  await Hive.openBox('settings');
   runApp(MainApp());
 }
 
@@ -55,6 +55,7 @@ class MainApp extends StatelessWidget {
         '/notifications': (context) => const NotificationsPage(),
         '/discussion': (context) => const DiscussionPage(),
         '/fishing': (context) => const FishingPage(),
+        '/developer': (context) => const DeveloperPage(),
       },
     );
   }
