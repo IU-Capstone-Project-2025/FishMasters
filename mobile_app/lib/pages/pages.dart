@@ -9,3 +9,4 @@ export 'notifications_page.dart';
 export 'register_page.dart';
 export 'login_page.dart';
 export 'fishing_page.dart';
+export 'developer_page.dart';

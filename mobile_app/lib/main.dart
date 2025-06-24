@@ -55,6 +55,7 @@ class MainApp extends StatelessWidget {
         '/notifications': (context) => const NotificationsPage(),
         '/discussion': (context) => const DiscussionPage(),
         '/fishing': (context) => const FishingPage(),
+        '/developer': (context) => const DeveloperPage(),
       },
     );
   }
