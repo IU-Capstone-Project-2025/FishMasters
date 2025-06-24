@@ -10,10 +10,12 @@ import inno.fishmasters.exception.FishingIsNotExistException;
 import inno.fishmasters.repository.CaughtFishRepository;
 import inno.fishmasters.repository.FishRepository;
 import inno.fishmasters.repository.FishingRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 public class FishingService {
     private final CaughtFishRepository caughtFishRepository;
@@ -46,8 +48,13 @@ public class FishingService {
     }
 
     public CaughtFish addCaughtFish(CaughtFishRequest request) {
-        Fishing fishing = fishingRepository.findByIdAndEndTimeIsNull(request.fishingId())
+        log.info("fishing id is {}", request.fishingId());
+        Fishing fishing = fishingRepository.findById(request.fishingId())
                 .orElseThrow(() -> new FishingIsNotExistException("Fishing session not found"));
+
+        if (fishing.getEndTime() != null) {
+            throw new FishingIsNotExistException("Fishing session has already ended");
+        }
 
         Fish fish = fishRepository.findById(request.fishId())
                 .orElseThrow(() -> new FishIsExistException("Fish not found"));

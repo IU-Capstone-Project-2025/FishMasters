@@ -22,7 +22,7 @@ public class Fishing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "fisher_email", nullable = false)
     private String userEmail;
 
     @Column(nullable = false)
