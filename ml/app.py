@@ -1,6 +1,10 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI(title="FishMasters ML Mock Model", version="1.0.0")
 
@@ -25,7 +29,7 @@ async def predict(image: UploadFile = File(...)):
     
     # Mock prediction result - always returns щука
     result = {
-        'prediction': 'щука',
+        'prediction': 'Щука обыкновенная',
         'confidence': 0.95,
         'status': 'success'
     }

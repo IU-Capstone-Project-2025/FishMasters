@@ -1,3 +1,5 @@
-fastapi==0.104.1
-uvicorn==0.24.0
-python-multipart==0.0.6 
+fastapi==0.115.13
+uvicorn==0.34.3
+python-multipart==0.0.20
+qdrant-client==1.14.3
+python-dotenv==1.0.0
