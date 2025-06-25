@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/functions/functions.dart';
 import 'package:http/http.dart' as http;
+import 'package:hive_flutter/hive_flutter.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -48,6 +49,12 @@ class _RegisterPageState extends State<RegisterPage> {
         );
         return;
       }
+
+      if (!Hive.isBoxOpen('settings')) {
+        await Hive.openBox('settings');
+      }
+      final settingsBox = Hive.box('settings');
+      settingsBox.put('email', email);
 
       debugPrint('Registered: $firstName $lastName, $email, $password');
       if (!mounted) return;
