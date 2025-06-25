@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
       final response = await http.post(
         // Uri.parse('http://localhost:8080/auth/login'), // Uncomment this line for local testing
         Uri.parse(
-          'http://capstone.aquaf1na.fun:8080/auth/login',
+          'https://capstone.aquaf1na.fun/auth/login',
         ), // Use this line for production
         headers: {'Content-Type': 'application/json'},
         body: '{"email": "$email", "password": "$password"}',

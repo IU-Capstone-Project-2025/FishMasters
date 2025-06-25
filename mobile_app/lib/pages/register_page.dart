@@ -32,7 +32,7 @@ class _RegisterPageState extends State<RegisterPage> {
         //   'http://localhost:8080/auth/register',
         // ), // Uncomment this line for local testing
         Uri.parse(
-          'http://capstone.aquaf1na.fun:8080/auth/register',
+          'https://capstone.aquaf1na.fun/auth/register',
         ), // Use this line for production
         headers: {'Content-Type': 'application/json'},
         body:
