@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile_app/functions/functions.dart';
 import 'package:http/http.dart' as http;
+import 'package:hive_flutter/hive_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -36,18 +39,30 @@ class _LoginPageState extends State<LoginPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Login failed: ${response.reasonPhrase}'),
-            duration: const Duration(seconds: 2),
+            duration: const Duration(seconds: 1),
           ),
         );
         return;
       }
 
       debugPrint('Logged in: $email, $password');
+
+      if (!Hive.isBoxOpen('settings')) {
+        await Hive.openBox('settings');
+      }
+      final settingsBox = Hive.box('settings');
+      settingsBox.put('email', email);
+
+      final responseJson = jsonDecode(response.body);
+      final fullName = '${responseJson['name']} ${responseJson['surname']}';
+      settingsBox.put('fullName', fullName);
+      settingsBox.put('score', responseJson['score'] ?? 0);
+
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Logged in: $email'),
-          duration: const Duration(seconds: 2),
+          duration: const Duration(seconds: 1),
         ),
       );
       await setLoggedIn(true);
