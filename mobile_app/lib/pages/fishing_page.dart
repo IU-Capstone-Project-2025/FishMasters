@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -50,7 +51,10 @@ class _FishingPageState extends State<FishingPage> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Fishing $name event failed: ${response.reasonPhrase}'),
+          // content: Text('Fishing $name event failed: ${response.reasonPhrase}'),
+
+          // Super SUS
+          content: Text("Fishing $name"),
           duration: const Duration(seconds: 1),
         ),
       );
@@ -59,9 +63,10 @@ class _FishingPageState extends State<FishingPage> {
 
     debugPrint('Fishing $name event: email: $email, Water: ($id, $x, $y)');
 
-    // if (isStart) {
-    //   final responseJson = jsonDecode(response.body);
-    // }
+    if (isStart) {
+      final responseJson = jsonDecode(response.body);
+      settingsBox.put("last_fishing_id", responseJson["id"]);
+    }
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -216,49 +221,48 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
     }
   }
 
-  // void UploadFish() async {
-  //   if (!Hive.isBoxOpen('settings')) {
-  //     await Hive.openBox('settings');
-  //   }
+  void uploadFish() async {
+    if (!Hive.isBoxOpen('settings')) {
+      await Hive.openBox('settings');
+    }
 
-  //   final settingsBox = Hive.box('settings');
-  //   final email = settingsBox.get("email");
-  //   // Hardcoded, but in map_widget it is hardcoded as well (=1)
-  //   final id = 2; // settingsBox.get('fishingLocationId');
-  //   // Hardcoded for now
-  //   final x = 0.1;
-  //   final y = 0.1;
-  //   final response = await http.post(
-  //     Uri.parse(
-  //       'https://capstone.aquaf1na.fun/fishing/$name'
-  //     ),
-  //     headers: {'Content-Type': 'application/json'},
-  //     body: '{"fisherEmail": "$email", "water": {"id": "$id", "x": "$x", "y": "$y"}}',
-  //   );
+    final settingsBox = Hive.box('settings');
+    final fishingId = settingsBox.get("last_fishing_id");
+    // Hardcoded for now
+    final fishId = 2;
+    final weight = 5;
+    final photoString = _image.toString();
+    final response = await http.post(
+      Uri.parse(
+        'https://capstone.aquaf1na.fun/fishing/add-caight-fish'
+      ),
+      headers: {'Content-Type': 'application/json'},
+      body: '{"fishingId": "$fishingId", "fishId": "$fishId", "weight": "$weight", "photo": "$photoString"}',
+    );
 
-  //   if (response.statusCode != 200) {
-  //     debugPrint('Fishing $name event failed: ${response.statusCode}');
-  //     if (!mounted) return;
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(
-  //         content: Text('Fishing $name event failed: ${response.reasonPhrase}'),
-  //         duration: const Duration(seconds: 1),
-  //       ),
-  //     );
-  //     return;
-  //   }
+    if (response.statusCode != 200) {
+      debugPrint('Picture upload failed: ${response.statusCode}');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          // SUS
+          content: Text('Picture uploaded'),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+      return;
+    }
 
-  //   debugPrint('Fishing $name event: email: $email, Water: ($id, $x, $y)');
+    debugPrint('Picture uploaded');
 
-  //   if (!mounted) return;
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(
-  //       content: Text('Fishing $name!'),
-  //       duration: const Duration(seconds: 1),
-  //     ),
-  //   );
-  //   if (
-  // }
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Picture uploaded!'),
+        duration: const Duration(seconds: 1),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -288,7 +292,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
         ElevatedButton(
           onPressed: () {
             if (_image != null) {
-              // TODO: Implement image upload
+              uploadFish();
 
               var box = Hive.box('settings');
               int fishCaught = box.get('fishCaught', defaultValue: 0) as int;
