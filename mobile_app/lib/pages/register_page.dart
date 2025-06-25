@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile_app/functions/functions.dart';
 import 'package:http/http.dart' as http;
@@ -55,6 +57,11 @@ class _RegisterPageState extends State<RegisterPage> {
       }
       final settingsBox = Hive.box('settings');
       settingsBox.put('email', email);
+
+      final responseJson = jsonDecode(response.body);
+      final fullName = '${responseJson['name']} ${responseJson['surname']}';
+      settingsBox.put('fullName', fullName);
+      settingsBox.put('score', responseJson['score'] ?? 0);
 
       debugPrint('Registered: $firstName $lastName, $email, $password');
       if (!mounted) return;
