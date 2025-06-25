@@ -33,6 +33,7 @@ class ProfilePage extends StatelessWidget {
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 width: 130,
