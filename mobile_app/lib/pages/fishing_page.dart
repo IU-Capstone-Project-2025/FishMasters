@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class FishingPage extends StatefulWidget {
   const FishingPage({super.key});
@@ -19,6 +20,57 @@ class _FishingPageState extends State<FishingPage> {
   void initState() {
     super.initState();
     _startTimer();
+    fishingEventRequest(true);
+  }
+
+  void fishingEventRequest(bool isStart) async {
+    if (!Hive.isBoxOpen('settings')) {
+      await Hive.openBox('settings');
+    }
+
+    final name = isStart ? 'start' : 'end';
+
+    final settingsBox = Hive.box('settings');
+    final email = settingsBox.get("email");
+    // Hardcoded, but in map_widget it is hardcoded as well (=1)
+    final id = 2; // settingsBox.get('fishingLocationId');
+    // Hardcoded for now
+    final x = 0.1;
+    final y = 0.1;
+    final response = await http.post(
+      Uri.parse(
+        'https://capstone.aquaf1na.fun/fishing/$name'
+      ),
+      headers: {'Content-Type': 'application/json'},
+      body: '{"fisherEmail": "$email", "water": {"id": "$id", "x": "$x", "y": "$y"}}',
+    );
+
+    if (response.statusCode != 200) {
+      debugPrint('Fishing $name event failed: ${response.statusCode}');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Fishing $name event failed: ${response.reasonPhrase}'),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+      return;
+    }
+
+    debugPrint('Fishing $name event: email: $email, Water: ($id, $x, $y)');
+
+    // if (isStart) {
+    //   final responseJson = jsonDecode(response.body);
+    // }
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Fishing $name!'),
+        duration: const Duration(seconds: 1),
+      ),
+    );
+    if (!mounted) return;
   }
 
   void _startTimer() {
@@ -55,7 +107,7 @@ class _FishingPageState extends State<FishingPage> {
     }
     var box = Hive.box('settings');
 
-    // TODO: Send fishing data to server
+    fishingEventRequest(false);
 
     box.put('fishingStarted', false);
     box.delete('fishingTime');
@@ -163,6 +215,50 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
       setState(() => _image = File(picked.path));
     }
   }
+
+  // void UploadFish() async {
+  //   if (!Hive.isBoxOpen('settings')) {
+  //     await Hive.openBox('settings');
+  //   }
+
+  //   final settingsBox = Hive.box('settings');
+  //   final email = settingsBox.get("email");
+  //   // Hardcoded, but in map_widget it is hardcoded as well (=1)
+  //   final id = 2; // settingsBox.get('fishingLocationId');
+  //   // Hardcoded for now
+  //   final x = 0.1;
+  //   final y = 0.1;
+  //   final response = await http.post(
+  //     Uri.parse(
+  //       'https://capstone.aquaf1na.fun/fishing/$name'
+  //     ),
+  //     headers: {'Content-Type': 'application/json'},
+  //     body: '{"fisherEmail": "$email", "water": {"id": "$id", "x": "$x", "y": "$y"}}',
+  //   );
+
+  //   if (response.statusCode != 200) {
+  //     debugPrint('Fishing $name event failed: ${response.statusCode}');
+  //     if (!mounted) return;
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('Fishing $name event failed: ${response.reasonPhrase}'),
+  //         duration: const Duration(seconds: 1),
+  //       ),
+  //     );
+  //     return;
+  //   }
+
+  //   debugPrint('Fishing $name event: email: $email, Water: ($id, $x, $y)');
+
+  //   if (!mounted) return;
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text('Fishing $name!'),
+  //       duration: const Duration(seconds: 1),
+  //     ),
+  //   );
+  //   if (
+  // }
 
   @override
   Widget build(BuildContext context) {
