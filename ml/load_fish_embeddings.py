@@ -1,5 +1,4 @@
-
-
+# python load_fish_embeddings.py /path/to/your/csv/file.csv
 import csv
 import os
 import sys
