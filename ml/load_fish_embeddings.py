@@ -84,9 +84,8 @@ def extract_embedding_from_row(row: List[str]) -> List[float]:
     Returns:
         List of 1024 float values representing the embedding
     """
-    # Skip fish_name (index 0) and full_description (index 1)
-    # Extract embedding_dim_0 to embedding_dim_1023 (indices 2 to 1025)
-    embedding_str_values = row[2:1026]  # Should be 1024 values
+    # Extract embedding dimensions 0-1023 (first 1024 columns)
+    embedding_str_values = row[0:1024]  # Should be 1024 values
     
     try:
         embedding = [float(val) for val in embedding_str_values]
@@ -133,11 +132,11 @@ def load_fish_embeddings_to_qdrant(csv_file_path: str, batch_size: int = 100) ->
             # Read header row
             header = next(csv_reader)
             print(f"CSV header columns: {len(header)}")
-            print(f"Expected format: fish_name, full_description, embedding_dim_0, ..., embedding_dim_1023")
+            print(f"Expected format: 0, 1, 2, ..., 1023, FullDescription_en, Species")
             
             # Verify header format
             if len(header) != 1026:
-                raise ValueError(f"Expected 1026 columns (fish_name + full_description + 1024 embedding dims), got {len(header)}")
+                raise ValueError(f"Expected 1026 columns (1024 embedding dims + FullDescription_en + Species), got {len(header)}")
             
             # Process rows in batches
             current_batch = []
@@ -148,9 +147,9 @@ def load_fish_embeddings_to_qdrant(csv_file_path: str, batch_size: int = 100) ->
                         print(f"Warning: Skipping row with {len(row)} columns (expected 1026)")
                         continue
                     
-                    # Extract data
-                    fish_name = row[0].strip()
-                    full_description = row[1].strip()
+                    # Extract data - now Species is at index 1025 and FullDescription_en is at index 1024
+                    fish_name = row[1025].strip()  # Species column
+                    full_description = row[1024].strip()  # FullDescription_en column
                     
                     if not fish_name or not full_description:
                         print(f"Warning: Skipping row with empty fish_name or full_description")
@@ -183,7 +182,7 @@ def load_fish_embeddings_to_qdrant(csv_file_path: str, batch_size: int = 100) ->
                 
                 except Exception as e:
                     print(f"Error processing row {total_processed + 1}: {e}")
-                    print(f"Row data: fish_name='{row[0] if len(row) > 0 else 'N/A'}', description length={len(row[1]) if len(row) > 1 else 0}")
+                    print(f"Row data: fish_name='{row[1025] if len(row) > 1025 else 'N/A'}', description length={len(row[1024]) if len(row) > 1024 else 0}")
                     continue
             
             # Process remaining records in the last batch
@@ -282,7 +281,9 @@ def main():
         # Load embeddings
         load_fish_embeddings_to_qdrant(args.csv_file, args.batch_size)
         
-        print("\n✅ Fish embeddings loaded successfully!")
+        print("\n✅ Fish embeddings loaded successfully to Qdrant!")
+        print("💡 To use FAISS for fast search with this data:")
+        print("   python test_faiss_from_qdrant.py")
         
     except KeyboardInterrupt:
         print("\n\n⚠️  Operation cancelled by user")
