@@ -3,3 +3,7 @@ uvicorn==0.34.3
 python-multipart==0.0.20
 qdrant-client==1.14.3
 python-dotenv==1.0.0
+faiss-cpu==1.7.4
+sentence-transformers>=3.0.0
+torch>=2.0.0
+numpy>=1.24.0
