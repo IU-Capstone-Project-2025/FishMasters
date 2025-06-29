@@ -54,7 +54,7 @@ def test_faiss_from_qdrant():
         
         # Test FAISS search (reads metadata from Qdrant)
         print("\n--- Testing FAISS Search (with Qdrant metadata retrieval) ---")
-        faiss_results = vector_db.search(query_vector, top_k=5)
+        faiss_results, faiss_timing = vector_db.search_with_timing(query_vector, top_k=5)
         print(f"FAISS found {len(faiss_results)} results:")
         for i, (fish, score) in enumerate(faiss_results):
             print(f"  {i+1}. {fish.name} (similarity: {score:.4f})")
@@ -62,9 +62,12 @@ def test_faiss_from_qdrant():
             print(f"     Description: {fish.full_description[:100]}...")
             print()
         
+        # Display timing for FAISS search
+        display_timing_info(faiss_timing, "FAISS + Qdrant")
+        
         # Test Qdrant-only search for comparison
         print("\n--- Testing Qdrant-Only Search ---")
-        qdrant_results = vector_db.search_qdrant_only(query_vector, top_k=5)
+        qdrant_results, qdrant_timing = vector_db.search_qdrant_only_with_timing(query_vector, top_k=5)
         print(f"Qdrant found {len(qdrant_results)} results:")
         for i, fish in enumerate(qdrant_results):
             print(f"  {i+1}. {fish.name}")
@@ -72,36 +75,89 @@ def test_faiss_from_qdrant():
             print(f"     Description: {fish.full_description[:100]}...")
             print()
         
-        # Benchmark performance
-        print("\n--- Performance Benchmark ---")
-        benchmark_results = vector_db.benchmark_search(query_vector, top_k=5)
+        # Display timing for Qdrant search
+        display_timing_info(qdrant_timing, "Qdrant Only")
         
-        print(f"FAISS search time (includes Qdrant metadata retrieval): {benchmark_results['faiss_time_seconds']:.6f} seconds")
-        print(f"Qdrant-only search time: {benchmark_results['qdrant_time_seconds']:.6f} seconds")
-        print(f"Performance ratio: {benchmark_results['speedup']:.2f}x")
-        print(f"FAISS results: {benchmark_results['faiss_results_count']}")
-        print(f"Qdrant results: {benchmark_results['qdrant_results_count']}")
-        print(f"Note: {benchmark_results['note']}")
+        # Performance Comparison using detailed timing
+        print("\n--- Performance Comparison ---")
+        print("Comparing detailed timing breakdown between FAISS+Qdrant vs Qdrant-only:")
+        print()
+        
+        faiss_total = faiss_timing.get('total_time', 0)
+        qdrant_total = qdrant_timing.get('total_time', 0)
+        speedup = qdrant_total / faiss_total if faiss_total > 0 else float('inf')
+        
+        print(f"🏁 FAISS + Qdrant total time:    {faiss_total:.6f} seconds")
+        print(f"🏁 Qdrant-only total time:       {qdrant_total:.6f} seconds")
+        print(f"🚀 Performance ratio:            {speedup:.2f}x {'(FAISS faster)' if speedup > 1 else '(Qdrant faster)'}")
+        print()
+        
+        # Detailed breakdown comparison
+        print("📊 Component Comparison:")
+        print(f"   FAISS index search:           {faiss_timing.get('faiss_index_search', 0):.6f}s")
+        print(f"   vs Qdrant built-in search:    {qdrant_timing.get('qdrant_search_with_metadata', 0):.6f}s")
+        print()
+        print(f"   FAISS metadata retrieval:     {faiss_timing.get('qdrant_metadata_retrieval', 0):.6f}s")
+        print(f"   (included in Qdrant search above)")
+        print()
         
         # Multiple benchmark runs for more accurate timing
-        print("\n--- Multiple Benchmark Runs (10 iterations) ---")
-        faiss_times = []
-        qdrant_times = []
+        print("\n--- Multiple Benchmark Runs (5 iterations) ---")
+        print("Running multiple searches for statistical accuracy...")
         
-        for i in range(10):
+        faiss_total_times = []
+        qdrant_total_times = []
+        faiss_search_times = []
+        faiss_metadata_times = []
+        qdrant_search_times = []
+        
+        for i in range(5):
+            print(f"  Run {i+1}/5...", end=" ")
             # Generate different query each time
             test_query = np.random.rand(1024).tolist()
-            benchmark = vector_db.benchmark_search(test_query, top_k=5)
-            faiss_times.append(benchmark['faiss_time_seconds'])
-            qdrant_times.append(benchmark['qdrant_time_seconds'])
+            
+            # FAISS timing
+            _, f_timing = vector_db.search_with_timing(test_query, top_k=5)
+            faiss_total_times.append(f_timing.get('total_time', 0))
+            faiss_search_times.append(f_timing.get('faiss_index_search', 0))
+            faiss_metadata_times.append(f_timing.get('qdrant_metadata_retrieval', 0))
+            
+            # Qdrant timing
+            _, q_timing = vector_db.search_qdrant_only_with_timing(test_query, top_k=5)
+            qdrant_total_times.append(q_timing.get('total_time', 0))
+            qdrant_search_times.append(q_timing.get('qdrant_search_with_metadata', 0))
+            print("✓")
         
-        avg_faiss_time = np.mean(faiss_times)
-        avg_qdrant_time = np.mean(qdrant_times)
-        avg_speedup = avg_qdrant_time / avg_faiss_time if avg_faiss_time > 0 else float('inf')
+        # Calculate averages
+        avg_faiss_total = np.mean(faiss_total_times)
+        avg_qdrant_total = np.mean(qdrant_total_times)
+        avg_faiss_search = np.mean(faiss_search_times)
+        avg_faiss_metadata = np.mean(faiss_metadata_times)
+        avg_qdrant_search = np.mean(qdrant_search_times)
+        avg_speedup = avg_qdrant_total / avg_faiss_total if avg_faiss_total > 0 else float('inf')
         
-        print(f"Average FAISS time (+ metadata): {avg_faiss_time:.6f} seconds")
-        print(f"Average Qdrant-only time: {avg_qdrant_time:.6f} seconds")
-        print(f"Average performance ratio: {avg_speedup:.2f}x")
+        print(f"\n📈 Average Performance Results ({len(faiss_total_times)} runs):")
+        print("-" * 60)
+        print(f"FAISS + Qdrant total:         {avg_faiss_total:.6f} ± {np.std(faiss_total_times):.6f}s")
+        print(f"  - FAISS search only:        {avg_faiss_search:.6f} ± {np.std(faiss_search_times):.6f}s")
+        print(f"  - Metadata retrieval:       {avg_faiss_metadata:.6f} ± {np.std(faiss_metadata_times):.6f}s")
+        print(f"Qdrant-only total:            {avg_qdrant_total:.6f} ± {np.std(qdrant_total_times):.6f}s")
+        print(f"Average performance ratio:    {avg_speedup:.2f}x")
+        print()
+        
+        # Performance insights
+        if avg_speedup > 1.2:
+            print(f"💡 FAISS is {avg_speedup:.1f}x faster on average")
+            print(f"   Pure FAISS search: {avg_faiss_search:.6f}s vs Qdrant: {avg_qdrant_search:.6f}s")
+        elif avg_speedup < 0.8:
+            print(f"💡 Qdrant is {1/avg_speedup:.1f}x faster on average")
+        else:
+            print("💡 Both methods have similar performance")
+        
+        if avg_faiss_metadata > avg_faiss_search:
+            print(f"💡 Metadata retrieval ({avg_faiss_metadata:.6f}s) is the bottleneck in FAISS method")
+        else:
+            print(f"💡 FAISS search ({avg_faiss_search:.6f}s) is faster than metadata retrieval")
         
         # Test rebuilding FAISS index
         print("\n--- Testing FAISS Index Rebuild ---")
@@ -250,7 +306,7 @@ def text_based_search():
             elif user_input.lower() == 'random':
                 print("🎲 Searching with random vector...")
                 query_vector = np.random.rand(1024).tolist()
-                search_and_display_results(vector_db, query_vector, top_k, "Random Vector")
+                search_and_display_results_with_embed_timing(vector_db, query_vector, top_k, "Random Vector", 0.0)
             elif user_input.lower() == 'stats':
                 display_stats(vector_db)
             elif user_input.lower() == 'rebuild':
@@ -264,18 +320,21 @@ def text_based_search():
                 if text_embedder:
                     try:
                         print("🤖 Converting text to embedding using Qwen model...")
+                        import time
+                        embed_start = time.time()
                         query_vector = text_embedder.encode_fish_query(user_input)
-                        print("✅ Text successfully converted to embedding!")
-                        search_and_display_results(vector_db, query_vector, top_k, user_input)
+                        embed_time = time.time() - embed_start
+                        print(f"✅ Text successfully converted to embedding! (took {embed_time:.6f} seconds)")
+                        search_and_display_results_with_embed_timing(vector_db, query_vector, top_k, user_input, embed_time)
                     except Exception as e:
                         print(f"❌ Error during text embedding: {e}")
                         print("🎲 Falling back to random vector...")
                         query_vector = np.random.rand(1024).tolist()
-                        search_and_display_results(vector_db, query_vector, top_k, f"{user_input} (random fallback)")
+                        search_and_display_results_with_embed_timing(vector_db, query_vector, top_k, f"{user_input} (random fallback)", 0.0)
                 else:
                     print("⚠️  Text embedder not available, using random vector...")
                     query_vector = np.random.rand(1024).tolist()
-                    search_and_display_results(vector_db, query_vector, top_k, f"{user_input} (random)")
+                    search_and_display_results_with_embed_timing(vector_db, query_vector, top_k, f"{user_input} (random)", 0.0)
         
     except KeyboardInterrupt:
         print("\n👋 Search interrupted. Goodbye!")
@@ -284,13 +343,16 @@ def text_based_search():
 
 
 def search_and_display_results(vector_db, query_vector, top_k, query_description):
-    """Helper function to search and display results"""
+    """Helper function to search and display results with detailed timing"""
     try:
         print(f"⏳ Searching...")
-        results = vector_db.search(query_vector, top_k=top_k)
+        
+        # Use the new timing-enabled search
+        results, timing_info = vector_db.search_with_timing(query_vector, top_k=top_k)
         
         if not results:
             print("❌ No results found.")
+            display_timing_info(timing_info, "FAISS + Qdrant")
             return
         
         print(f"\n🎯 Top {len(results)} results for: {query_description}")
@@ -313,10 +375,155 @@ def search_and_display_results(vector_db, query_vector, top_k, query_description
             print()
         
         print("-" * 80)
-        print(f"⚡ Search completed in ~{len(results)} results")
+        
+        # Display detailed timing information
+        display_timing_info(timing_info, "FAISS + Qdrant")
         
     except Exception as e:
         print(f"❌ Error during search: {e}")
+
+
+def search_and_display_results_with_embed_timing(vector_db, query_vector, top_k, query_description, embed_time):
+    """Helper function to search and display results with detailed timing including text embedding"""
+    try:
+        print(f"⏳ Searching...")
+        
+        # Use the new timing-enabled search
+        results, timing_info = vector_db.search_with_timing(query_vector, top_k=top_k)
+        
+        if not results:
+            print("❌ No results found.")
+            display_timing_info_with_embedding(timing_info, "FAISS + Qdrant", embed_time)
+            return
+        
+        print(f"\n🎯 Top {len(results)} results for: {query_description}")
+        print("-" * 80)
+        
+        for i, (fish, score) in enumerate(results):
+            print(f"\n{i+1}. 🐟 {fish.name}")
+            print(f"   📊 Similarity: {score:.4f}")
+            if fish.genus or fish.species:
+                print(f"   🧬 Taxonomy: {fish.genus} {fish.species}")
+            if fish.fbname and fish.fbname != fish.name:
+                print(f"   🏷️  Common name: {fish.fbname}")
+            
+            # Display description with word wrapping
+            if fish.full_description:
+                description = fish.full_description[:200]
+                if len(fish.full_description) > 200:
+                    description += "..."
+                print(f"   📝 Description: {description}")
+            print()
+        
+        print("-" * 80)
+        
+        # Display detailed timing information including embedding
+        display_timing_info_with_embedding(timing_info, "FAISS + Qdrant", embed_time)
+        
+    except Exception as e:
+        print(f"❌ Error during search: {e}")
+
+
+def display_timing_info(timing_info, method_name):
+    """Display detailed timing information in a formatted way"""
+    print(f"\n⏱️  {method_name} Timing Breakdown:")
+    print("=" * 60)
+    
+    if 'error' in timing_info:
+        print(f"❌ Error: {timing_info['error']}")
+        print(f"Total time: {timing_info.get('total_time', 0):.6f} seconds")
+        return
+    
+    # Display timing breakdown
+    if method_name == "FAISS + Qdrant":
+        # FAISS method timing breakdown
+        print(f"1. Vector normalization:      {timing_info.get('vector_normalization', 0):.6f} seconds")
+        print(f"2. FAISS index search:        {timing_info.get('faiss_index_search', 0):.6f} seconds")
+        print(f"3. ID mapping & preparation:  {timing_info.get('id_mapping_preparation', 0):.6f} seconds")
+        print(f"4. Qdrant metadata retrieval: {timing_info.get('qdrant_metadata_retrieval', 0):.6f} seconds")
+        print(f"5. Result processing:         {timing_info.get('result_processing', 0):.6f} seconds")
+        print("-" * 60)
+        print(f"📊 TOTAL TIME:                {timing_info.get('total_time', 0):.6f} seconds")
+        print(f"📈 Results found:             {timing_info.get('results_count', 0)}")
+        print(f"🔍 FAISS vectors searched:    {timing_info.get('faiss_vectors_searched', 0):,}")
+        print(f"🎯 Qdrant IDs found:          {timing_info.get('qdrant_ids_found', 0)}")
+        
+        # Performance insights
+        faiss_time = timing_info.get('faiss_index_search', 0)
+        qdrant_time = timing_info.get('qdrant_metadata_retrieval', 0)
+        total_time = timing_info.get('total_time', 0)
+        
+        if total_time > 0:
+            faiss_percent = (faiss_time / total_time) * 100
+            qdrant_percent = (qdrant_time / total_time) * 100
+            print(f"💡 FAISS search: {faiss_percent:.1f}% of total time")
+            print(f"💡 Qdrant retrieval: {qdrant_percent:.1f}% of total time")
+    
+    elif method_name == "Qdrant Only":
+        # Qdrant-only method timing breakdown
+        print(f"1. Qdrant search + metadata:  {timing_info.get('qdrant_search_with_metadata', 0):.6f} seconds")
+        print(f"2. Result processing:         {timing_info.get('result_processing', 0):.6f} seconds")
+        print("-" * 60)
+        print(f"📊 TOTAL TIME:                {timing_info.get('total_time', 0):.6f} seconds")
+        print(f"📈 Results found:             {timing_info.get('results_count', 0)}")
+    
+    print("=" * 60)
+
+
+def display_timing_info_with_embedding(timing_info, method_name, embed_time):
+    """Display detailed timing information including text embedding time"""
+    print(f"\n⏱️  Complete Pipeline Timing Breakdown:")
+    print("=" * 70)
+    
+    if 'error' in timing_info:
+        print(f"❌ Error: {timing_info['error']}")
+        if embed_time > 0:
+            print(f"Text embedding time: {embed_time:.6f} seconds")
+        print(f"Total time: {timing_info.get('total_time', 0):.6f} seconds")
+        return
+    
+    # Show complete pipeline including text embedding
+    total_pipeline_time = embed_time + timing_info.get('total_time', 0)
+    
+    if embed_time > 0:
+        print(f"0. Text → Vector (Qwen):      {embed_time:.6f} seconds")
+    else:
+        print(f"0. Vector generation:         0.000000 seconds (random/provided)")
+        
+    print(f"1. Vector normalization:      {timing_info.get('vector_normalization', 0):.6f} seconds")
+    print(f"2. FAISS index search:        {timing_info.get('faiss_index_search', 0):.6f} seconds")
+    print(f"3. ID mapping & preparation:  {timing_info.get('id_mapping_preparation', 0):.6f} seconds")
+    print(f"4. Qdrant metadata retrieval: {timing_info.get('qdrant_metadata_retrieval', 0):.6f} seconds")
+    print(f"5. Result processing:         {timing_info.get('result_processing', 0):.6f} seconds")
+    print("-" * 70)
+    print(f"📊 VECTOR SEARCH SUBTOTAL:    {timing_info.get('total_time', 0):.6f} seconds")
+    print(f"🔥 COMPLETE PIPELINE TOTAL:   {total_pipeline_time:.6f} seconds")
+    print(f"📈 Results found:             {timing_info.get('results_count', 0)}")
+    print(f"🔍 FAISS vectors searched:    {timing_info.get('faiss_vectors_searched', 0):,}")
+    print(f"🎯 Qdrant IDs found:          {timing_info.get('qdrant_ids_found', 0)}")
+    
+    # Performance breakdown percentages
+    if total_pipeline_time > 0:
+        if embed_time > 0:
+            embed_percent = (embed_time / total_pipeline_time) * 100
+            print(f"💡 Text embedding: {embed_percent:.1f}% of total pipeline time")
+        
+        search_time = timing_info.get('faiss_index_search', 0)
+        retrieval_time = timing_info.get('qdrant_metadata_retrieval', 0)
+        search_percent = (search_time / total_pipeline_time) * 100
+        retrieval_percent = (retrieval_time / total_pipeline_time) * 100
+        
+        print(f"💡 FAISS search: {search_percent:.1f}% of total pipeline time")
+        print(f"💡 Qdrant retrieval: {retrieval_percent:.1f}% of total pipeline time")
+        
+        if embed_time > timing_info.get('total_time', 0):
+            print(f"⚠️  Text embedding is the bottleneck ({embed_time:.6f}s)")
+        elif retrieval_time > search_time:
+            print(f"⚠️  Metadata retrieval is the bottleneck ({retrieval_time:.6f}s)")
+        else:
+            print(f"✅ Vector search is optimized")
+    
+    print("=" * 70)
 
 
 def display_stats(vector_db):

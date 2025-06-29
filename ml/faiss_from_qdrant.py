@@ -317,6 +317,102 @@ class FaissFromQdrantDatabase:
         except Exception as e:
             print(f"Error searching embeddings: {e}")
             return []
+
+    def search_with_timing(self, query_embedding: List[float], top_k: int = 5) -> Tuple[List[Tuple[FishSpecies, float]], Dict[str, float]]:
+        """
+        Search for similar fish embeddings with detailed timing information
+        
+        Args:
+            query_embedding: Vector to search for
+            top_k: Number of top results to return
+            
+        Returns:
+            Tuple[List[Tuple[FishSpecies, float]], Dict[str, float]]: 
+                (results, timing_info) where timing_info contains detailed breakdown
+        """
+        import time
+        
+        timing_info = {}
+        total_start = time.time()
+        
+        try:
+            if self.faiss_index.ntotal == 0:
+                print("FAISS index is empty")
+                return [], {"total_time": 0.0, "error": "empty_index"}
+            
+            # 1. Vector normalization timing
+            normalize_start = time.time()
+            normalized_query = self._normalize_vector(query_embedding)
+            timing_info['vector_normalization'] = time.time() - normalize_start
+            
+            # 2. FAISS index search timing
+            faiss_search_start = time.time()
+            similarities, faiss_indices = self.faiss_index.search(normalized_query, top_k)
+            timing_info['faiss_index_search'] = time.time() - faiss_search_start
+            
+            # 3. ID mapping and preparation timing
+            mapping_start = time.time()
+            qdrant_ids = []
+            valid_similarities = []
+            
+            for i, faiss_id in enumerate(faiss_indices[0]):
+                if faiss_id != -1:  # Valid result
+                    qdrant_id = self.faiss_id_to_qdrant_id.get(faiss_id)
+                    if qdrant_id is not None:
+                        qdrant_ids.append(qdrant_id)
+                        valid_similarities.append(similarities[0][i])
+            timing_info['id_mapping_preparation'] = time.time() - mapping_start
+            
+            if not qdrant_ids:
+                timing_info['total_time'] = time.time() - total_start
+                return [], timing_info
+            
+            # 4. Qdrant metadata retrieval timing
+            qdrant_retrieval_start = time.time()
+            points = self.qdrant_client.retrieve(
+                collection_name=self.collection_name,
+                ids=qdrant_ids,
+                with_payload=True
+            )
+            timing_info['qdrant_metadata_retrieval'] = time.time() - qdrant_retrieval_start
+            
+            # 5. Result processing and object creation timing
+            result_processing_start = time.time()
+            results = []
+            qdrant_points_dict = {point.id: point for point in points}
+            
+            for i, qdrant_id in enumerate(qdrant_ids):
+                if qdrant_id in qdrant_points_dict:
+                    point = qdrant_points_dict[qdrant_id]
+                    payload = point.payload
+                    
+                    fish_species = FishSpecies(
+                        fish_id=payload.get("id", 0),
+                        name=payload.get("name", ""),
+                        genus=payload.get("genus", ""),
+                        species=payload.get("species", ""),
+                        full_description=payload.get("full_description", ""),
+                        fbname=payload.get("fbname", "")
+                    )
+                    
+                    similarity_score = float(valid_similarities[i])
+                    results.append((fish_species, similarity_score))
+            
+            timing_info['result_processing'] = time.time() - result_processing_start
+            timing_info['total_time'] = time.time() - total_start
+            
+            # Additional statistics
+            timing_info['results_count'] = len(results)
+            timing_info['qdrant_ids_found'] = len(qdrant_ids)
+            timing_info['faiss_vectors_searched'] = self.faiss_index.ntotal
+            
+            return results, timing_info
+            
+        except Exception as e:
+            timing_info['total_time'] = time.time() - total_start
+            timing_info['error'] = str(e)
+            print(f"Error searching embeddings: {e}")
+            return [], timing_info
     
     def search_qdrant_only(self, query_embedding: List[float], top_k: int = 5) -> List[FishSpecies]:
         """
@@ -355,6 +451,61 @@ class FaissFromQdrantDatabase:
         except Exception as e:
             print(f"Error searching Qdrant: {e}")
             return []
+
+    def search_qdrant_only_with_timing(self, query_embedding: List[float], top_k: int = 5) -> Tuple[List[FishSpecies], Dict[str, float]]:
+        """
+        Search using Qdrant directly with detailed timing information
+        
+        Args:
+            query_embedding: Vector to search for
+            top_k: Number of top results to return
+            
+        Returns:
+            Tuple[List[FishSpecies], Dict[str, float]]: (results, timing_info)
+        """
+        import time
+        
+        timing_info = {}
+        total_start = time.time()
+        
+        try:
+            # 1. Qdrant search timing (includes vector similarity + metadata retrieval)
+            qdrant_search_start = time.time()
+            search_result = self.qdrant_client.search(
+                collection_name=self.collection_name,
+                query_vector=query_embedding,
+                limit=top_k,
+                with_payload=True
+            )
+            timing_info['qdrant_search_with_metadata'] = time.time() - qdrant_search_start
+            
+            # 2. Result processing timing
+            result_processing_start = time.time()
+            results = []
+            for hit in search_result:
+                payload = hit.payload
+                fish_species = FishSpecies(
+                    fish_id=payload.get("id", 0),
+                    name=payload.get("name", ""),
+                    genus=payload.get("genus", ""),
+                    species=payload.get("species", ""),
+                    full_description=payload.get("full_description", ""),
+                    fbname=payload.get("fbname", "")
+                )
+                results.append(fish_species)
+            timing_info['result_processing'] = time.time() - result_processing_start
+            
+            timing_info['total_time'] = time.time() - total_start
+            timing_info['results_count'] = len(results)
+            timing_info['method'] = 'qdrant_only'
+            
+            return results, timing_info
+            
+        except Exception as e:
+            timing_info['total_time'] = time.time() - total_start
+            timing_info['error'] = str(e)
+            print(f"Error searching Qdrant: {e}")
+            return [], timing_info
     
     def rebuild_faiss_index(self):
         """Manually rebuild FAISS index from current Qdrant data"""
