@@ -1,25 +1,20 @@
 package inno.fishmasters.controller;
 
-import inno.fishmasters.dto.request.fishing.CaughtFishRequest;
 import inno.fishmasters.dto.request.fishing.FishingEventRequest;
-import inno.fishmasters.entity.CaughtFish;
 import inno.fishmasters.entity.Fishing;
 import inno.fishmasters.service.FishingService;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/fishing")
-public class FishingController {
+public class   FishingController {
     private final FishingService fishingService;
-
-    public FishingController(FishingService fishingService) {
-        this.fishingService = fishingService;
-    }
 
     @Operation(summary = "Start a new fishing session")
     @PostMapping("/start")
@@ -35,12 +30,17 @@ public class FishingController {
         return ResponseEntity.ok(fishing);
     }
 
-    @Operation(summary = "Add a caught fish to the current fishing session",
-               description = "Endpoint allows add a fish in current fishing session from fish database")
-    @PostMapping("/add-caught-fish")
-    public ResponseEntity<CaughtFish> addCaughtFish(@RequestBody CaughtFishRequest request) {
-        CaughtFish caughtFish = fishingService.addCaughtFish(request);
-        return ResponseEntity.ok(caughtFish);
+    @GetMapping("/{fishingId}")
+    @Operation(summary = "Get fishing session by ID", description = "fishingId is a path variable")
+    public ResponseEntity<Fishing> getFishingById(@PathVariable Long fishingId) {
+        Fishing fishing = fishingService.getFishingById(fishingId);
+        return ResponseEntity.ok(fishing);
     }
 
+    @GetMapping("/{fisherEmail}")
+    @Operation(summary = "Get all fishings by fisher email", description = "fisherEmail is a path variable")
+    public ResponseEntity<List<Fishing>> getFishingsByFisherEmail(@PathVariable String fisherEmail) {
+        List<Fishing> fishings = fishingService.getFishingsByFisherEmail(fisherEmail);
+        return ResponseEntity.ok(fishings);
+    }
 }
