@@ -6,6 +6,7 @@ import inno.fishmasters.service.FishingService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,14 +19,14 @@ public class   FishingController {
 
     @Operation(summary = "Start a new fishing session")
     @PostMapping("/start")
-    public ResponseEntity<Fishing> startFishing(@RequestBody FishingEventRequest request) {
+    public ResponseEntity<Fishing> startFishing(@Validated @RequestBody FishingEventRequest request) {
         Fishing fishing = fishingService.startFishing(request);
         return ResponseEntity.ok(fishing);
     }
 
     @Operation(summary = "End the current fishing session")
     @PostMapping("/end")
-    public ResponseEntity<Fishing> endFishing(@RequestBody FishingEventRequest request) {
+    public ResponseEntity<Fishing> endFishing(@Validated @RequestBody FishingEventRequest request) {
         Fishing fishing = fishingService.endFishing(request);
         return ResponseEntity.ok(fishing);
     }
