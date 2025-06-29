@@ -6,6 +6,7 @@ import inno.fishmasters.service.FishService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class FishController {
     @Operation(summary = "Add a caught fish to the current fishing session",
             description = "Endpoint allows add a fish in current fishing session from fish database")
     @PostMapping("/add-caught-fish")
-    public ResponseEntity<CaughtFish> addCaughtFish(@RequestBody CaughtFishRequest request) {
+    public ResponseEntity<CaughtFish> addCaughtFish(@Validated @RequestBody CaughtFishRequest request) {
         CaughtFish caughtFish = fishService.addCaughtFish(request);
         return ResponseEntity.ok(caughtFish);
     }
