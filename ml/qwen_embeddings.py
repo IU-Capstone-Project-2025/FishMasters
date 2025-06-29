@@ -159,31 +159,6 @@ class QwenEmbedder:
         else:
             return [list(emb) for emb in embeddings]
     
-    def preprocess_fish_query(self, query: str) -> str:
-        """
-        Preprocess fish-related search queries for better embedding quality
-        
-        Args:
-            query: Raw user query
-            
-        Returns:
-            Preprocessed query optimized for fish search
-        """
-        # Convert to lowercase for consistency
-        query = query.lower().strip()
-        
-        # If query doesn't contain fish-related terms, add context
-        fish_terms = ["fish", "shark", "ray", "eel", "marine", "aquatic", "species", "animal"]
-        has_fish_context = any(term in query for term in fish_terms)
-        
-        if not has_fish_context and len(query.split()) <= 5:
-            # Add fish context for short, generic queries
-            query = f"fish species with {query} characteristics"
-        
-        # Add instruction for better embedding
-        query = f"Find fish species: {query}"
-        
-        return query
     
     def encode_fish_query(self, query: str, add_context: bool = False, target_dimension: int = 1024) -> List[float]:
         """
@@ -197,14 +172,10 @@ class QwenEmbedder:
         Returns:
             Embedding vector adjusted to target dimension
         """
-        # Preprocess query if requested
-        if add_context:
-            processed_query = self.preprocess_fish_query(query)
-        else:
-            processed_query = query
+        
         
         # Get embedding
-        embedding = self.encode_text(processed_query)
+        embedding = self.encode_text(query)
         
         # Adjust dimension to match fish embeddings (1024)
         if len(embedding) != target_dimension:
@@ -256,53 +227,3 @@ class QwenEmbedder:
             "is_loaded": self.model is not None,
             "model_type": "Qwen Embedder"
         }
-
-
-def test_qwen_embedder():
-    """Test the Qwen embedder functionality"""
-    print("=== Testing Qwen Text Embedder ===")
-    
-    try:
-        # Initialize embedder
-        print("🚀 Initializing Qwen embedder...")
-        embedder = QwenEmbedder()
-        
-        # Show model info
-        info = embedder.get_model_info()
-        print(f"\n📋 Model Info:")
-        for key, value in info.items():
-            print(f"   {key}: {value}")
-        
-        # Test queries
-        test_queries = [
-            "large predatory fish with sharp teeth",
-            "small colorful tropical fish", 
-            "elongated eel-like fish",
-            "spotted shark",
-            "blue fish"
-        ]
-        
-        print(f"\n🧪 Testing {len(test_queries)} queries:")
-        for i, query in enumerate(test_queries):
-            print(f"\n{i+1}. Query: '{query}'")
-            
-            # Get embedding
-            embedding = embedder.encode_fish_query(query)
-            print(f"   ✅ Embedding dimension: {len(embedding)}")
-            print(f"   📊 First 5 values: {[round(x, 4) for x in embedding[:5]]}")
-            
-            # Show preprocessing
-            processed = embedder.preprocess_fish_query(query)
-            if processed != query.lower():
-                print(f"   🔄 Preprocessed: '{processed}'")
-        
-        print("\n✅ Qwen embedder test completed!")
-        
-    except Exception as e:
-        print(f"❌ Test failed: {e}")
-        import traceback
-        traceback.print_exc()
-
-
-if __name__ == "__main__":
-    test_qwen_embedder() 

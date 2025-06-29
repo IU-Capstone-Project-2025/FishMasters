@@ -126,7 +126,7 @@ def test_faiss_from_qdrant():
         print("2. Loaded some fish embeddings using: python load_fish_embeddings.py --test-run")
 
 
-def test_index_rebuild():
+def index_rebuild():
     """Test rebuilding FAISS index from Qdrant"""
     
     print("\n=== FAISS Index Rebuild Test ===")
@@ -160,53 +160,6 @@ def test_index_rebuild():
         
     except Exception as e:
         print(f"❌ Error during rebuild test: {e}")
-
-
-def interactive_search():
-    """Interactive search interface"""
-    
-    print("\n=== Interactive Search ===")
-    
-    try:
-        vector_db = FaissFromQdrantDatabase(
-            collection_name="fish_embeddings_20250627_102709",
-            faiss_index_path="qdrant_faiss_index.faiss"
-        )
-        
-        stats = vector_db.get_stats()
-        if stats['qdrant_points'] == 0:
-            print("No fish in database. Please run the loader first.")
-            return
-        
-        print(f"Database contains {stats['qdrant_points']} fish species")
-        print("Enter 'q' to quit, 'r' to rebuild FAISS index")
-        print("Or press Enter to search with random vector\n")
-        
-        while True:
-            user_input = input("Action (Enter/q/r): ").strip().lower()
-            
-            if user_input in ['q', 'quit', 'exit']:
-                break
-            elif user_input in ['r', 'rebuild']:
-                print("Rebuilding FAISS index...")
-                vector_db.rebuild_faiss_index()
-                print("Index rebuilt!")
-                continue
-            else:
-                # Random search
-                print("Searching with random vector...")
-                query_vector = np.random.rand(1024).tolist()
-                
-                results = vector_db.search(query_vector, top_k=3)
-                print(f"\nTop 3 results:")
-                for i, (fish, score) in enumerate(results):
-                    print(f"  {i+1}. {fish.name} (similarity: {score:.4f})")
-                    print(f"     {fish.genus} {fish.species}")
-                print()
-        
-    except Exception as e:
-        print(f"Error during interactive search: {e}")
-
 
 def get_top_k_input():
     """Get the number of top results from user"""
@@ -397,26 +350,20 @@ def main():
     print("=" * 50)
     print("Choose an option:")
     print("1. 🔍 Text-based search (NEW - Enter manual search prompts)")
-    print("2. 🧪 Run full test suite")
-    print("3. 🔄 Test index rebuild")
-    print("4. 🎲 Interactive random search")
-    print("5. ❌ Exit")
+    print("2. 🔄 Index rebuild")
+    print("3. ❌ Exit")
     
     try:
-        choice = input("\nEnter your choice (1-5): ").strip()
+        choice = input("\nEnter your choice (1-3): ").strip()
         
         if choice == "1":
             text_based_search()
         elif choice == "2":
-            test_faiss_from_qdrant()
+            index_rebuild()
         elif choice == "3":
-            test_index_rebuild()
-        elif choice == "4":
-            interactive_search()
-        elif choice == "5":
             print("👋 Goodbye!")
         else:
-            print("❌ Invalid choice. Please run again and select 1-5.")
+            print("❌ Invalid choice. Please run again and select 1-3.")
     
     except KeyboardInterrupt:
         print("\n👋 Goodbye!")
