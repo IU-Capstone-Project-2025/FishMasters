@@ -19,7 +19,7 @@ def test_embedding_simple():
     try:
         # Import with error handling
         print("📦 Importing modules...")
-        from qwen_embeddings import FishQwenEmbedder
+        from qwen_embeddings import QwenEmbedder
         print("✅ Import successful!")
         
         # Test if we have required dependencies
@@ -54,7 +54,7 @@ def test_embedding_simple():
         signal.alarm(180)
         
         try:
-            embedder = FishQwenEmbedder()
+            embedder = QwenEmbedder()
             signal.alarm(0)  # Cancel timeout
             print("✅ Embedder initialized successfully!")
             

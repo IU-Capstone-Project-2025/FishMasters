@@ -7,7 +7,7 @@ import os
 import numpy as np
 from dotenv import load_dotenv
 from faiss_from_qdrant import FaissFromQdrantDatabase
-from qwen_embeddings import FishQwenEmbedder, FishSafeEmbedder
+from qwen_embeddings import QwenEmbedder
 
 # Load environment variables
 load_dotenv()
@@ -208,46 +208,17 @@ def interactive_search():
         print(f"Error during interactive search: {e}")
 
 
-def choose_embedding_model():
-    """Let user choose between safe models and Qwen models"""
-    
-    print("\n🤖 Choose Embedding Model:")
-    print("=" * 40)
-    print("1. 🔒 Safe Mode (Recommended for macOS)")
-    print("   • Uses lightweight, stable models")
-    print("   • No segmentation faults")
-    print("   • Fast loading")
-    print("   • Good quality embeddings")
-    print()
-    print("2. ⚡ Qwen Mode (Advanced - may be unstable on some systems)")
-    print("   • Attempts to use Qwen3-Embedding-0.6B")
-    print("   • Higher quality embeddings (potentially)")
-    print("   • May cause crashes on macOS")
-    print("   • Slower loading")
-    print()
-    
+def get_top_k_input():
+    """Get the number of top results from user"""
     while True:
         try:
-            choice = input("Choose mode (1=Safe, 2=Qwen): ").strip()
-            
-            if choice == "1":
-                print("✅ Selected Safe Mode - Using stable lightweight models")
-                return "safe"
-            elif choice == "2":
-                print("⚠️  Selected Qwen Mode - May be unstable on some systems")
-                confirm = input("Are you sure? This may cause crashes (y/N): ").strip().lower()
-                if confirm in ['y', 'yes']:
-                    print("⚡ Proceeding with Qwen Mode")
-                    return "qwen"
-                else:
-                    print("🔒 Switching to Safe Mode")
-                    return "safe"
+            top_k = int(input("Enter number of top results to return (default 5): ") or "5")
+            if top_k > 0:
+                return top_k
             else:
-                print("❌ Invalid choice. Please enter 1 or 2.")
-                
-        except KeyboardInterrupt:
-            print("\n🔒 Defaulting to Safe Mode")
-            return "safe"
+                print("Please enter a positive number.")
+        except ValueError:
+            print("Please enter a valid number.")
 
 
 def text_based_search():
@@ -255,57 +226,26 @@ def text_based_search():
     
     print("\n=== Text-Based Fish Search CLI ===")
     
-    # Choose embedding model first
-    model_choice = choose_embedding_model()
-    
     try:
         # Get top_k from user at the start
-        while True:
-            try:
-                top_k = int(input("Enter number of top results to return (default 5): ") or "5")
-                if top_k > 0:
-                    break
-                else:
-                    print("Please enter a positive number.")
-            except ValueError:
-                print("Please enter a valid number.")
+        top_k = get_top_k_input()
         
-        # Initialize text embedder based on user choice
-        if model_choice == "safe":
-            print(f"\n🔒 Initializing SAFE text embedding model...")
-            print("📥 Using only stable, tested models...")
-            
-            text_embedder = None
-            try:
-                text_embedder = FishSafeEmbedder()
-                print("✅ Safe text embedder initialized successfully!")
-                
-            except Exception as e:
-                print(f"❌ Failed to initialize safe embedder: {e}")
-                print("💡 This should not happen with the safe embedder - it has fallbacks")
-                text_embedder = None
-            except KeyboardInterrupt:
-                print("🛑 Model loading interrupted by user")
-                print("💡 Using fallback...")
-                text_embedder = None
+        # Initialize Qwen text embedder
+        print(f"\n🤖 Initializing Qwen text embedding model...")
         
-        else:  # qwen mode
-            print(f"\n⚡ Initializing QWEN text embedding model...")
-            print("📥 This will try Qwen models first, then fallback to safe models...")
+        text_embedder = None
+        try:
+            text_embedder = QwenEmbedder()
+            print("✅ Qwen text embedder initialized successfully!")
             
+        except Exception as e:
+            print(f"❌ Failed to initialize Qwen embedder: {e}")
+            print("💡 Will use random vectors as fallback")
             text_embedder = None
-            try:
-                text_embedder = FishQwenEmbedder()
-                print("✅ Qwen text embedder initialized successfully!")
-                
-            except Exception as e:
-                print(f"❌ Failed to initialize Qwen embedder: {e}")
-                print("💡 This should not happen - Qwen embedder has safe fallbacks")
-                text_embedder = None
-            except KeyboardInterrupt:
-                print("🛑 Model loading interrupted by user")
-                print("💡 Using fallback...")
-                text_embedder = None
+        except KeyboardInterrupt:
+            print("🛑 Model loading interrupted by user")
+            print("💡 Will use random vectors as fallback")
+            text_embedder = None
         
         # Initialize the database
         print(f"\n🗄️ Initializing FAISS database...")
