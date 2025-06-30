@@ -26,7 +26,7 @@ public class FishController {
     }
 
     @Operation(summary = "Get caught fishes by fishing id", description = "empty list if no fishes caught")
-    @GetMapping("/{fishingId}")
+    @GetMapping("/caught/{fishingId}")
     public ResponseEntity<List<CaughtFish>> getCaughtFishByFishingId(@PathVariable Long fishingId) {
         List<CaughtFish> caughtFish = fishService.getCaughtFishByFishingId(fishingId);
         return ResponseEntity.ok(caughtFish);
