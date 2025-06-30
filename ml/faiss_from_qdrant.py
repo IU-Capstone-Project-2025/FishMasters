@@ -113,7 +113,12 @@ class FaissFromQdrantDatabase:
             print("Building FAISS index from Qdrant data...")
             
             # Create new FAISS index
-            self.faiss_index = faiss.IndexFlatIP(self.embedding_dimension)
+            
+            # self.faiss_index = faiss.IndexFlatIP(self.embedding_dimension)
+            self.quantizer = faiss.IndexFlatIP(self.embedding_dimension)
+            self.faiss_index = faiss.IndexIVFFlat(self.quantizer, self.embedding_dimension, 256, faiss.METRIC_INNER_PRODUCT)
+            
+            
             self.faiss_id_to_qdrant_id = {}
             self.qdrant_id_to_faiss_id = {}
             
@@ -149,7 +154,7 @@ class FaissFromQdrantDatabase:
                         if point.vector:
                             # Normalize vector for cosine similarity
                             vector = np.array(point.vector, dtype=np.float32).reshape(1, -1)
-                            faiss.normalize_L2(vector)
+                            # faiss.normalize_L2(vector)
                             
                             vectors_to_add.append(vector[0])
                             qdrant_ids.append(point.id)
@@ -157,7 +162,9 @@ class FaissFromQdrantDatabase:
                     if vectors_to_add:
                         # Add batch to FAISS
                         vectors_matrix = np.array(vectors_to_add, dtype=np.float32)
+                        self.faiss_index.train(vectors_matrix)
                         self.faiss_index.add(vectors_matrix)
+                        self.faiss_index.nprobe = 10          
                         
                         # Build mappings for this batch
                         for i, qdrant_id in enumerate(qdrant_ids):
@@ -202,51 +209,6 @@ class FaissFromQdrantDatabase:
         # L2 normalize for cosine similarity
         faiss.normalize_L2(vec_array)
         return vec_array
-    
-    def store(self, embedding: List[float], metadata: FishSpecies) -> int:
-        """
-        Store fish embedding in Qdrant and update FAISS index
-        
-        Args:
-            embedding: Vector embedding of the fish
-            metadata: FishSpecies object containing fish information
-            
-        Returns:
-            int: Unique ID of the stored embedding
-        """
-        try:
-            fish_id = metadata.id
-            
-            # Store in Qdrant (primary storage)
-            point = PointStruct(
-                id=fish_id,
-                vector=embedding,
-                payload=metadata.to_dict()
-            )
-            
-            self.qdrant_client.upsert(
-                collection_name=self.collection_name,
-                points=[point]
-            )
-            
-            # Add to FAISS index for fast search
-            normalized_embedding = self._normalize_vector(embedding)
-            faiss_id = self.faiss_index.ntotal
-            self.faiss_index.add(normalized_embedding)
-            
-            # Update mappings
-            self.faiss_id_to_qdrant_id[faiss_id] = fish_id
-            self.qdrant_id_to_faiss_id[fish_id] = faiss_id
-            
-            # Cache metadata
-            self.metadata_cache[fish_id] = metadata
-            
-            print(f"Stored fish embedding with ID: {fish_id} (FAISS ID: {faiss_id})")
-            return fish_id
-            
-        except Exception as e:
-            print(f"Error storing embedding: {e}")
-            return -1
     
     def search(self, query_embedding: List[float], top_k: int = 5) -> List[Tuple[FishSpecies, float]]:
         """
@@ -309,7 +271,7 @@ class FaissFromQdrantDatabase:
                         fbname=payload.get("fbname", "")
                     )
                     
-                    similarity_score = float(valid_similarities[i])
+                    similarity_score = valid_similarities[i]
                     results.append((fish_species, similarity_score))
             
             return results
