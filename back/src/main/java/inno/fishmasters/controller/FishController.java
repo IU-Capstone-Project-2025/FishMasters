@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/fishing")
+@RequestMapping("/api/fish")
 public class FishController {
     private final FishService fishService;
 
