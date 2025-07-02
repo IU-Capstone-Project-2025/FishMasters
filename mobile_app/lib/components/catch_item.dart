@@ -54,7 +54,9 @@ class CatchItem extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        FishItem(name: fishNames[0], highlighted: true),
+                        if (fishNames.isEmpty) const Text('No fish caught'),
+                        if (fishNames.isNotEmpty)
+                          FishItem(name: fishNames[0], highlighted: true),
                         if (fishNames.length > 1)
                           for (var i = 1; i < min(fishNames.length, 3); i++)
                             FishItem(name: fishNames[i]),

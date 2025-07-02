@@ -3,6 +3,7 @@ import 'package:mobile_app/components/components.dart';
 import 'package:http/http.dart' as http;
 import 'package:hive/hive.dart';
 import 'package:mobile_app/models/models.dart';
+import 'dart:convert';
 
 class CatchPage extends StatefulWidget {
   const CatchPage({super.key});
@@ -141,10 +142,13 @@ class _CatchPageState extends State<CatchPage> {
       );
       debugPrint('Fetching catches for $email');
       if (response.statusCode == 200) {
+        debugPrint(response.body);
         final List<dynamic> data = response.body.isNotEmpty
-            ? (response.body as List)
+            ? (jsonDecode(response.body) as List)
             : [];
-        _catches = data.map((e) => FishingModel.fromJson(e)).toList();
+        _catches = data
+            .map((e) => FishingModel.fromJson(e as Map<String, dynamic>))
+            .toList();
         debugPrint('Fetched ${_catches.length} catches');
       } else {
         throw Exception('Failed to load catches ${response.statusCode}');
@@ -176,8 +180,9 @@ class _CatchPageState extends State<CatchPage> {
                   if (date.isEmpty) {
                     date = 'Unknown Date';
                   }
-                  var duration = _catches[index].startTime.isNotEmpty
-                      ? DateTime.parse(_catches[index].endTime)
+                  // TODO: Show ongoing fishing event if endTime is null
+                  var duration = _catches[index].endTime != null
+                      ? DateTime.parse(_catches[index].endTime!)
                             .difference(
                               DateTime.parse(_catches[index].startTime),
                             )
