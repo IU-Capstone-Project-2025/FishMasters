@@ -97,7 +97,7 @@ class _CatchPageState extends State<CatchPage> {
     final email = box.get('email', defaultValue: '');
     try {
       final response = await http.get(
-        Uri.parse('https://capstone.aquaf1na.fun/api/fishing/$email'),
+        Uri.parse('https://capstone.aquaf1na.fun/api/fishing/email/$email'),
       );
       debugPrint('Fetching catches for $email');
       if (response.statusCode == 200) {
