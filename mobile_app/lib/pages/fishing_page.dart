@@ -32,17 +32,18 @@ class _FishingPageState extends State<FishingPage> {
     final name = isStart ? 'start' : 'end';
 
     final settingsBox = Hive.box('settings');
-    final email = settingsBox.get("email");
+    final email = "string@mail.com";
     // Hardcoded, but in map_widget it is hardcoded as well (=1)
     final id = 2; // settingsBox.get('fishingLocationId');
     // Hardcoded for now
     final x = 0.1;
     final y = 0.1;
     final response = await http.post(
-      Uri.parse('https://capstone.aquaf1na.fun/fishing/$name'),
+      Uri.parse(
+        'https://capstone.aquaf1na.fun/api/fishing/$name'
+      ),
       headers: {'Content-Type': 'application/json'},
-      body:
-          '{"fisherEmail": "$email", "water": {"id": "$id", "x": "$x", "y": "$y"}}',
+      body: '{"fisherEmail": "$email", "water": {"id": 1, "x": 0.1, "y": 0.1}}',
     );
 
     if (response.statusCode != 200) {
@@ -50,10 +51,10 @@ class _FishingPageState extends State<FishingPage> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          // content: Text('Fishing $name event failed: ${response.reasonPhrase}'),
+          content: Text('Fishing $name event failed: ${response.reasonPhrase}'),
 
           // Super SUS
-          content: Text("Fishing $name"),
+          // content: Text("Fishing $name"),
           duration: const Duration(seconds: 1),
         ),
       );
@@ -150,6 +151,11 @@ class _FishingPageState extends State<FishingPage> {
               style: const TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => _stopFishing(context),
+              child: const Text('Stop Fishing'),
+            ),
+            const SizedBox(height: 30),
             Text(
               'Elapsed time: ${_formatDuration(_elapsedSeconds)}',
               style: const TextStyle(fontSize: 20),
@@ -181,19 +187,22 @@ class _FishingPageState extends State<FishingPage> {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                var box = Hive.box('settings');
-                int fishCaught = box.get('fishCaught', defaultValue: 0) as int;
-                box.put('fishCaught', fishCaught + 1);
+                // var box = Hive.box('settings');
+                // int fishCaught = box.get('fishCaught', defaultValue: 0) as int;
+                // box.put('fishCaught', fishCaught + 1);
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Upload image', textAlign: TextAlign.center,),
+                    content: Column(mainAxisSize: MainAxisSize.min, children: [ImageUploadField()]),
+                  ),
+                );
               },
               child: const Text('Add Fish'),
             ),
-            const SizedBox(height: 20),
-            const ImageUploadField(),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _stopFishing(context),
-              child: const Text('Stop Fishing'),
-            ),
+            SizedBox(height: 30),
+            // Text("Uploaded pictures:", style: const TextStyle(fontSize: 20),),
+            // TODO: Show all uploaded pictures
           ],
         ),
       ),
@@ -232,10 +241,11 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
     final weight = 5;
     final photoString = _image.toString();
     final response = await http.post(
-      Uri.parse('https://capstone.aquaf1na.fun/fishing/add-caight-fish'),
+      Uri.parse(
+        'https://capstone.aquaf1na.fun/api/fishing/add-caught-fish'
+      ),
       headers: {'Content-Type': 'application/json'},
-      body:
-          '{"fishingId": "$fishingId", "fishId": "$fishId", "weight": "$weight", "photo": "$photoString"}',
+      body: '{"fishingId": "$fishingId", "fishId": $fishId, "weight": $weight, "photo": "$photoString"}',
     );
 
     if (response.statusCode != 200) {
@@ -252,14 +262,6 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
     }
 
     debugPrint('Picture uploaded');
-
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Picture uploaded!'),
-        duration: const Duration(seconds: 1),
-      ),
-    );
   }
 
   @override
@@ -304,6 +306,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
               setState(() {
                 _image = null;
               });
+              Navigator.of(context).pop();
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
