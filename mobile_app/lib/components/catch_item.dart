@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
+import 'dart:math';
 
 class CatchItem extends StatelessWidget {
   const CatchItem({
@@ -7,11 +8,13 @@ class CatchItem extends StatelessWidget {
     required this.date,
     required this.duration,
     required this.fishCount,
+    required this.fishNames,
   });
 
   final String date;
   final int duration;
   final int fishCount;
+  final List<String> fishNames;
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +54,10 @@ class CatchItem extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const FishItem(name: "CARP", highlighted: true),
-                        const FishItem(name: "STURGEON"),
-                        const FishItem(name: "VOBLA"),
+                        FishItem(name: fishNames[0], highlighted: true),
+                        if (fishNames.length > 1)
+                          for (var i = 1; i < min(fishNames.length, 3); i++)
+                            FishItem(name: fishNames[i]),
                       ],
                     ),
                   ],

@@ -184,10 +184,20 @@ class _CatchPageState extends State<CatchPage> {
                             .inHours
                       : 0;
                   var fishCount = _catches[index].caughtFish.length;
+                  var caughtFish = _catches[index].caughtFish;
+                  final fishCounts = <String, int>{};
+                  for (var fish in caughtFish) {
+                    final name = fish.fish.name;
+                    fishCounts[name] = (fishCounts[name] ?? 0) + 1;
+                  }
+                  final sortedFish = fishCounts.entries.toList()
+                    ..sort((a, b) => b.value.compareTo(a.value));
+                  final uniqueFishList = sortedFish.map((e) => e.key).toList();
                   return CatchItem(
                     date: date,
                     duration: duration,
                     fishCount: fishCount,
+                    fishNames: uniqueFishList,
                   );
                 },
               );
