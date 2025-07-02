@@ -5,6 +5,7 @@ on:
 
 jobs:
   deploy:
+    environment: prod
     runs-on: self-hosted
     defaults:
       run:
@@ -16,7 +17,8 @@ jobs:
 
       - name: Run docker-compose
         run: |
-          sops --input-type dotenv --output-type dotenv -d .env.enc > .env
+          echo "${{ secrets.POSTGRES_DB }}" > .env
+          echo "${{ secrets.POSTGRES_USER }}" >> .env
+          echo "${{ secrets.POSTGRES_PASSWORD }}" >> .env
           docker-compose down
           docker-compose up -d --build --remove-orphans
-

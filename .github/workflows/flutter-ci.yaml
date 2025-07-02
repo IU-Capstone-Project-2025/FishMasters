@@ -1,10 +1,8 @@
 name: Flutter CI
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" , "stage" ]
 
 jobs:
   build:
@@ -18,16 +16,16 @@ jobs:
       - uses: flutter-actions/setup-flutter@v3
         with:
           channel: 'stable'
-          flutter-version: '3.25.0' 
-          
+          flutter-version: '3.25.0'
+
       - name: Install dependencies
         run: flutter pub get
-        
+
       - name: Analyze code
         run: flutter analyze
-        
+
       # - name: Run tests (if any)
       #   run: flutter test
-      
+
       - name: Build APK (release)
         run: flutter build apk --release
