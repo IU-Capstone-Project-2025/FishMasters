@@ -39,7 +39,8 @@ class CatchItem extends StatelessWidget {
                     Icon(Icons.access_time),
                     SizedBox(width: 8),
                     Text(
-                      "${duration != 0 ? duration : 'Less than an'} hour${duration < 2 ? '' : 's'} - $fishCount fish",
+                      "${duration != 0 ? duration : 'Less than an'} hour"
+                      "${duration < 2 ? '' : 's'} - $fishCount fish",
                     ),
                   ],
                 ),
