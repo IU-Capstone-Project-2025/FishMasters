@@ -7,7 +7,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
 
 @OpenAPIDefinition(
         servers = {
-                @Server(url = "https://capstone.aquaf1na.fun:8080", description = "Production server"),
+                @Server(url = "https://capstone.aquaf1na.fun/", description = "Production server"),
+                @Server(url = "https://stage.aquaf1na.fun/", description = "Stage server"),
                 @Server(url = "http://localhost:8080", description = "Local server")
         }
 )
