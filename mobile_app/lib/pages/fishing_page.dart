@@ -39,11 +39,10 @@ class _FishingPageState extends State<FishingPage> {
     final x = 0.1;
     final y = 0.1;
     final response = await http.post(
-      Uri.parse(
-        'https://capstone.aquaf1na.fun/fishing/$name'
-      ),
+      Uri.parse('https://capstone.aquaf1na.fun/fishing/$name'),
       headers: {'Content-Type': 'application/json'},
-      body: '{"fisherEmail": "$email", "water": {"id": "$id", "x": "$x", "y": "$y"}}',
+      body:
+          '{"fisherEmail": "$email", "water": {"id": "$id", "x": "$x", "y": "$y"}}',
     );
 
     if (response.statusCode != 200) {
@@ -233,11 +232,10 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
     final weight = 5;
     final photoString = _image.toString();
     final response = await http.post(
-      Uri.parse(
-        'https://capstone.aquaf1na.fun/fishing/add-caight-fish'
-      ),
+      Uri.parse('https://capstone.aquaf1na.fun/fishing/add-caight-fish'),
       headers: {'Content-Type': 'application/json'},
-      body: '{"fishingId": "$fishingId", "fishId": "$fishId", "weight": "$weight", "photo": "$photoString"}',
+      body:
+          '{"fishingId": "$fishingId", "fishId": "$fishId", "weight": "$weight", "photo": "$photoString"}',
     );
 
     if (response.statusCode != 200) {
