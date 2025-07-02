@@ -1,10 +1,8 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "main", "dev" ]
   pull_request:
-    branches: [ "main", "dev" ]
+    branches: [ "main", "stage" ]
 
 jobs:
   build:
@@ -13,5 +11,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build back --tag java-backend:$(date +%s)
+      run: docker build back --tag java-backend
+
+    - name: Build the ML image
+      run: docker build ml --tag machine-learn
 
