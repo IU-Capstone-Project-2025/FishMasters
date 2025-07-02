@@ -66,6 +66,46 @@ class _CatchPageState extends State<CatchPage> {
             photo: 'https://example.com/carp.jpg',
           ),
         ),
+        CaughtFishModel(
+          id: 3,
+          fisher: 'j.smith@example.com',
+          avgWeight: 1.8,
+          fish: FishModel(
+            id: 3,
+            name: 'PIKE',
+            photo: 'https://example.com/pike.jpg',
+          ),
+        ),
+        CaughtFishModel(
+          id: 4,
+          fisher: 'a.jones@example.com',
+          avgWeight: 2.2,
+          fish: FishModel(
+            id: 4,
+            name: 'PERCH',
+            photo: 'https://example.com/perch.jpg',
+          ),
+        ),
+        CaughtFishModel(
+          id: 5,
+          fisher: 'm.brown@example.com',
+          avgWeight: 2.9,
+          fish: FishModel(
+            id: 5,
+            name: 'BREAM',
+            photo: 'https://example.com/bream.jpg',
+          ),
+        ),
+        CaughtFishModel(
+          id: 6,
+          fisher: 'm.brown@example.com',
+          avgWeight: 2.9,
+          fish: FishModel(
+            id: 5,
+            name: 'BREAM',
+            photo: 'https://example.com/bream.jpg',
+          ),
+        ),
       ],
     ),
     FishingModel(
