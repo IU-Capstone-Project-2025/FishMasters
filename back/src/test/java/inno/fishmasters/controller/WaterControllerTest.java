@@ -1,7 +1,6 @@
-package inno.fishmasters;
+package inno.fishmasters.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import inno.fishmasters.controller.WaterController;
 import inno.fishmasters.dto.request.water.WaterCreationRequest;
 import inno.fishmasters.entity.Water;
 import inno.fishmasters.service.WaterService;

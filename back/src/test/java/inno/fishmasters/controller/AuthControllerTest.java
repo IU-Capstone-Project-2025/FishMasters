@@ -1,7 +1,6 @@
-package inno.fishmasters;
+package inno.fishmasters.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import inno.fishmasters.controller.AuthController;
 import inno.fishmasters.dto.request.auth.CreateFisherRequest;
 import inno.fishmasters.dto.request.auth.LoginFisherRequest;
 import inno.fishmasters.entity.Fisher;
