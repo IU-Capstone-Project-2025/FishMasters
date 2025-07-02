@@ -99,6 +99,7 @@ class _CatchPageState extends State<CatchPage> {
       final response = await http.get(
         Uri.parse('https://capstone.aquaf1na.fun/api/fishing/$email'),
       );
+      debugPrint('Fetching catches for $email');
       if (response.statusCode == 200) {
         final List<dynamic> data = response.body.isNotEmpty
             ? (response.body as List)
@@ -106,7 +107,7 @@ class _CatchPageState extends State<CatchPage> {
         _catches = data.map((e) => FishingModel.fromJson(e)).toList();
         debugPrint('Fetched ${_catches.length} catches');
       } else {
-        throw Exception('Failed to load catches');
+        throw Exception('Failed to load catches ${response.statusCode}');
       }
     } catch (e) {
       debugPrint('Error fetching catches: $e');
