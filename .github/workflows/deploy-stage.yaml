@@ -1,0 +1,21 @@
+name: Manual Deployment for STAGE
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: stage
+    defaults:
+      run:
+        working-directory: back
+        
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run docker-compose
+        run: |
+          sops --input-type dotenv --output-type dotenv -d .env.enc > .env
+          docker-compose down
+          docker-compose up -d --build --remove-orphans
