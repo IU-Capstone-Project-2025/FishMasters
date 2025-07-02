@@ -6,7 +6,7 @@ on:
 jobs:
   deploy:
     environment: prod
-    runs-on: self-hosted
+    runs-on: prod
     defaults:
       run:
         working-directory: back
