@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
 import 'package:http/http.dart' as http;
 import 'package:hive/hive.dart';
+import 'package:mobile_app/models/models.dart';
 
 class CatchPage extends StatefulWidget {
   const CatchPage({super.key});
@@ -47,7 +48,46 @@ class _CatchPageState extends State<CatchPage> {
     'March 18, 2025',
   ];
 
-  //
+  var _catches = <FishingModel>[
+    FishingModel(
+      id: 1,
+      startTime: '2025-03-13T08:00:00',
+      endTime: '2025-03-13T14:00:00',
+      userEmail: 'i.ivanov@example.com',
+      water: WaterModel(id: 1, x: 0.1, y: 0.2),
+      caughtFish: [
+        CaughtFishModel(
+          id: 1,
+          fisher: 'i.ivanov@example.com',
+          avgWeight: 3.0,
+          fish: FishModel(
+            id: 1,
+            name: 'CARP',
+            photo: 'https://example.com/carp.jpg',
+          ),
+        ),
+      ],
+    ),
+    FishingModel(
+      id: 2,
+      userEmail: 'b.ivanov',
+      startTime: '2025-03-14T09:00:00',
+      endTime: '2025-03-14T15:00:00',
+      caughtFish: [
+        CaughtFishModel(
+          id: 2,
+          fisher: 'sadfasj',
+          avgWeight: 2.5,
+          fish: FishModel(
+            id: 2,
+            name: 'STURGEON',
+            photo: 'https://example.com/sturgeon.jpg',
+          ),
+        ),
+      ],
+      water: WaterModel(id: 2, x: 0.3, y: 0.4),
+    ),
+  ];
 
   Future<void> _fetchCatches() async {
     if (!Hive.isBoxOpen('settings')) {
@@ -60,12 +100,15 @@ class _CatchPageState extends State<CatchPage> {
         Uri.parse('https://capstone.aquaf1na.fun/api/fishing/$email'),
       );
       if (response.statusCode == 200) {
-        // TODO: Parse the response and update the UI
+        final List<dynamic> data = response.body.isNotEmpty
+            ? (response.body as List)
+            : [];
+        _catches = data.map((e) => FishingModel.fromJson(e)).toList();
+        debugPrint('Fetched ${_catches.length} catches');
       } else {
         throw Exception('Failed to load catches');
       }
     } catch (e) {
-      // Handle error
       debugPrint('Error fetching catches: $e');
     }
   }
@@ -86,9 +129,13 @@ class _CatchPageState extends State<CatchPage> {
             builder: (context, asyncSnapshot) {
               return ListView.builder(
                 controller: _controller,
-                itemCount: dates.length,
+                itemCount: _catches.length,
                 itemBuilder: (context, index) {
-                  return CatchItem(date: dates[index]);
+                  var date = _catches[index].startTime.split('T')[0];
+                  if (date.isEmpty) {
+                    date = 'Unknown Date';
+                  }
+                  return CatchItem(date: date);
                 },
               );
             },
