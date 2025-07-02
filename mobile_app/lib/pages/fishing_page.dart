@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class FishingPage extends StatefulWidget {
   const FishingPage({super.key});
@@ -245,12 +246,19 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
       'POST',
       Uri.parse('https://stage.aquaf1na.fun/api/caught-fish'),
     );
-    request.fields['data'] = jsonEncode({
-      'fisherEmail': email,
-      'fishingId': fishingId,
-      'fishId': fishId,
-      'weight': weight,
-    });
+    request.files.add(
+      http.MultipartFile.fromString(
+        'data',
+        jsonEncode({
+          "fishingId": fishingId,
+          "fishId": fishId,
+          "weight": weight,
+          "fisherEmail": email,
+        }),
+        filename: 'data.json',
+        contentType: MediaType('application', 'json'),
+      ),
+    );
     request.files.add(
       await http.MultipartFile.fromPath(
         'photo',
