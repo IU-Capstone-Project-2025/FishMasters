@@ -1,1 +1,5 @@
 .DS_Store
+*.faiss
+*.pyc
+*.pkl
+*.env

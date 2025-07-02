@@ -3,7 +3,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct, Filter, FieldCondition, MatchValue
 import uuid
 import os
-from .fish_species import FishSpecies
+from fish_species import FishSpecies
 
 
 
@@ -40,10 +40,10 @@ class VectorDatabase:
             
             if self.collection_name not in collection_names:
                 # Create collection with vector configuration
-                # Assuming 512-dimensional vectors (adjust based on your embedding model)
+                # Using 1024-dimensional vectors based on the CSV embedding format
                 self.client.create_collection(
                     collection_name=self.collection_name,
-                    vectors_config=VectorParams(size=512, distance=Distance.COSINE)
+                    vectors_config=VectorParams(size=1024, distance=Distance.COSINE)
                 )
                 print(f"Created collection: {self.collection_name}")
             else:
