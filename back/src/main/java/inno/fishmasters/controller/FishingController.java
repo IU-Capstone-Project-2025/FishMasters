@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/fishing")
-public class   FishingController {
+public class FishingController {
     private final FishingService fishingService;
 
     @Operation(summary = "Start a new fishing session")
@@ -31,14 +31,14 @@ public class   FishingController {
         return ResponseEntity.ok(fishing);
     }
 
-    @GetMapping("/{fishingId}")
+    @GetMapping("/id/{fishingId}")
     @Operation(summary = "Get fishing session by ID", description = "fishingId is a path variable")
     public ResponseEntity<Fishing> getFishingById(@PathVariable Long fishingId) {
         Fishing fishing = fishingService.getFishingById(fishingId);
         return ResponseEntity.ok(fishing);
     }
 
-    @GetMapping("/{fisherEmail}")
+    @GetMapping("/email/{fisherEmail}")
     @Operation(summary = "Get all fishings by fisher email", description = "fisherEmail is a path variable")
     public ResponseEntity<List<Fishing>> getFishingsByFisherEmail(@PathVariable String fisherEmail) {
         List<Fishing> fishings = fishingService.getFishingsByFisherEmail(fisherEmail);
