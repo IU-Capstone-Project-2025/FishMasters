@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Branch Checker
 
 on:
   pull_request:
