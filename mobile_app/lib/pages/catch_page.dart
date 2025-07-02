@@ -52,7 +52,7 @@ class _CatchPageState extends State<CatchPage> {
     FishingModel(
       id: 1,
       startTime: '2025-03-13T08:00:00',
-      endTime: '2025-03-13T14:00:00',
+      endTime: '2025-03-13T08:30:00',
       userEmail: 'i.ivanov@example.com',
       water: WaterModel(id: 1, x: 0.1, y: 0.2),
       caughtFish: [
@@ -136,7 +136,19 @@ class _CatchPageState extends State<CatchPage> {
                   if (date.isEmpty) {
                     date = 'Unknown Date';
                   }
-                  return CatchItem(date: date);
+                  var duration = _catches[index].startTime.isNotEmpty
+                      ? DateTime.parse(_catches[index].endTime)
+                            .difference(
+                              DateTime.parse(_catches[index].startTime),
+                            )
+                            .inHours
+                      : 0;
+                  var fishCount = _catches[index].caughtFish.length;
+                  return CatchItem(
+                    date: date,
+                    duration: duration,
+                    fishCount: fishCount,
+                  );
                 },
               );
             },

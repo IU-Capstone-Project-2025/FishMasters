@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
 
 class CatchItem extends StatelessWidget {
-  const CatchItem({super.key, required this.date});
+  const CatchItem({
+    super.key,
+    required this.date,
+    required this.duration,
+    required this.fishCount,
+  });
 
   final String date;
+  final int duration;
+  final int fishCount;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +35,12 @@ class CatchItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  children: const [
+                  children: [
                     Icon(Icons.access_time),
                     SizedBox(width: 8),
-                    Text("6 Hours - 18 Fish"),
+                    Text(
+                      "${duration != 0 ? duration : 'Less than an'} hour${duration < 2 ? '' : 's'} - $fishCount fish",
+                    ),
                   ],
                 ),
                 const SizedBox(height: 12),
