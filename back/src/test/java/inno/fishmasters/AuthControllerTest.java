@@ -2,6 +2,7 @@ package inno.fishmasters;
 
 import inno.fishmasters.controller.AuthController;
 import inno.fishmasters.dto.request.auth.CreateFisherRequest;
+import inno.fishmasters.dto.request.auth.LoginFisherRequest;
 import inno.fishmasters.entity.Fisher;
 import inno.fishmasters.service.FisherService;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,29 @@ public class AuthControllerTest {
 
         ResponseEntity<Fisher> response = authController.registerFisher(request);
 
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(fisher, response.getBody());
+    }
+
+    @Test
+    void shouldLoginExistingFisher() {
+        LoginFisherRequest request = new LoginFisherRequest(
+                "test@mail.com",
+                "password"
+        );
+
+        Fisher fisher = new Fisher(
+                "test@mail.com",
+                "Name",
+                "Surname",
+                "password",
+                0,
+                null
+        );
+
+        when(fisherService.login(request)).thenReturn(fisher);
+
+        ResponseEntity<Fisher> response = authController.loginFisher(request);
         assertEquals(200, response.getStatusCode().value());
         assertEquals(fisher, response.getBody());
     }
