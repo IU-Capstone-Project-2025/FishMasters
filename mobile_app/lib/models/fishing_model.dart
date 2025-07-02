@@ -5,7 +5,7 @@ class FishingModel {
   final int id;
   final String userEmail;
   final String startTime;
-  final String endTime;
+  final String? endTime;
   final List<CaughtFishModel> caughtFish;
   final WaterModel water;
 
@@ -21,10 +21,10 @@ class FishingModel {
   factory FishingModel.fromJson(Map<String, dynamic> json) {
     return FishingModel(
       id: json['id'] as int,
-      userEmail: json['user_email'] as String,
-      startTime: json['start_time'] as String,
-      endTime: json['end_time'] as String,
-      caughtFish: (json['caught_fish'] as List)
+      userEmail: json['userEmail'] as String,
+      startTime: json['startTime'] as String,
+      endTime: json['endTime'] as String?,
+      caughtFish: (json['caughtFish'] as List)
           .map((e) => CaughtFishModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       water: WaterModel.fromJson(json['water'] as Map<String, dynamic>),
@@ -34,10 +34,10 @@ class FishingModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user_email': userEmail,
-      'start_time': startTime,
-      'end_time': endTime,
-      'caught_fish': caughtFish.map((e) => e.toJson()).toList(),
+      'userEmail': userEmail,
+      'startTime': startTime,
+      'endTime': endTime,
+      'caughtFish': caughtFish.map((e) => e.toJson()).toList(),
       'water': water.toJson(),
     };
   }

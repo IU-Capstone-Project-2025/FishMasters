@@ -18,7 +18,7 @@ class CaughtFishModel {
     return CaughtFishModel(
       id: json['id'] as int,
       fisher: json['fisher'] as String,
-      avgWeight: (json['avg_weight'] as num).toDouble(),
+      avgWeight: (json['avgWeight'] as num).toDouble(),
       fish: FishModel.fromJson(json['fish'] as Map<String, dynamic>),
     );
   }
@@ -27,7 +27,7 @@ class CaughtFishModel {
     return {
       'id': id,
       'fisher': fisher,
-      'avg_weight': avgWeight,
+      'avgWeight': avgWeight,
       'fish': fish.toJson(),
     };
   }
