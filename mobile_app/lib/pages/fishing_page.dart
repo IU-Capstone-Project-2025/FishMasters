@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class FishingPage extends StatefulWidget {
   const FishingPage({super.key});
@@ -39,9 +40,7 @@ class _FishingPageState extends State<FishingPage> {
     final x = 0.1;
     final y = 0.1;
     final response = await http.post(
-      Uri.parse(
-        'https://capstone.aquaf1na.fun/api/fishing/$name'
-      ),
+      Uri.parse('https://stage.aquaf1na.fun/api/fishing/$name'),
       headers: {'Content-Type': 'application/json'},
       body: '{"fisherEmail": "$email", "water": {"id": 1, "x": 0.1, "y": 0.1}}',
     );
@@ -193,8 +192,11 @@ class _FishingPageState extends State<FishingPage> {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text('Upload image', textAlign: TextAlign.center,),
-                    content: Column(mainAxisSize: MainAxisSize.min, children: [ImageUploadField()]),
+                    title: Text('Upload image', textAlign: TextAlign.center),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [ImageUploadField()],
+                    ),
                   ),
                 );
               },
@@ -239,15 +241,32 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
     // Hardcoded for now
     final fishId = 2;
     final weight = 5;
-    final photoString = _image.toString();
-    final response = await http.post(
-      Uri.parse(
-        'https://capstone.aquaf1na.fun/api/fishing/add-caught-fish'
-      ),
-      headers: {'Content-Type': 'application/json'},
-      body: '{"fishingId": "$fishingId", "fishId": $fishId, "weight": $weight, "photo": "$photoString"}',
+    final email = settingsBox.get('email', defaultValue: '').toString();
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse('https://stage.aquaf1na.fun/api/caught-fish'),
     );
-
+    request.files.add(
+      http.MultipartFile.fromString(
+        'data',
+        jsonEncode({
+          "fishingId": fishingId,
+          "fishId": fishId,
+          "weight": weight,
+          "fisherEmail": email,
+        }),
+        filename: 'data.json',
+        contentType: MediaType('application', 'json'),
+      ),
+    );
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'photo',
+        _image!.path,
+        filename: _image!.path.split('/').last,
+      ),
+    );
+    final response = await request.send();
     if (response.statusCode != 200) {
       debugPrint('Picture upload failed: ${response.statusCode}');
       if (!mounted) return;
