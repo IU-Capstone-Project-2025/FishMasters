@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
+import 'package:http/http.dart' as http;
+import 'package:hive/hive.dart';
 
 class CatchPage extends StatefulWidget {
   const CatchPage({super.key});
@@ -45,6 +47,29 @@ class _CatchPageState extends State<CatchPage> {
     'March 18, 2025',
   ];
 
+  //
+
+  Future<void> _fetchCatches() async {
+    if (!Hive.isBoxOpen('settings')) {
+      await Hive.openBox('settings');
+    }
+    final box = Hive.box('settings');
+    final email = box.get('email', defaultValue: '');
+    try {
+      final response = await http.get(
+        Uri.parse('https://capstone.aquaf1na.fun/api/fishing/$email'),
+      );
+      if (response.statusCode == 200) {
+        // TODO: Parse the response and update the UI
+      } else {
+        throw Exception('Failed to load catches');
+      }
+    } catch (e) {
+      // Handle error
+      debugPrint('Error fetching catches: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
@@ -56,67 +81,19 @@ class _CatchPageState extends State<CatchPage> {
       ),
       body: Stack(
         children: [
-          ListView.builder(
-            controller: _controller,
-            itemCount: dates.length,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    color: Colors.grey.shade400,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12.0,
-                    ),
-                    child: Text(
-                      dates[index],
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Card(
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 4.0,
-                      horizontal: 8.0,
-                    ),
-                    elevation: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: const [
-                              Icon(Icons.access_time),
-                              SizedBox(width: 8),
-                              Text("6 Hours - 18 Fish"),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              SizedBox(width: 32),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const FishItem(
-                                    name: "CARP",
-                                    highlighted: true,
-                                  ),
-                                  const FishItem(name: "STURGEON"),
-                                  const FishItem(name: "VOBLA"),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+          FutureBuilder(
+            future: _fetchCatches(),
+            builder: (context, asyncSnapshot) {
+              return ListView.builder(
+                controller: _controller,
+                itemCount: dates.length,
+                itemBuilder: (context, index) {
+                  return CatchItem(date: dates[index]);
+                },
               );
             },
           ),
+
           if (_showBottomBar)
             Positioned(
               bottom: 0,
