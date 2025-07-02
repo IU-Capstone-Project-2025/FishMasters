@@ -64,6 +64,15 @@ class CatchItem extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 8),
+                TextButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Details not implemented yet')),
+                    );
+                  },
+                  child: Text('View Details'),
+                ),
               ],
             ),
           ),
