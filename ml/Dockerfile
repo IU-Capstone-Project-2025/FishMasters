@@ -1,4 +1,6 @@
-FROM python
+FROM python:3.10-slim  # или 3.11
+
+RUN pip install faiss-cpu
 
 WORKDIR /app
 
