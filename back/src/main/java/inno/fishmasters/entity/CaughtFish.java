@@ -25,6 +25,10 @@ public class CaughtFish {
     @Column(nullable = true)
     private Double avgWeight;
 
+    @Column(name = "photo")
+    @Lob
+    private byte[] photo;
+
     @ManyToOne
     @JoinColumn(name = "fishing_id", nullable = false)
     @JsonBackReference

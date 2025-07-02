@@ -7,6 +7,6 @@ public record CaughtFishRequest(
         Long fishingId,
         Long fishId,
         Double weight,
-        String photo
+        String fisherEmail
 ) {
 }
