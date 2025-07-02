@@ -29,7 +29,14 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Tests with maven
-      run: mvn clean package
+    - name: Run tests
+      run: mvn -B clean verify -e
 
+    - name: Upload test report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: surefire-reports
+        path: back/target/surefire-reports
+    
 
