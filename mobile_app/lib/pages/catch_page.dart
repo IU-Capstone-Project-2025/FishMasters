@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
+import 'package:http/http.dart' as http;
+import 'package:hive/hive.dart';
+import 'package:mobile_app/models/models.dart';
+import 'dart:convert';
 
 class CatchPage extends StatefulWidget {
   const CatchPage({super.key});
@@ -45,6 +49,117 @@ class _CatchPageState extends State<CatchPage> {
     'March 18, 2025',
   ];
 
+  // var _catches = <FishingModel>[
+  //   FishingModel(
+  //     id: 1,
+  //     startTime: '2025-03-13T08:00:00',
+  //     endTime: '2025-03-13T08:30:00',
+  //     userEmail: 'i.ivanov@example.com',
+  //     water: WaterModel(id: 1, x: 0.1, y: 0.2),
+  //     caughtFish: [
+  //       CaughtFishModel(
+  //         id: 1,
+  //         fisher: 'i.ivanov@example.com',
+  //         avgWeight: 3.0,
+  //         fish: FishModel(
+  //           id: 1,
+  //           name: 'CARP',
+  //           photo: 'https://example.com/carp.jpg',
+  //         ),
+  //       ),
+  //       CaughtFishModel(
+  //         id: 3,
+  //         fisher: 'j.smith@example.com',
+  //         avgWeight: 1.8,
+  //         fish: FishModel(
+  //           id: 3,
+  //           name: 'PIKE',
+  //           photo: 'https://example.com/pike.jpg',
+  //         ),
+  //       ),
+  //       CaughtFishModel(
+  //         id: 4,
+  //         fisher: 'a.jones@example.com',
+  //         avgWeight: 2.2,
+  //         fish: FishModel(
+  //           id: 4,
+  //           name: 'PERCH',
+  //           photo: 'https://example.com/perch.jpg',
+  //         ),
+  //       ),
+  //       CaughtFishModel(
+  //         id: 5,
+  //         fisher: 'm.brown@example.com',
+  //         avgWeight: 2.9,
+  //         fish: FishModel(
+  //           id: 5,
+  //           name: 'BREAM',
+  //           photo: 'https://example.com/bream.jpg',
+  //         ),
+  //       ),
+  //       CaughtFishModel(
+  //         id: 6,
+  //         fisher: 'm.brown@example.com',
+  //         avgWeight: 2.9,
+  //         fish: FishModel(
+  //           id: 5,
+  //           name: 'BREAM',
+  //           photo: 'https://example.com/bream.jpg',
+  //         ),
+  //       ),
+  //     ],
+  //   ),
+  //   FishingModel(
+  //     id: 2,
+  //     userEmail: 'b.ivanov',
+  //     startTime: '2025-03-14T09:00:00',
+  //     endTime: '2025-03-14T15:00:00',
+  //     caughtFish: [
+  //       CaughtFishModel(
+  //         id: 2,
+  //         fisher: 'sadfasj',
+  //         avgWeight: 2.5,
+  //         fish: FishModel(
+  //           id: 2,
+  //           name: 'STURGEON',
+  //           photo: 'https://example.com/sturgeon.jpg',
+  //         ),
+  //       ),
+  //     ],
+  //     water: WaterModel(id: 2, x: 0.3, y: 0.4),
+  //   ),
+  // ];
+
+  var _catches = <FishingModel>[];
+
+  Future<void> _fetchCatches() async {
+    if (!Hive.isBoxOpen('settings')) {
+      await Hive.openBox('settings');
+    }
+    final box = Hive.box('settings');
+    final email = box.get('email', defaultValue: '');
+    try {
+      final response = await http.get(
+        Uri.parse('https://capstone.aquaf1na.fun/api/fishing/email/$email'),
+      );
+      debugPrint('Fetching catches for $email');
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        final List<dynamic> data = response.body.isNotEmpty
+            ? (jsonDecode(response.body) as List)
+            : [];
+        _catches = data
+            .map((e) => FishingModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        debugPrint('Fetched ${_catches.length} catches');
+      } else {
+        throw Exception('Failed to load catches ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error fetching catches: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
@@ -56,67 +171,50 @@ class _CatchPageState extends State<CatchPage> {
       ),
       body: Stack(
         children: [
-          ListView.builder(
-            controller: _controller,
-            itemCount: dates.length,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    color: Colors.grey.shade400,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12.0,
-                    ),
-                    child: Text(
-                      dates[index],
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Card(
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 4.0,
-                      horizontal: 8.0,
-                    ),
-                    elevation: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: const [
-                              Icon(Icons.access_time),
-                              SizedBox(width: 8),
-                              Text("6 Hours - 18 Fish"),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              SizedBox(width: 32),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const FishItem(
-                                    name: "CARP",
-                                    highlighted: true,
-                                  ),
-                                  const FishItem(name: "STURGEON"),
-                                  const FishItem(name: "VOBLA"),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+          FutureBuilder(
+            future: _fetchCatches(),
+            builder: (context, asyncSnapshot) {
+              // TODO: Fix bug with bottom bar reloading page
+              // if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+              //   return const Center(child: CircularProgressIndicator());
+              // }
+              return ListView.builder(
+                controller: _controller,
+                itemCount: _catches.length,
+                itemBuilder: (context, index) {
+                  var date = _catches[index].startTime.split('T')[0];
+                  if (date.isEmpty) {
+                    date = 'Unknown Date';
+                  }
+                  // TODO: Show ongoing fishing event if endTime is null
+                  var duration = _catches[index].endTime != null
+                      ? DateTime.parse(_catches[index].endTime!)
+                            .difference(
+                              DateTime.parse(_catches[index].startTime),
+                            )
+                            .inHours
+                      : 0;
+                  var fishCount = _catches[index].caughtFish.length;
+                  var caughtFish = _catches[index].caughtFish;
+                  final fishCounts = <String, int>{};
+                  for (var fish in caughtFish) {
+                    final name = fish.fish.name;
+                    fishCounts[name] = (fishCounts[name] ?? 0) + 1;
+                  }
+                  final sortedFish = fishCounts.entries.toList()
+                    ..sort((a, b) => b.value.compareTo(a.value));
+                  final uniqueFishList = sortedFish.map((e) => e.key).toList();
+                  return CatchItem(
+                    date: date,
+                    duration: duration,
+                    fishCount: fishCount,
+                    fishNames: uniqueFishList,
+                  );
+                },
               );
             },
           ),
+
           if (_showBottomBar)
             Positioned(
               bottom: 0,
