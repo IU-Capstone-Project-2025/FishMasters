@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: docker build back --tag java-backend
-
-    - name: Build the ML image
-      run: docker build ml --tag machine-learn
+    # will return when ML man's will fix the build
+    # - name: Build the ML image
+    #   run: docker build ml --tag machine-learn
 
