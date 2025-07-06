@@ -8,10 +8,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,6 +32,16 @@ public class AuthController {
         return ResponseEntity
                 .status(200)
                 .body(fisherService.login(request));
+    }
+
+    @Operation(summary = "Update fisher photo")
+    @PostMapping(value = "/update-photo", consumes = "multipart/form-data")
+    public ResponseEntity<Fisher> uploadFisherPhoto(
+            @RequestParam("email") String email,
+            @RequestPart("photo") MultipartFile photo
+    ) {
+        Fisher fisher = fisherService.updateFisherPhoto(email, photo);
+        return ResponseEntity.ok(fisher);
     }
 
 }

@@ -8,6 +8,7 @@ import inno.fishmasters.repository.FisherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Log4j2
 @Service
@@ -56,6 +57,18 @@ public class FisherService {
         }
 
         return fisher;
+    }
+
+    public Fisher updateFisherPhoto(String email, MultipartFile photo) {
+        Fisher fisher = fisherRepository.findByEmail(email);
+        if (photo != null && !photo.isEmpty()) {
+            try {
+                fisher.setPhoto(photo.getBytes());
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to read photo bytes", e);
+            }
+        }
+        return fisherRepository.save(fisher);
     }
 
 }
