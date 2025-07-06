@@ -149,6 +149,33 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.pushReplacementNamed(context, '/register'),
                   child: const Text('Don\'t have an account? Register'),
                 ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (!Hive.isBoxOpen('settings')) {
+                      await Hive.openBox('settings');
+                    }
+                    final settingsBox = Hive.box('settings');
+                    settingsBox.put('email', 'dev@local.test');
+                    settingsBox.put('fullName', 'Developer Mode');
+                    settingsBox.put('score', 0);
+
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Logged in as developer'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                    await setLoggedIn(true);
+                    if (!context.mounted) return;
+                    Navigator.pushReplacementNamed(context, '/home');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey[200],
+                  ),
+                  child: const Text('Developer Login'),
+                ),
               ],
             ),
           ),
