@@ -33,14 +33,15 @@ class _FishingPageState extends State<FishingPage> {
     final name = isStart ? 'start' : 'end';
 
     final settingsBox = Hive.box('settings');
-    final email = "string@mail.com";
+    final email = settingsBox.get('email', defaultValue: '').toString();
+
     // Hardcoded, but in map_widget it is hardcoded as well (=1)
     final id = 2; // settingsBox.get('fishingLocationId');
     // Hardcoded for now
     final x = 0.1;
     final y = 0.1;
     final response = await http.post(
-      Uri.parse('https://stage.aquaf1na.fun/api/fishing/$name'),
+      Uri.parse('https://capstone.aquaf1na.fun/api/fishing/$name'),
       headers: {'Content-Type': 'application/json'},
       body: '{"fisherEmail": "$email", "water": {"id": 1, "x": 0.1, "y": 0.1}}',
     );
