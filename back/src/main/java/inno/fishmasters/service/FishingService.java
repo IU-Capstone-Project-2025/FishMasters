@@ -41,6 +41,10 @@ public class FishingService {
     }
 
     public List<Fishing> getFishingsByFisherEmail(String fisherEmail) {
-        return fishingRepository.getFishingsByUserEmail(fisherEmail);
+        List<Fishing> fishings = fishingRepository.getFishingsByUserEmail(fisherEmail);
+        if (fishings.isEmpty()) {
+            throw new FishingIsNotExistException("No fishing sessions found for this fisher");
+        }
+        return fishings;
     }
 }
