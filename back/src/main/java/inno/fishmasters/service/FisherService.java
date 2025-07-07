@@ -5,6 +5,7 @@ import inno.fishmasters.dto.request.auth.LoginFisherRequest;
 import inno.fishmasters.entity.Fisher;
 import inno.fishmasters.exception.FisherIsExistException;
 import inno.fishmasters.repository.FisherRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,7 @@ public class FisherService {
         return fisher;
     }
 
+    @Transactional
     public Fisher updateFisherPhoto(String email, MultipartFile photo) {
         Fisher fisher = fisherRepository.findByEmail(email);
         if (photo != null && !photo.isEmpty()) {
