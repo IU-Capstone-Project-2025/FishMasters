@@ -9,6 +9,7 @@ import inno.fishmasters.repository.CaughtFishRepository;
 import inno.fishmasters.repository.FishRepository;
 import inno.fishmasters.repository.FisherRepository;
 import inno.fishmasters.repository.FishingRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ public class CaughtFishService {
     private final FishRepository fishRepository;
     private final FisherRepository fisherRepository;
 
+    @Transactional
     public CaughtFish createCaughtFish(CaughtFishRequest request, MultipartFile photo) {
         Fishing fishing = fishingRepository.findById(request.fishingId())
                 .orElseThrow(() -> new IllegalArgumentException("Fishing event not found"));
