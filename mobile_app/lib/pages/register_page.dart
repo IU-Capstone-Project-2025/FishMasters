@@ -62,6 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
       final fullName = '${responseJson['name']} ${responseJson['surname']}';
       settingsBox.put('fullName', fullName);
       settingsBox.put('score', responseJson['score'] ?? 0);
+      settingsBox.put('photo', responseJson['photo']);
 
       debugPrint('Registered: $firstName $lastName, $email, $password');
       if (!mounted) return;

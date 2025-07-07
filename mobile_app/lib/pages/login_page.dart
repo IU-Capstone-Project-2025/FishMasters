@@ -57,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
       final fullName = '${responseJson['name']} ${responseJson['surname']}';
       settingsBox.put('fullName', fullName);
       settingsBox.put('score', responseJson['score'] ?? 0);
+      settingsBox.put('photo', responseJson['photo']);
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
