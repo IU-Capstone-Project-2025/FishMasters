@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/functions/functions.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
@@ -15,6 +24,7 @@ class ProfilePage extends StatelessWidget {
     final settingsBox = Hive.box('settings');
     final email = settingsBox.get('email', defaultValue: 'example@example.com');
     final fullName = settingsBox.get('fullName', defaultValue: 'User Name');
+    final photo = settingsBox.get('photo', defaultValue: null);
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +34,28 @@ class ProfilePage extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton(icon: const Icon(Icons.edit), onPressed: null),
+            child: IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Change Profile Picture'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ImageUploaderWidget(
+                            uri:
+                                "https://capstone.aquaf1na.fun/auth/update-photo",
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -40,13 +71,16 @@ class ProfilePage extends StatelessWidget {
                 height: 130,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: colorScheme.primary, width: 5.0),
+                  border: Border.all(color: colorScheme.primary, width: 3.0),
                 ),
                 child: CircleAvatar(
-                  radius: 60,
-                  backgroundImage: AssetImage(
-                    'assets/images/profile_picture.png',
-                  ),
+                  backgroundImage: photo != null
+                      ? MemoryImage(base64Decode(photo))
+                      : null,
+                  backgroundColor: Colors.grey[400],
+                  child: photo != null
+                      ? null
+                      : const Icon(Icons.person, size: 60, color: Colors.white),
                 ),
               ),
               const SizedBox(height: 16),
@@ -84,6 +118,106 @@ class ProfilePage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ImageUploaderWidget extends StatefulWidget {
+  final String uri;
+
+  const ImageUploaderWidget({super.key, required this.uri});
+
+  @override
+  State<ImageUploaderWidget> createState() => _ImageUploaderWidgetState();
+}
+
+class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
+  File? _image;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
+  void _uploadImage() async {
+    if (_image == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select an image first')),
+      );
+      return;
+    }
+    if (!Hive.isBoxOpen('settings')) {
+      Hive.openBox('settings');
+    }
+    final settingsBox = Hive.box('settings');
+    final email = settingsBox.get('email', defaultValue: '');
+    final request = http.MultipartRequest('POST', Uri.parse(widget.uri));
+    request.fields['email'] = email;
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'photo',
+        _image!.path,
+        filename: _image!.path.split('/').last,
+      ),
+    );
+    try {
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Image uploaded successfully')),
+        );
+        settingsBox.put('photo', FileImage(_image!));
+      } else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to upload image ${response.statusCode}'),
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!Hive.isBoxOpen('settings')) {
+      Hive.openBox('settings');
+    }
+    final settingsBox = Hive.box('settings');
+    final currentPhoto = settingsBox.get('photo', defaultValue: null);
+
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: _pickImage,
+          child: CircleAvatar(
+            radius: 60,
+            backgroundImage: _image != null
+                ? FileImage(_image!)
+                : MemoryImage(base64Decode(currentPhoto)),
+            backgroundColor: Colors.grey[400],
+            child: _image == null
+                ? const Icon(Icons.camera_alt, size: 40, color: Colors.white)
+                : null,
+          ),
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: _uploadImage,
+          child: const Text('Upload Photo'),
+        ),
+      ],
     );
   }
 }
