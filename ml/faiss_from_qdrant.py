@@ -164,7 +164,7 @@ class FaissFromQdrantDatabase:
                         vectors_matrix = np.array(vectors_to_add, dtype=np.float32)
                         self.faiss_index.train(vectors_matrix)
                         self.faiss_index.add(vectors_matrix)
-                        self.faiss_index.nprobe = 10          
+                        self.faiss_index.nprobe = 3    
                         
                         # Build mappings for this batch
                         for i, qdrant_id in enumerate(qdrant_ids):
@@ -207,7 +207,7 @@ class FaissFromQdrantDatabase:
         """Normalize vector for cosine similarity in FAISS"""
         vec_array = np.array(vector, dtype=np.float32).reshape(1, -1)
         # L2 normalize for cosine similarity
-        faiss.normalize_L2(vec_array)
+        # faiss.normalize_L2(vec_array)
         return vec_array
     
     def search(self, query_embedding: List[float], top_k: int = 5) -> List[Tuple[FishSpecies, float]]:
