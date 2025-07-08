@@ -2,8 +2,11 @@ package inno.fishmasters.service;
 
 import inno.fishmasters.dto.request.water.WaterCreationRequest;
 import inno.fishmasters.entity.Water;
+import inno.fishmasters.exception.WaterIsNotFoundException;
 import inno.fishmasters.repository.WaterRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class WaterService {
@@ -14,9 +17,20 @@ public class WaterService {
     }
 
     public Water createWater(WaterCreationRequest request) {
-        Water water = new Water();
-        water.setX(request.x());
-        water.setY(request.y());
+        Water water = new Water(
+                (request.x() * 1000 + request.y()),
+                request.x(),
+                request.y()
+        );
         return waterRepository.save(water);
+    }
+
+    public Water getWaterById(Double id) {
+        return waterRepository.findById(id)
+                .orElseThrow(() -> new WaterIsNotFoundException("Water not found with id: " + id));
+    }
+
+    public List<Water> getAllWaters() {
+        return waterRepository.findAll();
     }
 }

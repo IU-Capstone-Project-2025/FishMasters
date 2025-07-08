@@ -35,7 +35,7 @@ public class WaterControllerTest {
                 0.5
         );
         Water water = new Water(
-                1L,
+                500.5,
                 0.5,
                 0.5
         );
@@ -45,7 +45,7 @@ public class WaterControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.id").value(500.5))
                 .andExpect(jsonPath("$.x").value(0.5))
                 .andExpect(jsonPath("$.y").value(0.5));
     }
