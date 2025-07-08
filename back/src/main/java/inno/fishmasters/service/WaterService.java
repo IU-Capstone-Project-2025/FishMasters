@@ -18,14 +18,14 @@ public class WaterService {
 
     public Water createWater(WaterCreationRequest request) {
         Water water = new Water(
-                (long) (request.x() * 1000 + request.y()),
+                (request.x() * 1000 + request.y()),
                 request.x(),
                 request.y()
         );
         return waterRepository.save(water);
     }
 
-    public Water getWaterById(Long id) {
+    public Water getWaterById(Double id) {
         return waterRepository.findById(id)
                 .orElseThrow(() -> new WaterIsNotFoundException("Water not found with id: " + id));
     }

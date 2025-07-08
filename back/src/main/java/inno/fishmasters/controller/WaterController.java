@@ -28,7 +28,7 @@ public class WaterController {
 
     @Operation(summary = "Get water point by coordinates")
     @GetMapping("/{id}")
-    public ResponseEntity<Water> getWaterById(@PathVariable Long id) {
+    public ResponseEntity<Water> getWaterById(@PathVariable Double id) {
         Water water = waterService.getWaterById(id);
         return ResponseEntity.ok(water);
     }
