@@ -15,7 +15,6 @@ import lombok.Setter;
 public class Water {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
