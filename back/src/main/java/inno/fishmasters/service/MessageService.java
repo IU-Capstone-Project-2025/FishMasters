@@ -2,6 +2,7 @@ package inno.fishmasters.service;
 
 
 import inno.fishmasters.dto.request.discussion.CreateMessageRequest;
+import inno.fishmasters.dto.response.MessageResponse;
 import inno.fishmasters.entity.Discussion;
 import inno.fishmasters.entity.Message;
 import inno.fishmasters.exception.DiscussionIsNotFoundException;
@@ -22,24 +23,37 @@ public final class MessageService {
     private final MessageRepository messageRepository;
     private final DiscussionRepository discussionRepository;
 
-    public List<Message> getAllMessagesByDiscussionId(Long discussionId) {
+    public List<MessageResponse> getAllMessagesByDiscussionId(Long discussionId) {
 
         Discussion discussion = discussionRepository.findById(discussionId)
                 .orElseThrow(() -> new DiscussionIsNotFoundException("Discussion not found with id: " + discussionId));
-        return messageRepository.findAllByDiscussion(discussion);
+        return messageRepository.findAllByDiscussion(discussion).stream().map(
+                el -> new MessageResponse(
+                        el.getId(),
+                        el.getContent(),
+                        el.getFisherEmail(),
+                        el.getCreatedAt()
+                )
+        ).toList();
     }
 
-    public Message createMessage(CreateMessageRequest request) {
+    public MessageResponse createMessage(CreateMessageRequest request) {
 
         Discussion discussion = discussionRepository.findById(request.discussionId())
                 .orElseThrow(() -> new DiscussionIsNotFoundException("Discussion not found with id: " + request.discussionId()));
 
-        return messageRepository.save(new Message(
+        Message message = messageRepository.save(new Message(
                 request.content(),
                 discussion,
                 request.fisherEmail(),
                 LocalDateTime.now()
         ));
+        return new MessageResponse(
+                message.getId(),
+                message.getContent(),
+                message.getFisherEmail(),
+                message.getCreatedAt()
+        );
 
     }
 

@@ -1,6 +1,7 @@
 package inno.fishmasters.controller;
 
 import inno.fishmasters.dto.request.discussion.CreateMessageRequest;
+import inno.fishmasters.dto.response.MessageResponse;
 import inno.fishmasters.entity.Discussion;
 import inno.fishmasters.entity.Message;
 import inno.fishmasters.service.DiscussionService;
@@ -29,15 +30,15 @@ public class DiscussionController {
 
     @Operation(summary = "Get all messages by discussionId")
     @GetMapping("/messages/{discussionId}")
-    public ResponseEntity<List<Message>> getMessagesByDiscussionId(@PathVariable Long discussionId) {
-        List<Message> messages = messageService.getAllMessagesByDiscussionId(discussionId);
+    public ResponseEntity<List<MessageResponse>> getMessagesByDiscussionId(@PathVariable Long discussionId) {
+        List<MessageResponse> messages = messageService.getAllMessagesByDiscussionId(discussionId);
         return ResponseEntity.ok(messages);
     }
 
     @Operation(summary = "Create a new message in discussion")
     @PostMapping("/messages/createMessage")
-    public ResponseEntity<Message> createMessage(@RequestBody CreateMessageRequest request) {
-        Message createdMessage = messageService.createMessage(request);
+    public ResponseEntity<MessageResponse> createMessage(@RequestBody CreateMessageRequest request) {
+        MessageResponse createdMessage = messageService.createMessage(request);
         return ResponseEntity.ok(createdMessage);
     }
     
