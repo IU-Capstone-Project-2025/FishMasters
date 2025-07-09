@@ -8,8 +8,11 @@ import inno.fishmasters.repository.FisherRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Log4j2
 @Service
@@ -71,6 +74,14 @@ public class FisherService {
             }
         }
         return fisherRepository.save(fisher);
+    }
+
+    public List<Fisher> getTopFishers(int limit) {
+        return fisherRepository.findAllByOrderByScoreDesc(PageRequest.of(0, limit));
+    }
+
+    public List<Fisher> getAllFishers() {
+        return fisherRepository.findAllByOrderByScoreDesc();
     }
 
 }
