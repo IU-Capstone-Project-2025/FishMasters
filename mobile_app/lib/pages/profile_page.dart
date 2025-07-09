@@ -24,7 +24,14 @@ class _ProfilePageState extends State<ProfilePage> {
     final settingsBox = Hive.box('settings');
     final email = settingsBox.get('email', defaultValue: 'example@example.com');
     final fullName = settingsBox.get('fullName', defaultValue: 'User Name');
-    final photo = settingsBox.get('photo', defaultValue: null);
+    var photoPath = settingsBox.get('profilePhotoPath', defaultValue: null);
+    if (photoPath != null) {
+      if (!File(photoPath).existsSync()) {
+        photoPath = null;
+        settingsBox.delete('profilePhotoPath');
+      }
+    }
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -74,11 +81,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   border: Border.all(color: colorScheme.primary, width: 3.0),
                 ),
                 child: CircleAvatar(
-                  backgroundImage: photo != null
-                      ? MemoryImage(base64Decode(photo))
+                  backgroundImage: photoPath != null
+                      ? FileImage(File(photoPath))
                       : null,
                   backgroundColor: Colors.grey[400],
-                  child: photo != null
+                  child: photoPath != null
                       ? null
                       : const Icon(Icons.person, size: 60, color: Colors.white),
                 ),
@@ -172,7 +179,7 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Image uploaded successfully')),
         );
-        settingsBox.put('photo', FileImage(_image!));
+        settingsBox.put('profilePhotoPath', _image!.path);
       } else {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -187,6 +194,8 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
         context,
       ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
+    debugPrint("upload is complete");
+    Navigator.of(context).pop();
   }
 
   @override
@@ -195,7 +204,7 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
       Hive.openBox('settings');
     }
     final settingsBox = Hive.box('settings');
-    final currentPhoto = settingsBox.get('photo', defaultValue: null);
+    final currentPhoto = settingsBox.get('profilePhotoPath', defaultValue: null);
 
     return Column(
       children: [
@@ -205,7 +214,9 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
             radius: 60,
             backgroundImage: _image != null
                 ? FileImage(_image!)
-                : MemoryImage(base64Decode(currentPhoto)),
+                : currentPhoto != null
+                  ? FileImage(File(currentPhoto))
+                  : null,
             backgroundColor: Colors.grey[400],
             child: _image == null
                 ? const Icon(Icons.camera_alt, size: 40, color: Colors.white)
