@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class MapWidget extends StatelessWidget {
   const MapWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     return Center(
       child: FlutterMap(
         options: MapOptions(
@@ -59,11 +61,11 @@ class MapWidget extends StatelessWidget {
                             onPressed: () {
                               Navigator.pushNamed(context, '/discussion');
                             },
-                            child: const Text('Discussion'),
+                            child: Text(localizations!.discussionLabel),
                           ),
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(),
-                            child: const Text('Close'),
+                            child: Text(localizations.closeLabel),
                           ),
                         ],
                       ),

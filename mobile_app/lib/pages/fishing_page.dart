@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class FishingPage extends StatefulWidget {
   const FishingPage({super.key});
@@ -135,9 +136,10 @@ class _FishingPageState extends State<FishingPage> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fishing'),
+        title: Text(localizations!.fishingText),
         backgroundColor: Theme.of(context).colorScheme.secondary,
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
       ),
@@ -146,24 +148,24 @@ class _FishingPageState extends State<FishingPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Fishing in progress...',
+              localizations.fishingInProgress,
               style: const TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _stopFishing(context),
-              child: const Text('Stop Fishing'),
+              child: Text(localizations.stopFishingButton),
             ),
             const SizedBox(height: 30),
             Text(
-              'Elapsed time: ${_formatDuration(_elapsedSeconds)}',
+              '${localizations.elapsedTime}: ${_formatDuration(_elapsedSeconds)}',
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Fish caught:"),
+                Text(localizations.fishCaught),
                 const SizedBox(width: 10),
                 ValueListenableBuilder(
                   valueListenable: Hive.box(
@@ -192,7 +194,10 @@ class _FishingPageState extends State<FishingPage> {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text('Upload image', textAlign: TextAlign.center),
+                    title: Text(
+                      localizations.uploadFishImageText,
+                      textAlign: TextAlign.center,
+                    ),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [ImageUploadField()],
@@ -200,7 +205,7 @@ class _FishingPageState extends State<FishingPage> {
                   ),
                 );
               },
-              child: const Text('Add Fish'),
+              child: Text(localizations.addFishButton),
             ),
             SizedBox(height: 30),
             // Text("Uploaded pictures:", style: const TextStyle(fontSize: 20),),
@@ -285,6 +290,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     return Column(
       children: [
         GestureDetector(
@@ -335,7 +341,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
               );
             }
           },
-          child: const Text('Upload Image'),
+          child: Text(localizations!.uploadFishImageButton),
         ),
       ],
     );

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
+
     var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About'),
+        title: Text(localizations!.aboutLabel),
         backgroundColor: theme.colorScheme.tertiary,
         foregroundColor: theme.colorScheme.onTertiary,
       ),
@@ -18,8 +21,7 @@ class AboutPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              'FishMasters is a community-driven app for fishing enthusiasts. '
-              'Connect with fellow anglers, share your catches, and explore the best fishing spots.',
+              localizations.appDescription,
               style: theme.textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
