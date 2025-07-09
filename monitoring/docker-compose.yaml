@@ -50,7 +50,7 @@ services:
   promtail:
     image: grafana/promtail
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro  # Ключевое изменение!
+      - /var/run/docker.sock:/var/run/docker.sock:ro  
       - ./promtail-config.yml:/etc/promtail/config.yml
       - /var/log/:/var/log/:ro
     depends_on:
