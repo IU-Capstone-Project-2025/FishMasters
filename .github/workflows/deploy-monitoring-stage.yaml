@@ -9,7 +9,7 @@ jobs:
     runs-on: stage
     defaults:
       run:
-        working-directory: monitoring
+        working-directory: monitoring/stage
         
     steps:
       - name: Checkout repository
