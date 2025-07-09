@@ -1,0 +1,21 @@
+name: Manual Deployment for STAGE monitoring
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    environment: stage
+    runs-on: stage
+    defaults:
+      run:
+        working-directory: monitoring
+        
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run docker-compose
+        run: |
+          docker-compose down
+          docker-compose up -d
