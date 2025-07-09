@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/functions/functions.dart';
 import 'package:http/http.dart' as http;
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -57,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
       final fullName = '${responseJson['name']} ${responseJson['surname']}';
       settingsBox.put('fullName', fullName);
       settingsBox.put('score', responseJson['score'] ?? 0);
+      settingsBox.put('photo', responseJson['photo']);
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -73,10 +75,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login"),
+        title: Text(localizations!.loginText),
         backgroundColor: colorScheme.tertiary,
         foregroundColor: colorScheme.onTertiary,
       ),
@@ -86,8 +89,8 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                const Text(
-                  'Login to Your Account',
+                Text(
+                  localizations.loginTitle,
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
@@ -101,8 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           TextFormField(
                             controller: _emailController,
-                            decoration: const InputDecoration(
-                              labelText: 'Email',
+                            decoration: InputDecoration(
+                              labelText: localizations.emailLabel,
                             ),
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
@@ -122,8 +125,8 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(height: 12),
                           TextFormField(
                             controller: _passwordController,
-                            decoration: const InputDecoration(
-                              labelText: 'Password',
+                            decoration: InputDecoration(
+                              labelText: localizations.passwordLabel,
                             ),
                             obscureText: true,
                             autovalidateMode:
@@ -136,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(height: 16),
                           ElevatedButton(
                             onPressed: _submit,
-                            child: const Text('Login'),
+                            child: Text(localizations.loginButton),
                           ),
                         ],
                       ),
@@ -147,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                 TextButton(
                   onPressed: () =>
                       Navigator.pushReplacementNamed(context, '/register'),
-                  child: const Text('Don\'t have an account? Register'),
+                  child: Text(localizations.needRegister),
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(

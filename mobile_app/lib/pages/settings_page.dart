@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key, required this.onLocaleChange});
+
+  final Function(Locale) onLocaleChange;
 
   @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
+
+    if (!Hive.isBoxOpen('settings')) {
+      Hive.openBox('settings');
+    }
+    final box = Hive.box('settings');
+    final localeCode = box.get('locale', defaultValue: 'en');
+
     var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(localizations!.settingsLabel),
         backgroundColor: theme.colorScheme.tertiary,
         foregroundColor: theme.colorScheme.onTertiary,
       ),
@@ -22,7 +39,10 @@ class SettingsPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Dark Mode', style: theme.textTheme.titleMedium),
+                    Text(
+                      localizations.darkModeLabel,
+                      style: theme.textTheme.titleMedium,
+                    ),
                     Switch(value: false, onChanged: null),
                   ],
                 ),
@@ -30,21 +50,30 @@ class SettingsPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Language', style: theme.textTheme.titleMedium),
+                    Text(
+                      localizations.languageLabel,
+                      style: theme.textTheme.titleMedium,
+                    ),
                     const SizedBox(width: 16.0),
                     DropdownButton<String>(
-                      value: 'English',
-                      items: const [
+                      value: localeCode,
+                      items: [
                         DropdownMenuItem(
-                          value: 'English',
-                          child: Text('English'),
+                          value: 'en',
+                          child: Text(localizations.englishLanguage),
                         ),
                         DropdownMenuItem(
-                          value: 'Russian',
-                          child: Text('Russian'),
+                          value: 'ru',
+                          child: Text(localizations.russianLanguage),
                         ),
                       ],
-                      onChanged: null,
+                      onChanged: (value) {
+                        if (value != null) {
+                          widget.onLocaleChange(Locale(value));
+                        }
+
+                        setState(() {});
+                      },
                     ),
                   ],
                 ),
@@ -52,7 +81,10 @@ class SettingsPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Notifications', style: theme.textTheme.titleMedium),
+                    Text(
+                      localizations.notificationsLabel,
+                      style: theme.textTheme.titleMedium,
+                    ),
                     Switch(value: false, onChanged: null),
                   ],
                 ),
@@ -60,7 +92,10 @@ class SettingsPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Font Size', style: theme.textTheme.titleMedium),
+                    Text(
+                      localizations.fontSizeLabel,
+                      style: theme.textTheme.titleMedium,
+                    ),
                     DropdownButton<double>(
                       value: 14.0,
                       items: const [
