@@ -3,3 +3,15 @@
 *.pyc
 *.pkl
 *.env
+
+# Virtual environments
+ml/venv/
+venv/
+env/
+.venv/
+.env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
