@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -16,6 +17,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
 
     if (!Hive.isBoxOpen('settings')) {
@@ -28,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(localizations!.profileText),
         backgroundColor: Theme.of(context).colorScheme.secondary,
         foregroundColor: colorScheme.onSecondary,
         actions: [
@@ -41,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text('Change Profile Picture'),
+                      title: Text(localizations.profilePictureEditTitle),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -98,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Score: ${settingsBox.get('score', defaultValue: 0)}',
+                '${localizations.scoreLabel}: ${settingsBox.get('score', defaultValue: 0)}',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: 16),
@@ -112,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     (route) => false,
                   );
                 },
-                child: Text('Log Out'),
+                child: Text(localizations.logoutButton),
               ),
             ],
           ),
@@ -191,6 +193,7 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     if (!Hive.isBoxOpen('settings')) {
       Hive.openBox('settings');
     }
@@ -215,7 +218,7 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
         const SizedBox(height: 16),
         ElevatedButton(
           onPressed: _uploadImage,
-          child: const Text('Upload Photo'),
+          child: Text(localizations!.uploadPictureButton),
         ),
       ],
     );

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/functions/functions.dart';
 import 'package:http/http.dart' as http;
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -80,10 +81,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
+        title: Text(localizations!.registerText),
         backgroundColor: colorScheme.tertiary,
         foregroundColor: colorScheme.onTertiary,
       ),
@@ -93,8 +95,8 @@ class _RegisterPageState extends State<RegisterPage> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                const Text(
-                  'Create an Account',
+                Text(
+                  localizations.registerTitle,
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
@@ -107,8 +109,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         children: [
                           TextFormField(
                             controller: _firstNameController,
-                            decoration: const InputDecoration(
-                              labelText: 'First Name',
+                            decoration: InputDecoration(
+                              labelText: localizations.firstNameLabel,
                             ),
                             validator: (value) => value == null || value.isEmpty
                                 ? 'Enter first name'
@@ -117,8 +119,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           const SizedBox(height: 12),
                           TextFormField(
                             controller: _lastNameController,
-                            decoration: const InputDecoration(
-                              labelText: 'Last Name',
+                            decoration: InputDecoration(
+                              labelText: localizations.lastNameLabel,
                             ),
                             validator: (value) => value == null || value.isEmpty
                                 ? 'Enter last name'
@@ -129,8 +131,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             controller: _emailController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            decoration: const InputDecoration(
-                              labelText: 'Email',
+                            decoration: InputDecoration(
+                              labelText: localizations.emailLabel,
                             ),
                             keyboardType: TextInputType.emailAddress,
                             validator: (value) {
@@ -151,8 +153,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             controller: _passwordController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            decoration: const InputDecoration(
-                              labelText: 'Password',
+                            decoration: InputDecoration(
+                              labelText: localizations.passwordLabel,
                             ),
                             obscureText: true,
                             validator: (value) =>
@@ -163,7 +165,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           const SizedBox(height: 24),
                           ElevatedButton(
                             onPressed: _submit,
-                            child: const Text('Submit'),
+                            child: Text(localizations.registerButton),
                           ),
                         ],
                       ),
@@ -174,7 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 TextButton(
                   onPressed: () =>
                       Navigator.pushReplacementNamed(context, '/login'),
-                  child: Text('Already have an account? Login'),
+                  child: Text(localizations.needLogin),
                 ),
               ],
             ),
