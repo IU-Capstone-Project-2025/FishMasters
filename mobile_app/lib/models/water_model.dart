@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class WaterModel {
-  final int id;
+  final double id;
   final double x;
   final double y;
 
@@ -9,7 +9,7 @@ class WaterModel {
 
   factory WaterModel.fromJson(Map<String, dynamic> json) {
     return WaterModel(
-      id: json['id'] as int,
+      id: (json['id'] as num).toDouble(),
       x: (json['x'] as num).toDouble(),
       y: (json['y'] as num).toDouble(),
     );

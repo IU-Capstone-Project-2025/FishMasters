@@ -16,11 +16,13 @@ class CatchPage extends StatefulWidget {
 class _CatchPageState extends State<CatchPage> {
   final _controller = ScrollController();
   bool _showBottomBar = true;
+  late Future<void> _fetchCatchesFuture;
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(_scrollListener);
+    _fetchCatchesFuture = _fetchCatches();
   }
 
   void _scrollListener() {
@@ -174,7 +176,7 @@ class _CatchPageState extends State<CatchPage> {
       body: Stack(
         children: [
           FutureBuilder(
-            future: _fetchCatches(),
+            future: _fetchCatchesFuture,
             builder: (context, asyncSnapshot) {
               if (asyncSnapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
