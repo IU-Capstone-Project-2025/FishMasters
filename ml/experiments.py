@@ -278,107 +278,145 @@ IP_avg_prec = IP_avg_prec/len(metrics['IndexFlatIP']['avg_similarity'])
 
 IVF_1_avg_prec = 0
 IVF_1_avg_rec = 0
+IVF_1_mrr = 0
 for i in range(len(metrics['IndexIVFFlat']['model_1']['avg_similarity'])):
     IVF_1_avg_prec += statistics.mean(metrics['IndexIVFFlat']['model_1']['avg_similarity'][i][0])
-    IVF_1_avg_rec += np.count_nonzero(np.isin(baseline[i], metrics['IndexIVFFlat']['model_1']['indexes'][i][0])) / len(metrics['IndexIVFFlat']['model_1']['indexes'][i][0])
-    
+    simmilarities = np.isin(baseline[i], metrics['IndexIVFFlat']['model_1']['indexes'][i][0])
+    IVF_1_avg_rec += np.count_nonzero(simmilarities) / len(metrics['IndexIVFFlat']['model_1']['indexes'][i][0])
+    try:
+        IVF_1_mrr += 1 / (simmilarities.tolist().index(True) + 1)
+    except ValueError:
+        ...
+
 IVF_1_avg_prec = IVF_1_avg_prec/len(metrics['IndexIVFFlat']['model_1']['avg_similarity'])
 IVF_1_avg_rec = IVF_1_avg_rec/len(metrics['IndexIVFFlat']['model_1']['indexes'])
-
-
+IVF_1_mrr = IVF_1_mrr/len(metrics['IndexIVFFlat']['model_1']['indexes'])
 
 
 IVF_2_avg_prec = 0
 IVF_2_avg_rec = 0
+IVF_2_mrr = 0
 for i in range(len(metrics['IndexIVFFlat']['model_2']['avg_similarity'])):
     IVF_2_avg_prec += statistics.mean(metrics['IndexIVFFlat']['model_2']['avg_similarity'][i][0])
-    IVF_2_avg_rec += np.count_nonzero(np.isin(baseline[i], metrics['IndexIVFFlat']['model_2']['indexes'][i][0])) / len(metrics['IndexIVFFlat']['model_2']['indexes'][i][0])
-    
+    simmilarities = np.isin(baseline[i], metrics['IndexIVFFlat']['model_2']['indexes'][i][0])
+    IVF_2_avg_rec += np.count_nonzero(simmilarities) / len(metrics['IndexIVFFlat']['model_2']['indexes'][i][0])
+    try:
+        IVF_2_mrr += 1 / (simmilarities.tolist().index(True) + 1)
+    except ValueError:
+        ...
 IVF_2_avg_prec = IVF_2_avg_prec/len(metrics['IndexIVFFlat']['model_2']['avg_similarity'])
 IVF_2_avg_rec = IVF_2_avg_rec/len(metrics['IndexIVFFlat']['model_2']['indexes'])
-
-
+IVF_2_mrr = IVF_2_mrr/len(metrics['IndexIVFFlat']['model_2']['indexes'])
 
 
 IVF_3_avg_prec = 0
 IVF_3_avg_rec = 0
+IVF_3_mrr= 0 
 for i in range(len(metrics['IndexIVFFlat']['model_3']['avg_similarity'])):
     IVF_3_avg_prec += statistics.mean(metrics['IndexIVFFlat']['model_3']['avg_similarity'][i][0])
-    IVF_3_avg_rec += np.count_nonzero(np.isin(baseline[i], metrics['IndexIVFFlat']['model_3']['indexes'][i][0])) / len(metrics['IndexIVFFlat']['model_3']['indexes'][i][0])
-    
+    simmilarities = np.isin(baseline[i], metrics['IndexIVFFlat']['model_3']['indexes'][i][0])
+    IVF_3_avg_rec += np.count_nonzero(simmilarities) / len(metrics['IndexIVFFlat']['model_3']['indexes'][i][0])
+    try:
+        IVF_3_mrr += 1 / (simmilarities.tolist().index(True) + 1)
+    except ValueError:
+        ...
 IVF_3_avg_prec = IVF_3_avg_prec/len(metrics['IndexIVFFlat']['model_3']['avg_similarity'])
 IVF_3_avg_rec = IVF_3_avg_rec/len(metrics['IndexIVFFlat']['model_3']['indexes'])
-
+IVF_3_mrr = IVF_3_mrr/len(metrics['IndexIVFFlat']['model_3']['indexes'])
 
 
 
 IVF_4_avg_prec = 0
 IVF_4_avg_rec = 0
+IVF_4_mrr = 0
 for i in range(len(metrics['IndexIVFFlat']['model_4']['avg_similarity'])):
     IVF_4_avg_prec += statistics.mean(metrics['IndexIVFFlat']['model_4']['avg_similarity'][i][0])
-    IVF_4_avg_rec += np.count_nonzero(np.isin(baseline[i], metrics['IndexIVFFlat']['model_4']['indexes'][i][0])) / len(metrics['IndexIVFFlat']['model_4']['indexes'][i][0])
-
+    simmilarities = np.isin(baseline[i], metrics['IndexIVFFlat']['model_4']['indexes'][i][0])
+    IVF_4_avg_rec += np.count_nonzero(simmilarities) / len(metrics['IndexIVFFlat']['model_4']['indexes'][i][0])
+    try:
+        IVF_4_mrr += 1 / (simmilarities.tolist().index(True) + 1)
+    except ValueError:
+        ...
 IVF_4_avg_prec = IVF_4_avg_prec/len(metrics['IndexIVFFlat']['model_4']['avg_similarity'])
 IVF_4_avg_rec = IVF_4_avg_rec/len(metrics['IndexIVFFlat']['model_4']['indexes'])
-
+IVF_4_mrr = IVF_4_mrr/len(metrics['IndexIVFFlat']['model_4']['indexes'])
 
 
 
 IVF_5_avg_prec = 0
 IVF_5_avg_rec = 0
+IVF_5_mrr = 0
 for i in range(len(metrics['IndexIVFFlat']['model_5']['avg_similarity'])):
     IVF_5_avg_prec += statistics.mean(metrics['IndexIVFFlat']['model_5']['avg_similarity'][i][0])
-    IVF_5_avg_rec += np.count_nonzero(np.isin(baseline[i], metrics['IndexIVFFlat']['model_5']['indexes'][i][0])) / len(metrics['IndexIVFFlat']['model_5']['indexes'][i][0])
-
+    simmilarities = np.isin(baseline[i], metrics['IndexIVFFlat']['model_5']['indexes'][i][0])
+    IVF_5_avg_rec += np.count_nonzero(simmilarities) / len(metrics['IndexIVFFlat']['model_5']['indexes'][i][0])
+    try:
+        IVF_5_mrr += 1 / (simmilarities.tolist().index(True) + 1)
+    except ValueError:
+        ...
 IVF_5_avg_prec = IVF_5_avg_prec/len(metrics['IndexIVFFlat']['model_5']['avg_similarity'])
 IVF_5_avg_rec = IVF_5_avg_rec/len(metrics['IndexIVFFlat']['model_5']['indexes'])
-
+IVF_5_mrr = IVF_5_mrr/len(metrics['IndexIVFFlat']['model_5']['indexes'])
 
 
 LSH_1_avg_prec = 0
 LSH_1_avg_rec = 0
+LSH_1_mrr = 0
 for i in range(len(metrics['IndexLSH']['model_1']['avg_similarity'])):
     LSH_1_avg_prec += statistics.mean(metrics['IndexLSH']['model_1']['avg_similarity'][i][0])
-    LSH_1_avg_rec += np.count_nonzero(np.isin(baseline[i], metrics['IndexLSH']['model_1']['indexes'][i][0])) / len(metrics['IndexLSH']['model_1']['indexes'][i][0])
-
+    simmilarities = np.isin(baseline[i], metrics['IndexLSH']['model_1']['indexes'][i][0])
+    LSH_1_avg_rec += np.count_nonzero(simmilarities) / len(metrics['IndexLSH']['model_1']['indexes'][i][0])
+    try:
+        LSH_1_mrr += 1 / (simmilarities.tolist().index(True) + 1)
+    except ValueError:
+        ...
 LSH_1_avg_prec = LSH_1_avg_prec/len(metrics['IndexLSH']['model_1']['avg_similarity'])
 LSH_1_avg_rec = LSH_1_avg_rec/len(metrics['IndexLSH']['model_1']['indexes'])
-
+LSH_1_mrr = LSH_1_mrr/len(metrics['IndexLSH']['model_1']['indexes'])
 
 
 LSH_2_avg_prec = 0
 LSH_2_avg_rec = 0
+LSH_2_mrr = 0
 for i in range(len(metrics['IndexLSH']['model_2']['avg_similarity'])):
     LSH_2_avg_prec += statistics.mean(metrics['IndexLSH']['model_2']['avg_similarity'][i][0])
-    LSH_2_avg_rec += np.count_nonzero(np.isin(baseline[i], metrics['IndexLSH']['model_2']['indexes'][i][0])) / len(metrics['IndexLSH']['model_2']['indexes'][i][0])
-
+    simmilarities = np.isin(baseline[i], metrics['IndexLSH']['model_2']['indexes'][i][0])
+    LSH_2_avg_rec += np.count_nonzero(simmilarities) / len(metrics['IndexLSH']['model_2']['indexes'][i][0])
+    try:
+        LSH_2_mrr += 1 / (simmilarities.tolist().index(True) + 1)
+    except ValueError:
+        ...
 LSH_2_avg_prec = LSH_2_avg_prec/len(metrics['IndexLSH']['model_2']['avg_similarity'])
 LSH_2_avg_rec = LSH_2_avg_rec/len(metrics['IndexLSH']['model_2']['indexes'])
-
-
-
-
+LSH_2_mrr = LSH_2_mrr/len(metrics['IndexLSH']['model_2']['indexes'])
 
 LSH_3_avg_prec = 0
 LSH_3_avg_rec = 0
+LSH_3_mrr = 0
 for i in range(len(metrics['IndexLSH']['model_3']['avg_similarity'])):
     LSH_3_avg_prec += statistics.mean(metrics['IndexLSH']['model_3']['avg_similarity'][i][0])
-    LSH_3_avg_rec += np.count_nonzero(np.isin(baseline[i], metrics['IndexLSH']['model_3']['indexes'][i][0])) / len(metrics['IndexLSH']['model_3']['indexes'][i][0])
+    simmilarities = np.isin(baseline[i], metrics['IndexLSH']['model_3']['indexes'][i][0])
+    LSH_3_avg_rec += np.count_nonzero(simmilarities) / len(metrics['IndexLSH']['model_3']['indexes'][i][0])
+    try:
+        LSH_3_mrr += 1/(simmilarities.tolist().index(True) + 1)
+    except ValueError:
+        ...
 
 LSH_3_avg_prec = LSH_3_avg_prec/len(metrics['IndexLSH']['model_3']['avg_similarity'])
 LSH_3_avg_rec = LSH_3_avg_rec/len(metrics['IndexLSH']['model_3']['indexes'])
+LSH_3_mrr = LSH_3_mrr/len(metrics['IndexLSH']['model_3']['indexes'])
 
 
 print(f"""{'_'*50}
-                                    Mean search time:       Mean precision:     Mean recall:
-    IndexIP                          - {statistics.mean(metrics['IndexFlatIP']['times']):2.5f} ms           {IP_avg_prec:2.5f}          {1.00000:2.5f}
-    IndexIVF (nlist=64, nprobe=1)    - {statistics.mean(metrics['IndexIVFFlat']['model_1']['times']):2.5f} ms           {IVF_1_avg_prec:2.5f}          {IVF_1_avg_rec:2.5f}
-    IndexIVF (nlist=128, nprobe=3)   - {statistics.mean(metrics['IndexIVFFlat']['model_2']['times']):2.5f} ms           {IVF_2_avg_prec:2.5f}          {IVF_2_avg_rec:2.5f}
-    IndexIVF (nlist=256, nprobe=3)   - {statistics.mean(metrics['IndexIVFFlat']['model_3']['times']):2.5f} ms           {IVF_3_avg_prec:2.5f}          {IVF_3_avg_rec:2.5f}
-    IndexIVF (nlist=512, nprobe=5)   - {statistics.mean(metrics['IndexIVFFlat']['model_4']['times']):2.5f} ms           {IVF_4_avg_prec:2.5f}          {IVF_4_avg_rec:2.5f}
-    IndexIVF (nlist=1024, nprobe=10) - {statistics.mean(metrics['IndexIVFFlat']['model_5']['times']):2.5f} ms           {IVF_5_avg_prec:2.5f}          {IVF_5_avg_rec:2.5f}  
-    IndexLSH (nbits=2)               - {statistics.mean(metrics['IndexLSH']['model_1']['times']):2.5f} ms           {LSH_1_avg_prec:2.5f}          {LSH_1_avg_rec:2.5f}
-    IndexLSH (nbits=4)               - {statistics.mean(metrics['IndexLSH']['model_2']['times']):2.5f} ms           {LSH_2_avg_prec:2.5f}          {LSH_1_avg_rec:2.5f}
-    IndexLSH (nbits=6)               - {statistics.mean(metrics['IndexLSH']['model_3']['times']):2.5f} ms           {LSH_3_avg_prec:2.5f}          {LSH_1_avg_rec:2.5f}
+                                    Mean search time:       Mean simmilarity:     Mean recall:      Mean RR:
+    IndexIP                          - {statistics.mean(metrics['IndexFlatIP']['times']):2.5f} ms           {IP_avg_prec:2.5f}               {1.00000:2.5f}          {1.00000:2.5f}
+    IndexIVF (nlist=64, nprobe=1)    - {statistics.mean(metrics['IndexIVFFlat']['model_1']['times']):2.5f} ms           {IVF_1_avg_prec:2.5f}               {IVF_1_avg_rec:2.5f}         {IVF_1_mrr:2.5f}
+    IndexIVF (nlist=128, nprobe=3)   - {statistics.mean(metrics['IndexIVFFlat']['model_2']['times']):2.5f} ms           {IVF_2_avg_prec:2.5f}               {IVF_2_avg_rec:2.5f}         {IVF_2_mrr:2.5f}
+    IndexIVF (nlist=256, nprobe=3)   - {statistics.mean(metrics['IndexIVFFlat']['model_3']['times']):2.5f} ms           {IVF_3_avg_prec:2.5f}               {IVF_3_avg_rec:2.5f}         {IVF_3_mrr:2.5f}
+    IndexIVF (nlist=512, nprobe=5)   - {statistics.mean(metrics['IndexIVFFlat']['model_4']['times']):2.5f} ms           {IVF_4_avg_prec:2.5f}               {IVF_4_avg_rec:2.5f}         {IVF_4_mrr:2.5f}
+    IndexIVF (nlist=1024, nprobe=10) - {statistics.mean(metrics['IndexIVFFlat']['model_5']['times']):2.5f} ms           {IVF_5_avg_prec:2.5f}               {IVF_5_avg_rec:2.5f}         {IVF_5_mrr:2.5f}
+    IndexLSH (nbits=2)               - {statistics.mean(metrics['IndexLSH']['model_1']['times']):2.5f} ms           {LSH_1_avg_prec:2.5f}               {LSH_1_avg_rec:2.5f}         {LSH_1_mrr:2.5f}
+    IndexLSH (nbits=4)               - {statistics.mean(metrics['IndexLSH']['model_2']['times']):2.5f} ms           {LSH_2_avg_prec:2.5f}               {LSH_1_avg_rec:2.5f}         {LSH_1_mrr:2.5f}
+    IndexLSH (nbits=6)               - {statistics.mean(metrics['IndexLSH']['model_3']['times']):2.5f} ms           {LSH_3_avg_prec:2.5f}               {LSH_1_avg_rec:2.5f}         {LSH_1_mrr:2.5f}
 """)
 
