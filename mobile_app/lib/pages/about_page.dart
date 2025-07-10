@@ -18,6 +18,7 @@ class AboutPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          SizedBox(),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
