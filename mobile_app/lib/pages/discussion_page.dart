@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class DiscussionPage extends StatefulWidget {
   const DiscussionPage({super.key});
@@ -30,9 +31,10 @@ class _DiscussionPageState extends State<DiscussionPage> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: const Text("Discussion")),
+      appBar: AppBar(title: Text(localizations!.discussionText)),
       body: Column(
         children: [
           Expanded(
@@ -76,8 +78,8 @@ class _DiscussionPageState extends State<DiscussionPage> {
                       controller: _controller,
                       textCapitalization: TextCapitalization.sentences,
                       onSubmitted: (_) => _sendMessage(),
-                      decoration: const InputDecoration(
-                        hintText: "Type a message...",
+                      decoration: InputDecoration(
+                        hintText: localizations.messagePlaceholder,
                         border: OutlineInputBorder(),
                         isDense: true,
                       ),

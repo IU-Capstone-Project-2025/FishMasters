@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Notifications"),
+        title: Text(localizations!.notificationsText),
         backgroundColor: colorScheme.secondary,
         foregroundColor: colorScheme.onSecondary,
       ),
@@ -34,6 +36,7 @@ class NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
@@ -116,7 +119,7 @@ class NotificationItem extends StatelessWidget {
                           );
                         },
                         icon: Icon(Icons.reply, color: colorScheme.primary),
-                        label: const Text("Reply"),
+                        label: Text(localizations!.replyLabel),
                       ),
                     ],
                   ),

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:hive/hive.dart';
 import 'package:mobile_app/models/models.dart';
 import 'dart:convert';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class CatchPage extends StatefulWidget {
   const CatchPage({super.key});
@@ -162,10 +163,11 @@ class _CatchPageState extends State<CatchPage> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Catch'),
+        title: Text(localizations!.myCatchText),
         backgroundColor: colorScheme.secondary,
         foregroundColor: colorScheme.onSecondary,
       ),

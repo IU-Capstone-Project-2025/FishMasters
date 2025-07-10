@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class PrimaryPage extends StatelessWidget {
   const PrimaryPage({super.key});
@@ -51,6 +52,7 @@ class _PrimaryBodyState extends State<PrimaryBody> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
     return Stack(
       children: [
@@ -129,7 +131,9 @@ class _PrimaryBodyState extends State<PrimaryBody> {
                       ),
                     ),
                     child: Text(
-                      fishingStarted ? 'Fishing ongoing...' : 'GO',
+                      fishingStarted
+                          ? localizations!.fishingInProgress
+                          : localizations!.startFishingButton,
                       style: TextStyle(
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
