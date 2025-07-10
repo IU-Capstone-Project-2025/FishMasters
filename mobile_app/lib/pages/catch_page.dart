@@ -176,10 +176,9 @@ class _CatchPageState extends State<CatchPage> {
           FutureBuilder(
             future: _fetchCatches(),
             builder: (context, asyncSnapshot) {
-              // TODO: Fix bug with bottom bar reloading page
-              // if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-              //   return const Center(child: CircularProgressIndicator());
-              // }
+              if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
               return ListView.builder(
                 controller: _controller,
                 itemCount: _catches.length,
