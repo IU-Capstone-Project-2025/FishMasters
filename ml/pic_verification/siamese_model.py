@@ -273,8 +273,18 @@ class PicSearchSystem:
             print(f"Error searching with QDrant {e}")
     
     def compare_searches(self, image):
-        ...
-    
+        pic = get_user_pic()
+        time_faiss_st = time.time()
+        result_faiss = self.search_faiss(pic)
+        time_faiss_end = time.time()
+        print(f"FAISS:\n\ttime: {time_faiss_end-time_faiss_st}\n\tresult: {result_faiss}")
+        time_qdrant_st = time.time()
+        result_qdrant = self.search_qdrant(pic)
+        time_qdrant_end = time.time()
+        print(f"QDrant:\n\ttime: {time_qdrant_end-time_qdrant_st}\n\tresult: {result_qdrant}")
+        
+        
+        
 def get_user_pic():
     #TODO получить фотку от пользователя
     ...
