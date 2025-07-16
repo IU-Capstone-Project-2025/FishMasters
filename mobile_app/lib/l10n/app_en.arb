@@ -32,9 +32,9 @@
   "replyLabel": "Reply",
   "englishLanguage": "English",
   "russianLanguage": "Русский",
-  "discussionText": "Discussion",
+  "chatText": "Chat",
   "messagePlaceholder": "Type a message...",
-  "discussionLabel": "Discussion",
+  "chatLabel": "Chat",
   "closeLabel": "Close",
   "fishingText": "Fishing",
   "fishingInProgress": "Fishing in progress...",
@@ -43,5 +43,7 @@
   "fishCaught": "Fish Caught",
   "addFishButton": "Add Fish",
   "uploadFishImageText": "Upload Fish Image",
-  "uploadFishImageButton": "Upload Image"
+  "uploadFishImageButton": "Upload Image",
+  "loadingMarkersLabel": "Loading fishing places...",
+  "fishingLocationLabel": "Fishing Location"
 }

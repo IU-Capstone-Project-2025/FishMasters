@@ -48,7 +48,9 @@ class _FishingPageState extends State<FishingPage> {
     );
 
     if (response.statusCode != 200) {
-      debugPrint('Fishing $name event failed: ${response.statusCode}');
+      debugPrint(
+        'Fishing $name event failed: ${response.statusCode} ${response.reasonPhrase}',
+      );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

@@ -108,13 +108,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get russianLanguage => 'Русский';
 
   @override
-  String get discussionText => 'Обсуждение';
+  String get chatText => 'Чат';
 
   @override
   String get messagePlaceholder => 'Введите сообщение...';
 
   @override
-  String get discussionLabel => 'Обсуждение';
+  String get chatLabel => 'Чат';
 
   @override
   String get closeLabel => 'Закрыть';
@@ -142,4 +142,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get uploadFishImageButton => 'Загрузить изображение';
+
+  @override
+  String get loadingMarkersLabel => 'Загрузка мест для рыбалки...';
+
+  @override
+  String get fishingLocationLabel => 'Место рыбалки';
 }

@@ -293,11 +293,11 @@ abstract class AppLocalizations {
   /// **'Русский'**
   String get russianLanguage;
 
-  /// No description provided for @discussionText.
+  /// No description provided for @chatText.
   ///
   /// In en, this message translates to:
-  /// **'Discussion'**
-  String get discussionText;
+  /// **'Chat'**
+  String get chatText;
 
   /// No description provided for @messagePlaceholder.
   ///
@@ -305,11 +305,11 @@ abstract class AppLocalizations {
   /// **'Type a message...'**
   String get messagePlaceholder;
 
-  /// No description provided for @discussionLabel.
+  /// No description provided for @chatLabel.
   ///
   /// In en, this message translates to:
-  /// **'Discussion'**
-  String get discussionLabel;
+  /// **'Chat'**
+  String get chatLabel;
 
   /// No description provided for @closeLabel.
   ///
@@ -364,6 +364,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upload Image'**
   String get uploadFishImageButton;
+
+  /// No description provided for @loadingMarkersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading fishing places...'**
+  String get loadingMarkersLabel;
+
+  /// No description provided for @fishingLocationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fishing Location'**
+  String get fishingLocationLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
