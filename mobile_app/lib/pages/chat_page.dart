@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 
-class DiscussionPage extends StatefulWidget {
-  const DiscussionPage({super.key});
+class ChatPage extends StatefulWidget {
+  const ChatPage({super.key});
 
   @override
-  State<DiscussionPage> createState() => _DiscussionPageState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
-class _DiscussionPageState extends State<DiscussionPage> {
+class _ChatPageState extends State<ChatPage> {
   final List<String> _messages = [];
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -34,7 +34,7 @@ class _DiscussionPageState extends State<DiscussionPage> {
     var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: Text(localizations!.discussionText)),
+      appBar: AppBar(title: Text(localizations!.chatText)),
       body: Column(
         children: [
           Expanded(
