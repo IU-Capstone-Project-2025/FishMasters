@@ -280,9 +280,10 @@ def pipeline(max_images: int = None, collection_name: str = "fish_image_embeddin
     image_embeddings = []
     failed_images = []
     
-    # Get the current working directory (should be in pic_verification)
-    # We need to go up one level to get to ml directory, then to datasets
-    ml_dir = Path('..').resolve()  # Go up to ml directory
+    # Images are saved in the current working directory structure
+    # Since DataProcessor saves images relative to current directory,
+    # we need to look in the correct location
+    current_dir = Path('.').resolve()
     
     for idx, row in tqdm(fish_data.iterrows(), total=len(fish_data), desc="Processing images"):
         try:
@@ -296,18 +297,31 @@ def pipeline(max_images: int = None, collection_name: str = "fish_image_embeddin
                 
                 # Handle different path formats
                 if os.path.isabs(image_path):
-                    # Absolute path
+                    # Absolute path - use as is
                     full_image_path = Path(image_path)
-                elif image_path.startswith('datasets/'):
-                    # Path already includes datasets/ prefix
-                    full_image_path = ml_dir / image_path
                 else:
-                    # Relative path without datasets prefix
-                    full_image_path = ml_dir / 'datasets' / image_path
-                
-                if not full_image_path.exists():
-                    failed_images.append(f"File not found: {full_image_path}")
-                    continue
+                    # For relative paths, try multiple locations since images might be saved 
+                    # in different places depending on where the script was run
+                    potential_paths = [
+                        # In current directory (pic_verification/datasets/...)
+                        current_dir / image_path,
+                        # In parent directory (ml/datasets/...)
+                        current_dir.parent / image_path,
+                        # If path doesn't start with datasets/, try adding it
+                        current_dir / 'datasets' / image_path,
+                        current_dir.parent / 'datasets' / image_path
+                    ]
+                    
+                    full_image_path = None
+                    for potential_path in potential_paths:
+                        if potential_path.exists():
+                            full_image_path = potential_path
+                            break
+                    
+                    if full_image_path is None:
+                        # Couldn't find the image in any of the expected locations
+                        failed_images.append(f"File not found in any expected location: {image_path}")
+                        continue
                 
                 # Load and preprocess image
                 image_tensor = embedder.load_and_preprocess_image(str(full_image_path))
