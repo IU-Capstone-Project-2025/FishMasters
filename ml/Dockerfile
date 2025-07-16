@@ -1,19 +1,17 @@
-FROM python:3.10-slim  # или 3.11
-
-RUN pip install faiss-cpu
-
-WORKDIR /app
+FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     swig \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt requirements.txt
+RUN pip install faiss-cpu
 
+WORKDIR /app
+
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY app.py app.py
+COPY . .
 
-ENTRYPOINT ["python3"]
-CMD ["app.py"]
+CMD ["python3", "app.py"]
