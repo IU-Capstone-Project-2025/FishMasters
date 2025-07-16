@@ -376,6 +376,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fishing Location'**
   String get fishingLocationLabel;
+
+  /// No description provided for @fishNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fish'**
+  String get fishNameLabel;
+
+  /// No description provided for @noFishNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload an image to get fish name'**
+  String get noFishNameLabel;
+
+  /// No description provided for @loadingFishName.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading fish name...'**
+  String get loadingFishName;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

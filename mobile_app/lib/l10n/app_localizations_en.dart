@@ -148,4 +148,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fishingLocationLabel => 'Fishing Location';
+
+  @override
+  String get fishNameLabel => 'Fish';
+
+  @override
+  String get noFishNameLabel => 'Upload an image to get fish name';
+
+  @override
+  String get loadingFishName => 'Loading fish name...';
 }

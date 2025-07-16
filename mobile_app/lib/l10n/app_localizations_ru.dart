@@ -148,4 +148,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get fishingLocationLabel => 'Место рыбалки';
+
+  @override
+  String get fishNameLabel => 'Рыба';
+
+  @override
+  String get noFishNameLabel => 'Загрузите изображение, чтобы получить название рыбы';
+
+  @override
+  String get loadingFishName => 'Загрузка названия рыбы...';
 }

@@ -119,6 +119,8 @@ class MarkerUnit {
                       }
                       var box = Hive.box('settings');
                       box.put('fishingLocationId', id);
+                      box.put('fishingLocationX', x);
+                      box.put('fishingLocationY', y);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Fishing location selected (id: $id).'),

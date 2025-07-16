@@ -45,5 +45,8 @@
   "uploadFishImageText": "Загрузить фото рыбы",
   "uploadFishImageButton": "Загрузить изображение",
   "loadingMarkersLabel": "Загрузка мест для рыбалки...",
-  "fishingLocationLabel": "Место рыбалки"
+  "fishingLocationLabel": "Место рыбалки",
+  "fishNameLabel": "Рыба",
+  "noFishNameLabel": "Загрузите изображение, чтобы получить название рыбы",
+  "loadingFishName": "Загрузка названия рыбы..."
 }

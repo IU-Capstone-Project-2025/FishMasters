@@ -45,5 +45,8 @@
   "uploadFishImageText": "Upload Fish Image",
   "uploadFishImageButton": "Upload Image",
   "loadingMarkersLabel": "Loading fishing places...",
-  "fishingLocationLabel": "Fishing Location"
+  "fishingLocationLabel": "Fishing Location",
+  "fishNameLabel": "Fish",
+  "noFishNameLabel": "Upload an image to get fish name",
+  "loadingFishName": "Loading fish name..."
 }

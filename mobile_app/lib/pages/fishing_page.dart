@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/models/models.dart';
 
 class FishingPage extends StatefulWidget {
   const FishingPage({super.key});
@@ -36,15 +37,19 @@ class _FishingPageState extends State<FishingPage> {
     final settingsBox = Hive.box('settings');
     final email = settingsBox.get('email', defaultValue: '').toString();
 
-    // Hardcoded, but in map_widget it is hardcoded as well (=1)
-    final id = 2; // settingsBox.get('fishingLocationId');
-    // Hardcoded for now
-    final x = 0.1;
-    final y = 0.1;
+    final id = settingsBox.get('fishingLocationId') as double;
+    final x = settingsBox.get('fishingLocationX') as double;
+    final y = settingsBox.get('fishingLocationY') as double;
+
     final response = await http.post(
       Uri.parse('https://capstone.aquaf1na.fun/api/fishing/$name'),
       headers: {'Content-Type': 'application/json'},
-      body: '{"fisherEmail": "$email", "water": {"id": 1, "x": 0.1, "y": 0.1}}',
+      body: jsonEncode(
+        FishingSessionModel(
+          fisherEmail: email,
+          water: WaterModel(id: id, x: x, y: y),
+        ).toJson(),
+      ),
     );
 
     if (response.statusCode != 200) {
@@ -229,13 +234,45 @@ class ImageUploadField extends StatefulWidget {
 
 class _ImageUploadFieldState extends State<ImageUploadField> {
   File? _image;
+  String? _fishName;
+  bool _isLoading = true;
 
   Future<void> _pickImage() async {
+    _fishName = null;
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: ImageSource.gallery);
 
     if (picked != null) {
       setState(() => _image = File(picked.path));
+      debugPrint("Fetching fish name...");
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://ml.aquaf1na.fun:5001/predict'),
+      );
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          _image!.path,
+          filename: _image!.path.split('/').last,
+        ),
+      );
+      var streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      if (response.statusCode == 200) {
+        debugPrint('Prediction successful: ${response.body}');
+        final prediction = FishPredictionModel.fromJson(
+          jsonDecode(response.body),
+        );
+        setState(() {
+          _fishName = prediction.prediction;
+          _isLoading = false;
+        });
+      } else {
+        debugPrint('Prediction failed: ${response.statusCode}');
+        setState(() {
+          _fishName = null;
+        });
+      }
     }
   }
 
@@ -316,7 +353,20 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
                 : null,
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
+        Container(
+          child: _image == null
+              ? Text(localizations!.noFishNameLabel)
+              : _isLoading
+              ? Text(localizations!.loadingFishName)
+              : _fishName == null
+              ? Text('Error: ${localizations!.noFishNameLabel}')
+              : Text(
+                  '${localizations!.fishNameLabel}: $_fishName',
+                  style: const TextStyle(fontSize: 16),
+                ),
+        ),
+        const SizedBox(height: 8),
         ElevatedButton(
           onPressed: () {
             if (_image != null) {
@@ -344,7 +394,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
               );
             }
           },
-          child: Text(localizations!.uploadFishImageButton),
+          child: Text(localizations.uploadFishImageButton),
         ),
       ],
     );
