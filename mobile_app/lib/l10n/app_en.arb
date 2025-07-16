@@ -48,5 +48,14 @@
   "fishingLocationLabel": "Fishing Location",
   "fishNameLabel": "Fish",
   "noFishNameLabel": "Upload an image to get fish name",
-  "loadingFishName": "Loading fish name..."
+  "loadingFishName": "Loading fish name...",
+  "manualUploadButton": "Manual Upload",
+  "fishDescriptionLabel": "Fish Description",
+  "searchByDescriptionButton": "Search by Description",
+  "selectFishLabel": "Select Fish:",
+  "similarityScoreLabel": "Similarity Score",
+  "searchingFishLabel": "Searching for fish...",
+  "noResultsFoundLabel": "No results found",
+  "cancelButton": "Cancel",
+  "uploadButton": "Upload"
 }

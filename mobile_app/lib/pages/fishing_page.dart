@@ -396,6 +396,204 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
           },
           child: Text(localizations.uploadFishImageButton),
         ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            showDialog(
+              context: context,
+              builder: (context) => ManualUploadDialog(),
+            );
+          },
+          child: Text(localizations.manualUploadButton),
+        ),
+      ],
+    );
+  }
+}
+
+class ManualUploadDialog extends StatefulWidget {
+  const ManualUploadDialog({super.key});
+
+  @override
+  State<ManualUploadDialog> createState() => _ManualUploadDialogState();
+}
+
+class _ManualUploadDialogState extends State<ManualUploadDialog> {
+  final TextEditingController _fishNameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  List<FishResultModel> _searchResults = [];
+  bool _isSearching = false;
+  FishResultModel? _selectedFish;
+
+  Future<void> _searchFishByDescription() async {
+    if (_descriptionController.text.trim().isEmpty) return;
+
+    setState(() {
+      _isSearching = true;
+      _searchResults = [];
+      _selectedFish = null;
+    });
+
+    try {
+      final request = FishSearchRequestModel(
+        description: _descriptionController.text.trim(),
+        topK: 3, // Get top 3 results
+      );
+
+      final response = await http.post(
+        Uri.parse('http://ml.aquaf1na.fun:5001/search'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(request.toJson()),
+      );
+
+      debugPrint(response.body);
+
+      if (response.statusCode == 200) {
+        final searchResponse = FishSearchResponseModel.fromJson(
+          jsonDecode(response.body),
+        );
+
+        setState(() {
+          _searchResults = searchResponse.results;
+          _isSearching = false;
+        });
+      } else {
+        debugPrint('Fish search failed: ${response.statusCode}');
+        setState(() {
+          _isSearching = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('Fish search error: $e');
+      setState(() {
+        _isSearching = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context)!;
+
+    return AlertDialog(
+      title: Text(localizations.manualUploadButton),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _fishNameController,
+              decoration: InputDecoration(
+                labelText: localizations.fishNameLabel,
+                border: const OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _descriptionController,
+              decoration: InputDecoration(
+                labelText: localizations.fishDescriptionLabel,
+                border: const OutlineInputBorder(),
+                hintText: 'e.g., "Small silver fish with blue fins"',
+              ),
+              maxLines: 3,
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _isSearching ? null : _searchFishByDescription,
+                child: _isSearching
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(localizations.searchingFishLabel),
+                        ],
+                      )
+                    : Text(localizations.searchByDescriptionButton),
+              ),
+            ),
+            if (_searchResults.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Text(
+                localizations.selectFishLabel,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  itemCount: _searchResults.length,
+                  itemBuilder: (context, index) {
+                    final fish = _searchResults[index];
+                    final isSelected = _selectedFish?.id == fish.id;
+
+                    return Card(
+                      color: isSelected
+                          ? Theme.of(
+                              context,
+                            ).primaryColor.withValues(alpha: 0.2)
+                          : null,
+                      child: ListTile(
+                        title: Text(fish.name),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${fish.genus} ${fish.species}'),
+                            Text(
+                              '${localizations.similarityScoreLabel}: ${fish.similarityScore}%',
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          setState(() {
+                            _selectedFish = fish;
+                            _fishNameController.text = fish.name;
+                          });
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ] else if (_isSearching == false &&
+                _descriptionController.text.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Text(localizations.noResultsFoundLabel),
+            ],
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(localizations.cancelButton),
+        ),
+        ElevatedButton(
+          onPressed: _fishNameController.text.trim().isEmpty
+              ? null
+              : () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Mock upload of ${_fishNameController.text}',
+                      ),
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
+                  Navigator.of(context).pop();
+                },
+          child: Text(localizations.uploadButton),
+        ),
       ],
     );
   }

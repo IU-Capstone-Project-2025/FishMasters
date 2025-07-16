@@ -157,4 +157,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loadingFishName => 'Loading fish name...';
+
+  @override
+  String get manualUploadButton => 'Manual Upload';
+
+  @override
+  String get fishDescriptionLabel => 'Fish Description';
+
+  @override
+  String get searchByDescriptionButton => 'Search by Description';
+
+  @override
+  String get selectFishLabel => 'Select Fish:';
+
+  @override
+  String get similarityScoreLabel => 'Similarity Score';
+
+  @override
+  String get searchingFishLabel => 'Searching for fish...';
+
+  @override
+  String get noResultsFoundLabel => 'No results found';
+
+  @override
+  String get cancelButton => 'Cancel';
+
+  @override
+  String get uploadButton => 'Upload';
 }

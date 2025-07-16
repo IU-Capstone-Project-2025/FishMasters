@@ -48,5 +48,14 @@
   "fishingLocationLabel": "Место рыбалки",
   "fishNameLabel": "Рыба",
   "noFishNameLabel": "Загрузите изображение, чтобы получить название рыбы",
-  "loadingFishName": "Загрузка названия рыбы..."
+  "loadingFishName": "Загрузка названия рыбы...",
+  "manualUploadButton": "Загрузка вручную",
+  "fishDescriptionLabel": "Описание рыбы",
+  "searchByDescriptionButton": "Поиск по описанию",
+  "selectFishLabel": "Выберите рыбу:",
+  "similarityScoreLabel": "Схожесть",
+  "searchingFishLabel": "Поиск рыбы...",
+  "noResultsFoundLabel": "Результаты не найдены",
+  "cancelButton": "Отмена",
+  "uploadButton": "Загрузить"
 }

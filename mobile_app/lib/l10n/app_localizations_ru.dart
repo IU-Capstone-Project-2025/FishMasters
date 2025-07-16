@@ -157,4 +157,31 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get loadingFishName => 'Загрузка названия рыбы...';
+
+  @override
+  String get manualUploadButton => 'Загрузка вручную';
+
+  @override
+  String get fishDescriptionLabel => 'Описание рыбы';
+
+  @override
+  String get searchByDescriptionButton => 'Поиск по описанию';
+
+  @override
+  String get selectFishLabel => 'Выберите рыбу:';
+
+  @override
+  String get similarityScoreLabel => 'Схожесть';
+
+  @override
+  String get searchingFishLabel => 'Поиск рыбы...';
+
+  @override
+  String get noResultsFoundLabel => 'Результаты не найдены';
+
+  @override
+  String get cancelButton => 'Отмена';
+
+  @override
+  String get uploadButton => 'Загрузить';
 }
