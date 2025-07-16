@@ -3,7 +3,6 @@ import 'package:mobile_app/functions/functions.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
 
@@ -33,7 +32,6 @@ class _ProfilePageState extends State<ProfilePage> {
         settingsBox.delete('profilePhotoPath');
       }
     }
-    
 
     return Scaffold(
       appBar: AppBar(
@@ -57,6 +55,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           ImageUploaderWidget(
                             uri:
                                 "https://capstone.aquaf1na.fun/auth/update-photo",
+                            onUploadSuccess: () {
+                              setState(() {
+                                // Trigger rebuild to show new profile picture
+                              });
+                            },
                           ),
                         ],
                       ),
@@ -133,8 +136,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
 class ImageUploaderWidget extends StatefulWidget {
   final String uri;
+  final VoidCallback? onUploadSuccess;
 
-  const ImageUploaderWidget({super.key, required this.uri});
+  const ImageUploaderWidget({
+    super.key,
+    required this.uri,
+    this.onUploadSuccess,
+  });
 
   @override
   State<ImageUploaderWidget> createState() => _ImageUploaderWidgetState();
@@ -142,6 +150,7 @@ class ImageUploaderWidget extends StatefulWidget {
 
 class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
   File? _image;
+  bool _isUploading = false;
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -160,6 +169,11 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
       );
       return;
     }
+
+    setState(() {
+      _isUploading = true;
+    });
+
     if (!Hive.isBoxOpen('settings')) {
       Hive.openBox('settings');
     }
@@ -182,6 +196,8 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
           const SnackBar(content: Text('Image uploaded successfully')),
         );
         settingsBox.put('profilePhotoPath', _image!.path);
+        // Call the callback to trigger profile page rebuild
+        widget.onUploadSuccess?.call();
       } else {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -196,7 +212,13 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
         context,
       ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
+
+    setState(() {
+      _isUploading = false;
+    });
+
     debugPrint("upload is complete");
+    if (!mounted) return;
     Navigator.of(context).pop();
   }
 
@@ -207,29 +229,92 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
       Hive.openBox('settings');
     }
     final settingsBox = Hive.box('settings');
-    final currentPhoto = settingsBox.get('profilePhotoPath', defaultValue: null);
+    final currentPhoto = settingsBox.get(
+      'profilePhotoPath',
+      defaultValue: null,
+    );
 
     return Column(
       children: [
         GestureDetector(
-          onTap: _pickImage,
-          child: CircleAvatar(
-            radius: 60,
-            backgroundImage: _image != null
-                ? FileImage(_image!)
-                : currentPhoto != null
-                  ? FileImage(File(currentPhoto))
-                  : null,
-            backgroundColor: Colors.grey[400],
-            child: _image == null
-                ? const Icon(Icons.camera_alt, size: 40, color: Colors.white)
-                : null,
+          onTap: _isUploading ? null : _pickImage,
+          child: Stack(
+            children: [
+              Container(
+                width: 124,
+                height: 124,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 2.0,
+                  ),
+                ),
+                child: CircleAvatar(
+                  radius: 60,
+                  backgroundImage: _image != null
+                      ? FileImage(_image!)
+                      : currentPhoto != null
+                      ? FileImage(File(currentPhoto))
+                      : null,
+                  backgroundColor: Colors.grey[400],
+                  child: _image == null && currentPhoto == null
+                      ? const Icon(
+                          Icons.camera_alt,
+                          size: 40,
+                          color: Colors.white,
+                        )
+                      : null,
+                ),
+              ),
+              // Dark overlay when no image is selected
+              if (_image == null && currentPhoto != null)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  width: 124,
+                  height: 124,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.black.withValues(alpha: 0.3),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.camera_alt,
+                      size: 40,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              // Loading indicator
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOut,
+                width: 124,
+                height: 124,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black.withValues(
+                    alpha: _isUploading ? 0.4 : 0.0,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: _uploadImage,
-          child: Text(localizations!.uploadPictureButton),
+          onPressed: _isUploading ? null : _uploadImage,
+          child: _isUploading
+              ? const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              : Text(localizations!.uploadPictureButton),
         ),
       ],
     );

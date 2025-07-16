@@ -14,6 +14,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Water {
 
+    public Water(Double id, Double x, Double y) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+    }
+
     @Id
     private Double id;
 
@@ -22,4 +28,7 @@ public class Water {
 
     @Column(nullable = false)
     private Double y;
+
+    @OneToOne(mappedBy = "water", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Discussion discussion;
 }

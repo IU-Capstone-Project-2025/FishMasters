@@ -250,7 +250,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
     final email = settingsBox.get('email', defaultValue: '').toString();
     final request = http.MultipartRequest(
       'POST',
-      Uri.parse('https://stage.aquaf1na.fun/api/caught-fish'),
+      Uri.parse('https://capstone.aquaf1na.fun/api/caught-fish'),
     );
     request.files.add(
       http.MultipartFile.fromString(
