@@ -15,7 +15,7 @@ load_dotenv()
  
 class PicSearchSystem:
     
-    def __init__(self, collection_name: str = "fish_embeddings", faiss_index_path: str = "qdrant_faiss_pics_index.faiss"):
+    def __init__(self, collection_name: str = "fish_image_embeddings", faiss_index_path: str = "qdrant_faiss_pics_index.faiss"):
         qdrant_url = os.getenv("QDRANT_URL")
         qdrant_api_key = os.getenv("QDRANT_API_KEY")
     
@@ -40,8 +40,8 @@ class PicSearchSystem:
         self.qdrant_id_to_faiss_id: Dict[int, int] = {}
         
         # Initialize components
-        self._initialize_qdrant_collection()
-        self._load_or_build_faiss_index()
+        # self._initialize_qdrant_collection()
+        # self._load_or_build_faiss_index()
         
     def _initialize_qdrant_collection(self):
         """Initialize the Qdrant collection for persistent storage"""
@@ -52,7 +52,7 @@ class PicSearchSystem:
             if self.collection_name not in collection_names:
                 self.qdrant_client.create_collection(
                     collection_name=self.collection_name,
-                    vectors_config=VectorParams(size=self.embedding_dimension, distance=Distance.COSINE)
+                    vectors_config=VectorParams(size=self.embedding_dims, distance=Distance.COSINE)
                 )
                 print(f"Created Qdrant collection: {self.collection_name}")
             else:
@@ -107,6 +107,26 @@ class PicSearchSystem:
             print(f"Error verifying FAISS index: {e}")
             return False
     
+    def _save_faiss_index(self):
+        """Save FAISS index and mappings to disk"""
+        try:
+            # Save FAISS index
+            faiss.write_index(self.faiss_index, self.faiss_index_path)
+            
+            # Save mappings
+            mappings = {
+                'faiss_id_to_qdrant_id': self.faiss_id_to_qdrant_id,
+                'qdrant_id_to_faiss_id': self.qdrant_id_to_faiss_id
+            }
+            
+            with open(self.metadata_path, 'wb') as f:
+                pickle.dump(mappings, f)
+            
+            print(f"Saved FAISS index with {self.faiss_index.ntotal} vectors to: {self.faiss_index_path}")
+            
+        except Exception as e:
+            print(f"Error saving FAISS index: {e}")
+    
     def _build_faiss_from_qdrant(self):
         """Build FAISS index from all vectors in Qdrant using batch processing"""
         try:
@@ -114,7 +134,7 @@ class PicSearchSystem:
             
             # Create new FAISS index
             
-            self.faiss_index = faiss.IndexFlatIP(self.embedding_dimension)
+            self.faiss_index = faiss.IndexFlatIP(self.embedding_dims)
             
             self.faiss_id_to_qdrant_id = {}
             self.qdrant_id_to_faiss_id = {}
@@ -198,9 +218,9 @@ class PicSearchSystem:
         except Exception as e:
             print(f"Error building FAISS index from Qdrant: {e}")
             # Create empty index as fallback
-            self.faiss_index = faiss.IndexFlatIP(self.embedding_dimension)
+            self.faiss_index = faiss.IndexFlatIP(self.embedding_dims)
             print("Created empty index")
-             
+        
     def search_faiss(self, image):
         try:
             if self.faiss_index.ntotal == 0:
@@ -208,13 +228,20 @@ class PicSearchSystem:
                 return []
                         
             image_embedding = self.embedder.get_embedding(image)
+            print('1')
 
             similarity, faiss_id = self.faiss_index.search(image_embedding, 1)
-        
+
+            print(faiss_id)
+
+            print('2')
+
             if faiss_id == -1:
                 raise ValueError(f"Faiss index: {faiss_id}")
             
             qdrant_id = self.faiss_id_to_qdrant_id.get(faiss_id)
+            
+            print('3')
             
             if qdrant_id is None:
                 raise ValueError(f"qdrant_id is {qdrant_id}")
@@ -225,11 +252,17 @@ class PicSearchSystem:
                 with_payload=True
             )
             
+            
+            print('4')
+            
+            
             if qdrant_id not in points:
                 raise ValueError(f"No qdrant_id {qdrant_id} in qdrant database")
             
             point = points[0]
+            print('5')
             payload = point.payload
+            print('6')
             
             fish_species = FishSpecies(
                 fish_id=payload.get("id", 0),
@@ -239,8 +272,9 @@ class PicSearchSystem:
                 full_description=payload.get("full_description", ""),
                 fbname=payload.get("fbname", "")
             )
-            
+            print('7')
             result = (fish_species, similarity)
+            print('8')
             return result 
 
         except Exception as e:
@@ -272,19 +306,28 @@ class PicSearchSystem:
         except Exception as e:
             print(f"Error searching with QDrant {e}")
     
-    def compare_searches(self, image):
-        pic = get_user_pic()
+    def get_user_pic(self):
+        #TODO получить фотку от пользователя
+        image_path = 'datasets/fish_images/coccineus_test2.jpg'
+        return Image.open(image_path)
+    
+    
+    def compare_searches(self):
+        pic = self.get_user_pic()
         time_faiss_st = time.time()
         result_faiss = self.search_faiss(pic)
         time_faiss_end = time.time()
+        
         print(f"FAISS:\n\ttime: {time_faiss_end-time_faiss_st}\n\tresult: {result_faiss}")
         time_qdrant_st = time.time()
         result_qdrant = self.search_qdrant(pic)
         time_qdrant_end = time.time()
-        print(f"QDrant:\n\ttime: {time_qdrant_end-time_qdrant_st}\n\tresult: {result_qdrant}")
+        print(f"QDrant:\n\ttime: {time_qdrant_end-time_qdrant_st}\n\tresult: {result_qdrant.species}")
         
         
-        
-def get_user_pic():
-    #TODO получить фотку от пользователя
-    ...
+if __name__ == '__main__':
+    test = PicSearchSystem()
+    # test._load_or_build_faiss_index()
+    pic = test.get_user_pic()
+    result = test.search_qdrant(pic)
+    print(result.species)
