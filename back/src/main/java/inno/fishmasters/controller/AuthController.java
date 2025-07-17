@@ -18,9 +18,32 @@ public class AuthController {
 
     private final FisherService fisherService;
 
+//    @Operation(summary = "Register a new fisher")
+//    @PostMapping("/register")
+//    public ResponseEntity<Fisher> registerFisher(@RequestBody @Validated CreateFisherRequest request) {
+//        return ResponseEntity
+//                .status(200)
+//                .body(fisherService.register(request));
+//    }
+
     @Operation(summary = "Register a new fisher")
-    @PostMapping("/register")
-    public ResponseEntity<Fisher> registerFisher(@RequestBody @Validated CreateFisherRequest request) {
+    @PostMapping(value = "/register", consumes = "multipart/form-data")
+    public ResponseEntity<Fisher> registerFisher(
+            @RequestPart("email") String email,
+            @RequestPart("name") String name,
+            @RequestPart("surname") String surname,
+            @RequestPart("password") String password,
+            @RequestPart(value = "photo", required = false) MultipartFile photo
+    ) {
+        byte[] photoBytes = null;
+        if (photo != null && !photo.isEmpty()) {
+            try {
+                photoBytes = photo.getBytes();
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to read photo bytes", e);
+            }
+        }
+        CreateFisherRequest request = new CreateFisherRequest(email, name, surname, password, photoBytes);
         return ResponseEntity
                 .status(200)
                 .body(fisherService.register(request));
