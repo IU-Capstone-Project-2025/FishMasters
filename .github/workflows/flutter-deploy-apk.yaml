@@ -36,4 +36,4 @@ jobs:
           tag_name: v${{ github.run_number }}
           files: mobile_app/build/app/outputs/flutter-apk/app-release.apk
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
