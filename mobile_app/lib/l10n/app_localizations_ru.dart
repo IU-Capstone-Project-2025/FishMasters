@@ -108,13 +108,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get russianLanguage => 'Русский';
 
   @override
-  String get discussionText => 'Обсуждение';
+  String get chatText => 'Чат';
 
   @override
   String get messagePlaceholder => 'Введите сообщение...';
 
   @override
-  String get discussionLabel => 'Обсуждение';
+  String get chatLabel => 'Чат';
 
   @override
   String get closeLabel => 'Закрыть';
@@ -142,4 +142,46 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get uploadFishImageButton => 'Загрузить изображение';
+
+  @override
+  String get loadingMarkersLabel => 'Загрузка мест для рыбалки...';
+
+  @override
+  String get fishingLocationLabel => 'Место рыбалки';
+
+  @override
+  String get fishNameLabel => 'Рыба';
+
+  @override
+  String get noFishNameLabel => 'Загрузите изображение, чтобы получить название рыбы';
+
+  @override
+  String get loadingFishName => 'Загрузка названия рыбы...';
+
+  @override
+  String get manualUploadButton => 'Загрузка вручную';
+
+  @override
+  String get fishDescriptionLabel => 'Описание рыбы';
+
+  @override
+  String get searchByDescriptionButton => 'Поиск по описанию';
+
+  @override
+  String get selectFishLabel => 'Выберите рыбу:';
+
+  @override
+  String get similarityScoreLabel => 'Схожесть';
+
+  @override
+  String get searchingFishLabel => 'Поиск рыбы...';
+
+  @override
+  String get noResultsFoundLabel => 'Результаты не найдены';
+
+  @override
+  String get cancelButton => 'Отмена';
+
+  @override
+  String get uploadButton => 'Загрузить';
 }

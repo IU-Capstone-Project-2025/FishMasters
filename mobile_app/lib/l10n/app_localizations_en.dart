@@ -108,13 +108,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get russianLanguage => 'Русский';
 
   @override
-  String get discussionText => 'Discussion';
+  String get chatText => 'Chat';
 
   @override
   String get messagePlaceholder => 'Type a message...';
 
   @override
-  String get discussionLabel => 'Discussion';
+  String get chatLabel => 'Chat';
 
   @override
   String get closeLabel => 'Close';
@@ -142,4 +142,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get uploadFishImageButton => 'Upload Image';
+
+  @override
+  String get loadingMarkersLabel => 'Loading fishing places...';
+
+  @override
+  String get fishingLocationLabel => 'Fishing Location';
+
+  @override
+  String get fishNameLabel => 'Fish';
+
+  @override
+  String get noFishNameLabel => 'Upload an image to get fish name';
+
+  @override
+  String get loadingFishName => 'Loading fish name...';
+
+  @override
+  String get manualUploadButton => 'Manual Upload';
+
+  @override
+  String get fishDescriptionLabel => 'Fish Description';
+
+  @override
+  String get searchByDescriptionButton => 'Search by Description';
+
+  @override
+  String get selectFishLabel => 'Select Fish:';
+
+  @override
+  String get similarityScoreLabel => 'Similarity Score';
+
+  @override
+  String get searchingFishLabel => 'Searching for fish...';
+
+  @override
+  String get noResultsFoundLabel => 'No results found';
+
+  @override
+  String get cancelButton => 'Cancel';
+
+  @override
+  String get uploadButton => 'Upload';
 }

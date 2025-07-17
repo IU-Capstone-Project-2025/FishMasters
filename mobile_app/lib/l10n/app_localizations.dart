@@ -293,11 +293,11 @@ abstract class AppLocalizations {
   /// **'Русский'**
   String get russianLanguage;
 
-  /// No description provided for @discussionText.
+  /// No description provided for @chatText.
   ///
   /// In en, this message translates to:
-  /// **'Discussion'**
-  String get discussionText;
+  /// **'Chat'**
+  String get chatText;
 
   /// No description provided for @messagePlaceholder.
   ///
@@ -305,11 +305,11 @@ abstract class AppLocalizations {
   /// **'Type a message...'**
   String get messagePlaceholder;
 
-  /// No description provided for @discussionLabel.
+  /// No description provided for @chatLabel.
   ///
   /// In en, this message translates to:
-  /// **'Discussion'**
-  String get discussionLabel;
+  /// **'Chat'**
+  String get chatLabel;
 
   /// No description provided for @closeLabel.
   ///
@@ -364,6 +364,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upload Image'**
   String get uploadFishImageButton;
+
+  /// No description provided for @loadingMarkersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading fishing places...'**
+  String get loadingMarkersLabel;
+
+  /// No description provided for @fishingLocationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fishing Location'**
+  String get fishingLocationLabel;
+
+  /// No description provided for @fishNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fish'**
+  String get fishNameLabel;
+
+  /// No description provided for @noFishNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload an image to get fish name'**
+  String get noFishNameLabel;
+
+  /// No description provided for @loadingFishName.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading fish name...'**
+  String get loadingFishName;
+
+  /// No description provided for @manualUploadButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual Upload'**
+  String get manualUploadButton;
+
+  /// No description provided for @fishDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fish Description'**
+  String get fishDescriptionLabel;
+
+  /// No description provided for @searchByDescriptionButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by Description'**
+  String get searchByDescriptionButton;
+
+  /// No description provided for @selectFishLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Fish:'**
+  String get selectFishLabel;
+
+  /// No description provided for @similarityScoreLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Similarity Score'**
+  String get similarityScoreLabel;
+
+  /// No description provided for @searchingFishLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching for fish...'**
+  String get searchingFishLabel;
+
+  /// No description provided for @noResultsFoundLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get noResultsFoundLabel;
+
+  /// No description provided for @cancelButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelButton;
+
+  /// No description provided for @uploadButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload'**
+  String get uploadButton;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
