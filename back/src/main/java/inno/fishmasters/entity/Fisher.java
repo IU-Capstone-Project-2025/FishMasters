@@ -30,7 +30,6 @@ public class Fisher {
     @Column(nullable = false)
     private Integer score;
 
-    @Lob
     @Column(name = "photo")
     private byte[] photo;
 
