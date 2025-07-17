@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.web.multipart.MultipartFile;
 
 @Schema(description = "Форма для создания пользователя")
 public record CreateFisherRequest(
@@ -21,6 +20,6 @@ public record CreateFisherRequest(
         @NotNull
         @Size(min = 6, max = 255, message = "Пароль должен быть от 6 до 255 символов")
         String password,
-        MultipartFile photo
+        byte[] photo
 ) {
 }
