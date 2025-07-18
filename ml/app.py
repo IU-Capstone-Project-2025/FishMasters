@@ -34,9 +34,10 @@ app.add_middleware(
 
 # Global variables for initialization
 vector_db: Optional[FaissFromQdrantDatabase] = None
+image_vector_db: Optional[FaissFromQdrantDatabase] = None
 qwen_embedder: Optional[QwenEmbedder] = None
 image_embedder: Optional[Embedder] = None
-initialization_mode: str = "none"  # "none", "low_resources", "high_resources", "low_res_pic"
+initialization_mode: str = "none"  # "none", "low_resources", "high_resources", "low_res_pic", "random_pic"
 
 
 class FishSearchRequest(BaseModel):
@@ -72,7 +73,8 @@ class StatusResponse(BaseModel):
     status: str
     initialized: bool
     mode: str
-    database_loaded: bool
+    text_database_loaded: bool
+    image_database_loaded: bool
     qwen_loaded: bool
     image_embedder_loaded: bool
     fish_count: int
@@ -88,20 +90,39 @@ class ImageSearchResponse(BaseModel):
 
 
 def initialize_database():
-    """Initialize the FAISS vector database"""
+    """Initialize the FAISS vector database for text embeddings"""
     global vector_db
     
     try:
         if vector_db is None:
-            print("🗄️ Initializing FAISS database...")
+            print("🗄️ Initializing FAISS database for text embeddings...")
             vector_db = FaissFromQdrantDatabase(
                 collection_name="fish_embeddings_20250627_102709",
                 faiss_index_path="qdrant_faiss_index.faiss"
             )
-            print("✅ Database initialized successfully")
+            print("✅ Text database initialized successfully")
         return True
     except Exception as e:
-        print(f"❌ Failed to initialize database: {e}")
+        print(f"❌ Failed to initialize text database: {e}")
+        return False
+
+
+def initialize_image_database():
+    """Initialize the FAISS vector database for image embeddings"""
+    global image_vector_db
+    
+    try:
+        if image_vector_db is None:
+            print("🖼️ Initializing FAISS database for image embeddings...")
+            image_vector_db = FaissFromQdrantDatabase(
+                collection_name="fish_image_embeddings",
+                faiss_index_path="fish_image_embeddings_faiss_index.faiss",  # Separate index for images
+                embedding_dimension=512  # ResNet18 produces 512D embeddings
+            )
+            print("✅ Image database initialized successfully")
+        return True
+    except Exception as e:
+        print(f"❌ Failed to initialize image database: {e}")
         return False
 
 
@@ -140,33 +161,64 @@ async def initialize_system(request: InitializationRequest):
     """
     Initialize the fish search system with specified mode.
     
-    - **low_resources**: Only initialize the database, use random vectors for search
-    - **low_res_pic**: Initialize database and image embedder, use random vectors for text search
-    - **high_resources**: Initialize database, Qwen embeddings, and image embedder for full functionality
+    - **low_resources**: Only initialize text database, use random vectors for search
+    - **low_res_pic**: Initialize text database and image embedder, use random vectors for text search
+    - **random_pic**: Initialize image database only, use random vectors for image search (testing)
+    - **high_resources**: Initialize all databases and embedders for full functionality
     """
     global initialization_mode
     
     mode = request.mode.lower()
-    if mode not in ["low_resources", "low_res_pic", "high_resources"]:
+    if mode not in ["low_resources", "low_res_pic", "random_pic", "high_resources"]:
         raise HTTPException(
             status_code=400, 
-            detail="Mode must be 'low_resources', 'low_res_pic', or 'high_resources'"
+            detail="Mode must be 'low_resources', 'low_res_pic', 'random_pic', or 'high_resources'"
         )
     
     start_time = time.time()
     
     try:
-        # Always initialize the database
-        db_success = initialize_database()
-        if not db_success:
-            raise HTTPException(
-                status_code=500,
-                detail="Failed to initialize vector database"
-            )
-        
+        # Initialize databases based on mode
+        db_success = True
+        image_db_success = True
         qwen_success = True
         image_success = True
         
+        if mode in ["low_resources", "low_res_pic"]:
+            # Initialize text database
+            db_success = initialize_database()
+            if not db_success:
+                raise HTTPException(
+                    status_code=500,
+                    detail="Failed to initialize text database"
+                )
+        
+        elif mode == "random_pic":
+            # Only initialize image database
+            image_db_success = initialize_image_database()
+            if not image_db_success:
+                raise HTTPException(
+                    status_code=500,
+                    detail="Failed to initialize image database"
+                )
+        
+        elif mode == "high_resources":
+            # Initialize both databases
+            db_success = initialize_database()
+            if not db_success:
+                raise HTTPException(
+                    status_code=500,
+                    detail="Failed to initialize text database"
+                )
+            
+            image_db_success = initialize_image_database()
+            if not image_db_success:
+                raise HTTPException(
+                    status_code=500,
+                    detail="Failed to initialize image database"
+                )
+        
+        # Initialize embedders based on mode
         if mode == "high_resources":
             qwen_success = initialize_qwen_embedder()
             if not qwen_success:
@@ -195,14 +247,20 @@ async def initialize_system(request: InitializationRequest):
         init_time = time.time() - start_time
         
         # Get database stats
-        stats = vector_db.get_stats() if vector_db else {"qdrant_points": 0}
-        fish_count = stats.get("qdrant_points", 0)
+        fish_count = 0
+        if vector_db:
+            stats = vector_db.get_stats()
+            fish_count += stats.get("qdrant_points", 0)
+        if image_vector_db:
+            image_stats = image_vector_db.get_stats()
+            fish_count += image_stats.get("qdrant_points", 0)
         
         return StatusResponse(
             status="success",
             initialized=True,
             mode=mode,
-            database_loaded=db_success,
+            text_database_loaded=db_success,
+            image_database_loaded=image_db_success,
             qwen_loaded=(qwen_embedder is not None),
             image_embedder_loaded=(image_embedder is not None),
             fish_count=fish_count,
@@ -219,8 +277,9 @@ async def search_fish(request: FishSearchRequest):
     Search for fish based on text description.
     
     The search behavior depends on initialization mode:
-    - **low_resources**: Uses random vectors for search (fast but not semantic)
-    - **low_res_pic**: Uses random vectors for search (image search available)
+    - **low_resources**: Uses random vectors for text search (fast but not semantic)
+    - **low_res_pic**: Uses random vectors for text search (image search available)
+    - **random_pic**: Not available for text search (image-only mode)
     - **high_resources**: Uses Qwen embeddings for semantic search (slower but accurate)
     - **auto**: Automatically chooses based on what's available
     """
@@ -245,6 +304,11 @@ async def search_fish(request: FishSearchRequest):
         mode_used = initialization_mode if initialization_mode != "none" else "low_resources"
     elif requested_mode in ["low_resources", "low_res_pic", "high_resources"]:
         mode_used = requested_mode
+    elif requested_mode == "random_pic":
+        raise HTTPException(
+            status_code=400,
+            detail="Text search not available in 'random_pic' mode. Use image search instead."
+        )
     else:
         raise HTTPException(
             status_code=400,
@@ -322,25 +386,53 @@ async def search_fish_by_image(image: UploadFile = File(...)):
     Search for fish based on uploaded image.
     
     The search uses ResNet18 image embeddings to find similar fish images.
-    Requires 'high_resources' or 'low_res_pic' mode to be initialized with image embedder.
+    Supports modes: 'high_resources', 'low_res_pic' (real embeddings), 'random_pic' (random vectors for testing).
     """
-    global vector_db, image_embedder, initialization_mode
+    global vector_db, image_vector_db, image_embedder, initialization_mode
     
     start_time = time.time()
     timing = {}
     
     # Check if system is initialized
-    if vector_db is None:
+    if initialization_mode == "none":
         raise HTTPException(
             status_code=503,
             detail="System not initialized. Please call /initialize endpoint first."
         )
     
-    # Check if image embedder is available
-    if image_embedder is None:
+    # Determine which database to use based on mode
+    search_db = None
+    use_real_embeddings = True
+    
+    if initialization_mode in ["high_resources", "low_res_pic"]:
+        # Use image database and real embeddings
+        if image_vector_db is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Image database not available. Please initialize system properly."
+            )
+        if image_embedder is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Image embedder not available. Please initialize system in 'high_resources' or 'low_res_pic' mode first."
+            )
+        search_db = image_vector_db
+        use_real_embeddings = True
+        
+    elif initialization_mode == "random_pic":
+        # Use image database with random vectors
+        if image_vector_db is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Image database not available. Please initialize system in 'random_pic' mode first."
+            )
+        search_db = image_vector_db
+        use_real_embeddings = False
+        
+    else:
         raise HTTPException(
             status_code=503,
-            detail="Image embedder not available. Please initialize system in 'high_resources' or 'low_res_pic' mode first."
+            detail=f"Image search not supported in '{initialization_mode}' mode. Use 'high_resources', 'low_res_pic', or 'random_pic' mode."
         )
     
     # Validate uploaded file
@@ -354,26 +446,41 @@ async def search_fish_by_image(image: UploadFile = File(...)):
         # Read and process the uploaded image
         image_processing_start = time.time()
         
-        # Read image data
-        image_data = await image.read()
-        
-        # Convert to PIL Image
-        pil_image = Image.open(io.BytesIO(image_data)).convert('RGB')
-        
-        # Generate image embedding
-        image_embedding = image_embedder.get_embedding(pil_image)
-        
-        # Convert to numpy array and then to list for search
-        if hasattr(image_embedding, 'cpu'):
-            embedding_vector = image_embedding.cpu().numpy().tolist()
+        if use_real_embeddings:
+            # Read image data
+            image_data = await image.read()
+            
+            # Convert to PIL Image
+            pil_image = Image.open(io.BytesIO(image_data)).convert('RGB')
+            
+            # Generate image embedding
+            image_embedding = image_embedder.get_embedding(pil_image)
+            
+            # Convert to numpy array and then to list for search
+            if hasattr(image_embedding, 'cpu'):
+                embedding_vector = image_embedding.cpu().numpy().tolist()
+            else:
+                embedding_vector = image_embedding.tolist()
+            
+            # ResNet18 produces 512D embeddings for image database
+            if len(embedding_vector) != 512:
+                raise ValueError(f"Unexpected embedding dimension: {len(embedding_vector)}. Expected 512 for image embeddings.")
+            
+            timing["image_embedding"] = time.time() - image_processing_start
         else:
-            embedding_vector = image_embedding.tolist()
+            # Use random vector for testing (512D for image database)
+            embedding_vector = np.random.rand(512).tolist()
+            timing["random_vector_generation"] = time.time() - image_processing_start
         
-        timing["image_processing"] = time.time() - image_processing_start
+        # Validate embedding vector
+        if not embedding_vector or any(not isinstance(x, (int, float)) for x in embedding_vector):
+            raise ValueError("Invalid embedding vector: contains non-numeric values")
         
-        # Perform the search in vector database
+        print(f"Image embedding dimension: {len(embedding_vector)}, mode: {initialization_mode}")  # Debug log
+        
+        # Perform the search in image vector database
         search_start = time.time()
-        results, search_timing = vector_db.search_with_timing(embedding_vector, top_k=10)
+        results, search_timing = search_db.search_with_timing(embedding_vector, top_k=10)
         
         # Filter out non-numeric timing values to avoid validation errors
         filtered_timing = {k: v for k, v in search_timing.items() if isinstance(v, (int, float))}
@@ -400,7 +507,7 @@ async def search_fish_by_image(image: UploadFile = File(...)):
         return ImageSearchResponse(
             success=True,
             results=fish_results,
-            mode_used="image_search",
+            mode_used=f"{initialization_mode}_image_search",
             timing=timing,
             total_time=total_time
         )
@@ -415,20 +522,28 @@ async def search_fish_by_image(image: UploadFile = File(...)):
 @app.get("/status", response_model=StatusResponse)
 async def get_status():
     """Get current system status and initialization state"""
-    global vector_db, qwen_embedder, image_embedder, initialization_mode
+    global vector_db, image_vector_db, qwen_embedder, image_embedder, initialization_mode
     
-    db_loaded = vector_db is not None
+    text_db_loaded = vector_db is not None
+    image_db_loaded = image_vector_db is not None
     qwen_loaded = qwen_embedder is not None
     image_loaded = image_embedder is not None
     initialized = initialization_mode != "none"
     
     fish_count = 0
-    if db_loaded:
+    if text_db_loaded:
         try:
             stats = vector_db.get_stats()
-            fish_count = stats.get("qdrant_points", 0)
+            fish_count += stats.get("qdrant_points", 0)
         except:
-            fish_count = 0
+            pass
+    
+    if image_db_loaded:
+        try:
+            image_stats = image_vector_db.get_stats()
+            fish_count += image_stats.get("qdrant_points", 0)
+        except:
+            pass
     
     status_msg = f"System status: {'initialized' if initialized else 'not initialized'}"
     if initialized:
@@ -438,7 +553,8 @@ async def get_status():
         status="ready" if initialized else "not_initialized",
         initialized=initialized,
         mode=initialization_mode,
-        database_loaded=db_loaded,
+        text_database_loaded=text_db_loaded,
+        image_database_loaded=image_db_loaded,
         qwen_loaded=qwen_loaded,
         image_embedder_loaded=image_loaded,
         fish_count=fish_count,
@@ -493,9 +609,10 @@ async def root():
             'docs': '/docs (GET) - API documentation'
         },
         'modes': {
-            'low_resources': 'Use random vectors for search (fast, not semantic)',
+            'low_resources': 'Use random vectors for text search only (fast, not semantic)',
             'low_res_pic': 'Use random vectors for text + ResNet18 for image search (moderate resources)',
-            'high_resources': 'Use Qwen embeddings for semantic search + ResNet18 for image search (accurate, slower)'
+            'random_pic': 'Use random vectors for image search only (testing mode)',
+            'high_resources': 'Use Qwen embeddings for text + ResNet18 for image search (full functionality)'
         }
     }
 
