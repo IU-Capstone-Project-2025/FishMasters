@@ -277,7 +277,10 @@ async def search_fish(request: FishSearchRequest):
         # Perform the search
         search_start = time.time()
         results, search_timing = vector_db.search_with_timing(query_vector, top_k=request.top_k)
-        timing.update(search_timing)
+        
+        # Filter out non-numeric timing values to avoid validation errors
+        filtered_timing = {k: v for k, v in search_timing.items() if isinstance(v, (int, float))}
+        timing.update(filtered_timing)
         timing["total_search"] = time.time() - search_start
         
         # Convert results to response format
@@ -371,7 +374,10 @@ async def search_fish_by_image(image: UploadFile = File(...)):
         # Perform the search in vector database
         search_start = time.time()
         results, search_timing = vector_db.search_with_timing(embedding_vector, top_k=10)
-        timing.update(search_timing)
+        
+        # Filter out non-numeric timing values to avoid validation errors
+        filtered_timing = {k: v for k, v in search_timing.items() if isinstance(v, (int, float))}
+        timing.update(filtered_timing)
         timing["total_search"] = time.time() - search_start
         
         # Convert results to response format
