@@ -11,7 +11,7 @@ from fish_species import FishSpecies
 class FaissFromQdrantDatabase:
     """Vector database that uses Qdrant as primary storage and builds FAISS index from Qdrant data"""
     
-    def __init__(self, collection_name: str = "fish_embeddings", faiss_index_path: str = "qdrant_faiss_index.faiss"):
+    def __init__(self, collection_name: str = "fish_embeddings", faiss_index_path: str = "qdrant_faiss_index.faiss", embedding_dimension: int = 1024):
         # Get Qdrant credentials from environment variables
         qdrant_url = os.getenv("QDRANT_URL")
         qdrant_api_key = os.getenv("QDRANT_API_KEY")
@@ -30,7 +30,7 @@ class FaissFromQdrantDatabase:
         
         # FAISS index for fast similarity search
         self.faiss_index = None
-        self.embedding_dimension = 1024
+        self.embedding_dimension = embedding_dimension
         
         # Mapping between FAISS indices and Qdrant point IDs
         self.faiss_id_to_qdrant_id: Dict[int, int] = {}
@@ -374,6 +374,9 @@ class FaissFromQdrantDatabase:
             timing_info['total_time'] = time.time() - total_start
             timing_info['error'] = str(e)
             print(f"Error searching embeddings: {e}")
+            print(f"Error type: {type(e).__name__}")
+            import traceback
+            print(f"Full traceback: {traceback.format_exc()}")
             return [], timing_info
     
     def search_qdrant_only(self, query_embedding: List[float], top_k: int = 5) -> List[FishSpecies]:
