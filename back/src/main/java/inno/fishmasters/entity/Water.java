@@ -1,5 +1,6 @@
 package inno.fishmasters.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,5 +31,6 @@ public class Water {
     private Double y;
 
     @OneToOne(mappedBy = "water", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Discussion discussion;
 }
