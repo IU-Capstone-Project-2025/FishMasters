@@ -57,7 +57,6 @@ class _LoginPageState extends State<LoginPage> {
       final responseJson = jsonDecode(response.body);
       final fullName = '${responseJson['name']} ${responseJson['surname']}';
       settingsBox.put('fullName', fullName);
-      settingsBox.put('score', responseJson['score'] ?? 0);
       settingsBox.put('photo', responseJson['photo']);
 
       if (!mounted) return;
@@ -161,7 +160,6 @@ class _LoginPageState extends State<LoginPage> {
                     final settingsBox = Hive.box('settings');
                     settingsBox.put('email', 'dev@local.test');
                     settingsBox.put('fullName', 'Developer Mode');
-                    settingsBox.put('score', 0);
 
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
