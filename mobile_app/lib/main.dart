@@ -30,106 +30,92 @@ class MainApp extends StatefulWidget {
       onSurface: const Color(0xFF252A34),
       error: const Color(0xFFFF2E63),
       onError:const Color(0xFF252A34),
+      tertiary: const Color(0x00FFFFFF)
     ),
     useMaterial3: true,
     textTheme: TextTheme(
       // Display Styles
       displayLarge: GoogleFonts.singleDay(
-        fontSize: 57,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w400,
+        fontSize: 64,
+        fontWeight: FontWeight.w600,
         color: const Color(0xFF252A34),
       ),
       displayMedium: GoogleFonts.singleDay(
-        fontSize: 45,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w400,
+        fontSize: 55,
+        fontWeight: FontWeight.normal,
         color: const Color(0xFF252A34),
       ),
       displaySmall: GoogleFonts.singleDay(
         fontSize: 36,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w600,
         color: const Color(0xFF252A34),
       ),
 
       // Headline Styles
-      headlineLarge: GoogleFonts.singleDay(
+      headlineLarge: GoogleFonts.comicNeue(
         fontSize: 32,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.normal,
         color: const Color(0xFF252A34),
       ),
-      headlineMedium: GoogleFonts.singleDay(
-        fontSize: 28,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w400,
+      headlineMedium: GoogleFonts.comicNeue(
+        fontSize: 30, // 28
+        fontWeight: FontWeight.normal,
         color: const Color(0xFF252A34),
       ),
       headlineSmall: GoogleFonts.singleDay(
         fontSize: 24,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w600,
         color: const Color(0xFF252A34),
       ),
 
       // Title Styles
       titleLarge: GoogleFonts.singleDay(
-        fontSize: 22,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w500,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
         color: const Color(0xFF252A34),
       ),
-      titleMedium: GoogleFonts.singleDay(
-        fontSize: 18,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w500,
-        color: const Color(0xFF252A34),
+      titleMedium: GoogleFonts.comicNeue(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF08D9D6),
       ),
-      titleSmall: GoogleFonts.singleDay(
-        fontSize: 14,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w500,
+      titleSmall: GoogleFonts.comicNeue(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
         color: const Color(0xFF252A34),
       ),
 
       // Label Styles
-      labelLarge: GoogleFonts.singleDay(
+      labelLarge: GoogleFonts.comicNeue(
         fontSize: 16,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w500,
-        color: const Color(0xFF252A34),
+        fontWeight: FontWeight.normal,
+        color: const Color(0xFF000000),
       ),
-      labelMedium: GoogleFonts.singleDay(
+      labelMedium: GoogleFonts.comicNeue(
         fontSize: 14,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w500,
-        color: const Color(0xFF252A34),
+        fontWeight: FontWeight.normal,
+        color: const Color(0xFF000000),
       ),
-      labelSmall: GoogleFonts.singleDay(
+      labelSmall: GoogleFonts.comicNeue(
         fontSize: 12,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w500,
-        color: const Color(0xFF252A34),
+        fontWeight: FontWeight.normal,
+        color: const Color(0xFF000000),
       ),
 
       // Body Styles
       bodyLarge: GoogleFonts.singleDay(
         fontSize: 16,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.normal,
         color: const Color(0xFF252A34),
       ),
-      bodyMedium: GoogleFonts.singleDay(
+      bodyMedium: GoogleFonts.comicNeue(
         fontSize: 14,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w400,
-        color: const Color(0xFF252A34),
+        fontWeight: FontWeight.normal,
+        color: const Color(0xFFFF2E63),
       ),
       bodySmall: GoogleFonts.singleDay(
         fontSize: 12,
-        letterSpacing: 0.0,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.normal,
         color: const Color(0xFF252A34),
       ),
     ),
