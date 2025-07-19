@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app/pages/pages.dart';
 import 'package:mobile_app/functions/functions.dart';
 import 'package:hive/hive.dart';
@@ -31,6 +32,117 @@ class MainApp extends StatefulWidget {
       onError:const Color(0xFF252A34),
     ),
     useMaterial3: true,
+    textTheme: TextTheme(
+      // Display Styles
+      displayLarge: GoogleFonts.singleDay(
+        fontSize: 57,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF252A34),
+      ),
+      displayMedium: GoogleFonts.singleDay(
+        fontSize: 45,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF252A34),
+      ),
+      displaySmall: GoogleFonts.singleDay(
+        fontSize: 36,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF252A34),
+      ),
+
+      // Headline Styles
+      headlineLarge: GoogleFonts.singleDay(
+        fontSize: 32,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF252A34),
+      ),
+      headlineMedium: GoogleFonts.singleDay(
+        fontSize: 28,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF252A34),
+      ),
+      headlineSmall: GoogleFonts.singleDay(
+        fontSize: 24,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF252A34),
+      ),
+
+      // Title Styles
+      titleLarge: GoogleFonts.singleDay(
+        fontSize: 22,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF252A34),
+      ),
+      titleMedium: GoogleFonts.singleDay(
+        fontSize: 18,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF252A34),
+      ),
+      titleSmall: GoogleFonts.singleDay(
+        fontSize: 14,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF252A34),
+      ),
+
+      // Label Styles
+      labelLarge: GoogleFonts.singleDay(
+        fontSize: 16,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF252A34),
+      ),
+      labelMedium: GoogleFonts.singleDay(
+        fontSize: 14,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF252A34),
+      ),
+      labelSmall: GoogleFonts.singleDay(
+        fontSize: 12,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF252A34),
+      ),
+
+      // Body Styles
+      bodyLarge: GoogleFonts.singleDay(
+        fontSize: 16,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF252A34),
+      ),
+      bodyMedium: GoogleFonts.singleDay(
+        fontSize: 14,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF252A34),
+      ),
+      bodySmall: GoogleFonts.singleDay(
+        fontSize: 12,
+        letterSpacing: 0.0,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF252A34),
+      ),
+    ),
+  scaffoldBackgroundColor: const Color(0xFFEAEAEA),
+  appBarTheme: AppBarTheme(
+    backgroundColor: const Color(0xFFEAEAEA),
+    titleTextStyle: GoogleFonts.singleDay(
+      fontSize: 22,
+      fontWeight: FontWeight.w500,
+      color: const Color(0xFF252A34),
+    ),
+    elevation: 0,
+  ),
   );
 
   @override
