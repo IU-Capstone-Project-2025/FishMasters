@@ -24,7 +24,15 @@ class _FishingPageState extends State<FishingPage> {
   void initState() {
     super.initState();
     _startTimer();
-    fishingEventRequest(true);
+
+    if (!Hive.isBoxOpen('settings')) {
+      Hive.openBox('settings');
+    }
+    var box = Hive.box('settings');
+    if (!box.get('fishingStarted', defaultValue: false)) {
+      box.put('fishingStarted', true);
+      fishingEventRequest(true);
+    }
   }
 
   void fishingEventRequest(bool isStart) async {
@@ -245,34 +253,34 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
     if (picked != null) {
       setState(() => _image = File(picked.path));
       debugPrint("Fetching fish name...");
-      final request = http.MultipartRequest(
-        'POST',
-        Uri.parse('http://ml.aquaf1na.fun:5001/predict'),
-      );
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'image',
-          _image!.path,
-          filename: _image!.path.split('/').last,
-        ),
-      );
-      var streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
-      if (response.statusCode == 200) {
-        debugPrint('Prediction successful: ${response.body}');
-        final prediction = FishPredictionModel.fromJson(
-          jsonDecode(response.body),
-        );
-        setState(() {
-          _fishName = prediction.prediction;
-          _isLoading = false;
-        });
-      } else {
-        debugPrint('Prediction failed: ${response.statusCode}');
-        setState(() {
-          _fishName = null;
-        });
-      }
+      // final request = http.MultipartRequest(
+      //   'POST',
+      //   Uri.parse('http://ml.aquaf1na.fun:5001/predict'),
+      // );
+      // request.files.add(
+      //   await http.MultipartFile.fromPath(
+      //     'image',
+      //     _image!.path,
+      //     filename: _image!.path.split('/').last,
+      //   ),
+      // );
+      // var streamedResponse = await request.send();
+      // final response = await http.Response.fromStream(streamedResponse);
+      // if (response.statusCode == 200) {
+      //   debugPrint('Prediction successful: ${response.body}');
+      //   final prediction = FishPredictionModel.fromJson(
+      //     jsonDecode(response.body),
+      //   );
+      //   setState(() {
+      //     _fishName = prediction.prediction;
+      //     _isLoading = false;
+      //   });
+      // } else {
+      //   debugPrint('Prediction failed: ${response.statusCode}');
+      //   setState(() {
+      //     _fishName = null;
+      //   });
+      // }
     }
   }
 
@@ -287,6 +295,9 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
     final fishId = 2;
     final weight = 5;
     final email = settingsBox.get('email', defaultValue: '').toString();
+    debugPrint(
+      'Uploading fish: fishingId: $fishingId, fishId: $fishId, weight: $weight, email: $email',
+    );
     final request = http.MultipartRequest(
       'POST',
       Uri.parse('https://capstone.aquaf1na.fun/api/caught-fish'),

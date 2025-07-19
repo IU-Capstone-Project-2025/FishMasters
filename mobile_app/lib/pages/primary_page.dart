@@ -42,9 +42,7 @@ class _PrimaryBodyState extends State<PrimaryBody> {
       return;
     }
 
-    box.put('fishingStarted', true);
-
-    debugPrint('Fishing started');
+    debugPrint('Fishing...');
 
     if (!context.mounted) return;
     Navigator.pushNamed(context, '/fishing');
