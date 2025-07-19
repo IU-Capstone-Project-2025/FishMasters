@@ -1,6 +1,6 @@
 package inno.fishmasters.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public final class Discussion {
 
     @OneToOne
     @JoinColumn(name = "water_id", nullable = false, unique = true)
-    @JsonManagedReference
+    @JsonBackReference
     private Water water;
 
 }
