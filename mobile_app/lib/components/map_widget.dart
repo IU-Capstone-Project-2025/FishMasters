@@ -39,8 +39,8 @@ class MapWidget extends StatelessWidget {
     return Center(
       child: FlutterMap(
         options: MapOptions(
-          initialCenter: LatLng(55.775000, 49.123611),
-          initialZoom: 13.0,
+          initialCenter: LatLng(55.904749, 48.726576),
+          initialZoom: 15.0,
           onTap: null,
         ),
         children: [
@@ -79,7 +79,7 @@ class MapWidget extends StatelessWidget {
                         ),
                       ],
                     )
-                  : MarkerLayer(markers: snapshot.data ?? []);
+                  : MarkerLayer(markers: snapshot.data ?? [], rotate: true);
             },
           ),
         ],
