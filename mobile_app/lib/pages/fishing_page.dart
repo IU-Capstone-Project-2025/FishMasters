@@ -253,36 +253,41 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
     if (picked != null) {
       setState(() => _image = File(picked.path));
       debugPrint("Fetching fish name...");
-      // TODO: Implement actual ML request
 
-      // final request = http.MultipartRequest(
-      //   'POST',
-      //   Uri.parse('http://ml.aquaf1na.fun:5001/predict'),
-      // );
-      // request.files.add(
-      //   await http.MultipartFile.fromPath(
-      //     'image',
-      //     _image!.path,
-      //     filename: _image!.path.split('/').last,
-      //   ),
-      // );
-      // var streamedResponse = await request.send();
-      // final response = await http.Response.fromStream(streamedResponse);
-      // if (response.statusCode == 200) {
-      //   debugPrint('Prediction successful: ${response.body}');
-      //   final prediction = FishPredictionModel.fromJson(
-      //     jsonDecode(response.body),
-      //   );
-      //   setState(() {
-      //     _fishName = prediction.prediction;
-      //     _isLoading = false;
-      //   });
-      // } else {
-      //   debugPrint('Prediction failed: ${response.statusCode}');
-      //   setState(() {
-      //     _fishName = null;
-      //   });
-      // }
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://ml.aquaf1na.fun:5001/search_image'),
+      );
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          _image!.path,
+          filename: _image!.path.split('/').last,
+          contentType: MediaType('image', 'jpeg'),
+        ),
+      );
+
+      var streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      if (response.statusCode == 200) {
+        final prediction = FishSearchResponseModel.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>,
+        );
+        setState(() {
+          _fishName = prediction.results.isNotEmpty
+              ? prediction.results.first.name.replaceAll('_', ' ')
+              : null;
+          debugPrint('Fish prediction: $_fishName');
+          _isLoading = false;
+        });
+      } else {
+        debugPrint('Fish prediction failed: ${response.statusCode}');
+        debugPrint('Response body: ${response.body}');
+        setState(() {
+          _fishName = null;
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -293,7 +298,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
 
     final settingsBox = Hive.box('settings');
     final fishingId = settingsBox.get("last_fishing_id");
-    // Hardcoded for now
+    // TODO: Fix hardcoded fish ID and weight
     final fishId = 2;
     final weight = 5;
     final email = settingsBox.get('email', defaultValue: '').toString();
@@ -333,7 +338,6 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          // SUS
           content: Text('Picture uploaded'),
           duration: const Duration(seconds: 1),
         ),
