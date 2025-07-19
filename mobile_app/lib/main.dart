@@ -18,7 +18,18 @@ class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   static var themeData = ThemeData(
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
+    colorScheme: ColorScheme(
+      brightness: Brightness.light,
+      primary: const Color(0xFFEAEAEA),
+      secondary: const Color(0xFF08D9D6),
+      surface: const Color(0xFFEAEAEA),
+      surfaceBright: const Color(0xFFFFFFFF),
+      onPrimary: const Color(0xFF252A34),
+      onSecondary: const Color(0xFF000000),
+      onSurface: const Color(0xFF252A34),
+      error: const Color(0xFFFF2E63),
+      onError:const Color(0xFF252A34),
+    ),
     useMaterial3: true,
   );
 
