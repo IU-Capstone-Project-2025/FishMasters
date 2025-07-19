@@ -21,7 +21,6 @@ public class Fish {
     @Column(nullable = false, length = 255)
     private String name;
 
-    @Lob
     @Column(nullable = true)
-    private String photo;
+    private byte[] photo;
 }
