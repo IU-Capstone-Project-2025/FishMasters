@@ -548,7 +548,7 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
                           children: [
                             Text('${fish.genus} ${fish.species}'),
                             Text(
-                              '${localizations.similarityScoreLabel}: ${fish.similarityScore}%',
+                              '${localizations.similarityScoreLabel}: ${fish.similarityScore.toStringAsFixed(2) * 100}%',
                             ),
                           ],
                         ),
