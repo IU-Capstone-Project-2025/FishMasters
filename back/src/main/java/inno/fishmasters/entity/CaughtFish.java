@@ -26,7 +26,6 @@ public class CaughtFish {
     private Double avgWeight;
 
     @Column(name = "photo")
-    @Lob
     private byte[] photo;
 
     @ManyToOne
