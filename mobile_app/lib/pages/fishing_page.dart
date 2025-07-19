@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
@@ -303,6 +304,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
       'POST',
       Uri.parse('https://capstone.aquaf1na.fun/api/caught-fish'),
     );
+    request.headers['Content-Type'] = 'multipart/form-data';
     request.files.add(
       http.MultipartFile.fromString(
         'data',
@@ -313,9 +315,10 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
           "fisherEmail": email,
         }),
         filename: 'data.json',
-        // contentType: MediaType('application', 'json'),
+        contentType: MediaType('application', 'json'),
       ),
     );
+
     request.files.add(
       await http.MultipartFile.fromPath(
         'photo',
@@ -323,6 +326,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
         filename: _image!.path.split('/').last,
       ),
     );
+
     final response = await request.send();
     if (response.statusCode != 200) {
       debugPrint('Picture upload failed: ${response.statusCode}');

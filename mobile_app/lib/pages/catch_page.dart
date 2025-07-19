@@ -153,6 +153,8 @@ class _CatchPageState extends State<CatchPage> {
             : [];
         _catches = data
             .map((e) => FishingModel.fromJson(e as Map<String, dynamic>))
+            .toList()
+            .reversed
             .toList();
         debugPrint('Fetched ${_catches.length} catches');
       } else {
