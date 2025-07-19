@@ -57,5 +57,10 @@
   "searchingFishLabel": "Поиск рыбы...",
   "noResultsFoundLabel": "Результаты не найдены",
   "cancelButton": "Отмена",
-  "uploadButton": "Загрузить"
+  "uploadButton": "Загрузить",
+  "noDiscussionTitle": "Нет обсуждений",
+  "noDiscussionContent": "Нет доступных обсуждений для этого водоема. Хотите начать новое?",
+  "cancelLabel": "Отмена",
+  "createDiscussionLabel": "Создать обсуждение",
+  "errorCreatingDiscussion": "Ошибка при создании обсуждения"
 }

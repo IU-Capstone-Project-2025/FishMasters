@@ -448,6 +448,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upload'**
   String get uploadButton;
+
+  /// No description provided for @noDiscussionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No discussion'**
+  String get noDiscussionTitle;
+
+  /// No description provided for @noDiscussionContent.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no discussions available for this water body. Want to start one?'**
+  String get noDiscussionContent;
+
+  /// No description provided for @cancelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelLabel;
+
+  /// No description provided for @createDiscussionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Discussion'**
+  String get createDiscussionLabel;
+
+  /// No description provided for @errorCreatingDiscussion.
+  ///
+  /// In en, this message translates to:
+  /// **'Error creating discussion'**
+  String get errorCreatingDiscussion;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

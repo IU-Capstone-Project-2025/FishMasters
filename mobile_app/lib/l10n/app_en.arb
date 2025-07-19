@@ -57,5 +57,10 @@
   "searchingFishLabel": "Searching for fish...",
   "noResultsFoundLabel": "No results found",
   "cancelButton": "Cancel",
-  "uploadButton": "Upload"
+  "uploadButton": "Upload",
+  "noDiscussionTitle": "No discussion",
+  "noDiscussionContent": "There are no discussions available for this water body. Want to start one?",
+  "cancelLabel": "Cancel",
+  "createDiscussionLabel": "Create Discussion",
+  "errorCreatingDiscussion": "Error creating discussion"
 }

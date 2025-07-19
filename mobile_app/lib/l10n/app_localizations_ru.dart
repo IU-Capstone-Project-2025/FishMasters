@@ -184,4 +184,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get uploadButton => 'Загрузить';
+
+  @override
+  String get noDiscussionTitle => 'Нет обсуждений';
+
+  @override
+  String get noDiscussionContent => 'Нет доступных обсуждений для этого водоема. Хотите начать новое?';
+
+  @override
+  String get cancelLabel => 'Отмена';
+
+  @override
+  String get createDiscussionLabel => 'Создать обсуждение';
+
+  @override
+  String get errorCreatingDiscussion => 'Ошибка при создании обсуждения';
 }

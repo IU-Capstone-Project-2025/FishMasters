@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/models/models.dart';
 
@@ -253,6 +252,8 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
     if (picked != null) {
       setState(() => _image = File(picked.path));
       debugPrint("Fetching fish name...");
+      // TODO: Implement actual ML request
+
       // final request = http.MultipartRequest(
       //   'POST',
       //   Uri.parse('http://ml.aquaf1na.fun:5001/predict'),
@@ -312,7 +313,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
           "fisherEmail": email,
         }),
         filename: 'data.json',
-        contentType: MediaType('application', 'json'),
+        // contentType: MediaType('application', 'json'),
       ),
     );
     request.files.add(

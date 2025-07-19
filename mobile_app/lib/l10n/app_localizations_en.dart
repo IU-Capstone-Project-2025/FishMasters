@@ -184,4 +184,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get uploadButton => 'Upload';
+
+  @override
+  String get noDiscussionTitle => 'No discussion';
+
+  @override
+  String get noDiscussionContent => 'There are no discussions available for this water body. Want to start one?';
+
+  @override
+  String get cancelLabel => 'Cancel';
+
+  @override
+  String get createDiscussionLabel => 'Create Discussion';
+
+  @override
+  String get errorCreatingDiscussion => 'Error creating discussion';
 }

@@ -5,3 +5,4 @@ export 'water_model.dart';
 export 'fishing_session_model.dart';
 export 'fish_prediction_model.dart';
 export 'fish_search_model.dart';
+export 'discussion_model.dart';
