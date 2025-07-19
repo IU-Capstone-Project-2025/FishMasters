@@ -5,12 +5,14 @@ class CaughtFishModel {
   final int id;
   final String fisher;
   final double avgWeight;
+  final String? photo;
   final FishModel fish;
 
   CaughtFishModel({
     required this.id,
     required this.fisher,
     required this.avgWeight,
+    this.photo,
     required this.fish,
   });
 
@@ -19,6 +21,7 @@ class CaughtFishModel {
       id: json['id'] as int,
       fisher: json['fisher'] as String,
       avgWeight: (json['avgWeight'] as num).toDouble(),
+      photo: json['photo'] as String?,
       fish: FishModel.fromJson(json['fish'] as Map<String, dynamic>),
     );
   }
@@ -28,6 +31,7 @@ class CaughtFishModel {
       'id': id,
       'fisher': fisher,
       'avgWeight': avgWeight,
+      'photo': photo,
       'fish': fish.toJson(),
     };
   }
