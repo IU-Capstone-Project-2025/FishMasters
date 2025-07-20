@@ -62,5 +62,10 @@
   "noDiscussionContent": "There are no discussions available for this water body. Want to start one?",
   "cancelLabel": "Cancel",
   "createDiscussionLabel": "Create Discussion",
-  "errorCreatingDiscussion": "Error creating discussion"
+  "errorCreatingDiscussion": "Error creating discussion",
+  "darkMode": "Dark Mode",
+  "darkModeEnabled": "Dark mode enabled",
+  "lightModeEnabled": "Ligth mode enabled",
+  "useSystemTheme": "Use System Theme",
+  "systemModeEnabled": "System mode enabled"
 }

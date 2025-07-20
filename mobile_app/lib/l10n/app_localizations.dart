@@ -478,6 +478,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error creating discussion'**
   String get errorCreatingDiscussion;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get darkMode;
+
+  /// No description provided for @darkModeEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode enabled'**
+  String get darkModeEnabled;
+
+  /// No description provided for @lightModeEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Ligth mode enabled'**
+  String get lightModeEnabled;
+
+  /// No description provided for @useSystemTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Use System Theme'**
+  String get useSystemTheme;
+
+  /// No description provided for @systemModeEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'System mode enabled'**
+  String get systemModeEnabled;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_app/Theme/app_theme.dart';
+import 'package:mobile_app/Theme/theme_provider.dart';
 import 'package:mobile_app/pages/pages.dart';
 import 'package:mobile_app/functions/functions.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 
 void main() async {
@@ -12,124 +14,17 @@ void main() async {
   final appDocDir = await getApplicationDocumentsDirectory();
   Hive.init(appDocDir.path);
   await Hive.openBox('settings');
-  runApp(MainApp());
+  final themeProvider = ThemeProvider();
+  await themeProvider.initialize();
+  runApp(ChangeNotifierProvider.value(
+      value: themeProvider,
+      child: MainApp(),
+      )
+  );
 }
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
-
-  static var themeData = ThemeData(
-    colorScheme: ColorScheme(
-      brightness: Brightness.light,
-      primary: const Color(0xFFEAEAEA),
-      secondary: const Color(0xFF08D9D6),
-      surface: const Color(0xFFEAEAEA),
-      surfaceBright: const Color(0xFFFFFFFF),
-      onPrimary: const Color(0xFF252A34),
-      onSecondary: const Color(0xFF000000),
-      onSurface: const Color(0xFF252A34),
-      error: const Color(0xFFFF2E63),
-      onError:const Color(0xFF252A34),
-      tertiary: const Color(0x00FFFFFF)
-    ),
-    useMaterial3: true,
-    textTheme: TextTheme(
-      // Display Styles
-      displayLarge: GoogleFonts.singleDay(
-        fontSize: 64,
-        fontWeight: FontWeight.w600,
-        color: const Color(0xFF252A34),
-      ),
-      displayMedium: GoogleFonts.singleDay(
-        fontSize: 55,
-        fontWeight: FontWeight.normal,
-        color: const Color(0xFF252A34),
-      ),
-      displaySmall: GoogleFonts.singleDay(
-        fontSize: 36,
-        fontWeight: FontWeight.w600,
-        color: const Color(0xFF252A34),
-      ),
-
-      // Headline Styles
-      headlineLarge: GoogleFonts.comicNeue(
-        fontSize: 32,
-        fontWeight: FontWeight.normal,
-        color: const Color(0xFF252A34),
-      ),
-      headlineMedium: GoogleFonts.comicNeue(
-        fontSize: 30, // 28
-        fontWeight: FontWeight.normal,
-        color: const Color(0xFF252A34),
-      ),
-      headlineSmall: GoogleFonts.comicNeue(
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
-        color: const Color(0xFF252A34),
-      ),
-
-      // Title Styles
-      titleLarge: GoogleFonts.singleDay(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-        color: const Color(0xFF252A34),
-      ),
-      titleMedium: GoogleFonts.comicNeue(
-        fontSize: 16,
-        fontWeight: FontWeight.normal,
-        color: const Color(0xFF08D9D6),
-      ),
-      titleSmall: GoogleFonts.comicNeue(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: const Color(0xFF252A34),
-      ),
-
-      // Label Styles
-      labelLarge: GoogleFonts.comicNeue(
-        fontSize: 16,
-        fontWeight: FontWeight.normal,
-        color: const Color(0xFF000000),
-      ),
-      labelMedium: GoogleFonts.comicNeue(
-        fontSize: 14,
-        fontWeight: FontWeight.normal,
-        color: const Color(0xFF000000),
-      ),
-      labelSmall: GoogleFonts.comicNeue(
-        fontSize: 12,
-        fontWeight: FontWeight.normal,
-        color: const Color(0xFF000000),
-      ),
-
-      // Body Styles
-      bodyLarge: GoogleFonts.singleDay(
-        fontSize: 16,
-        fontWeight: FontWeight.normal,
-        color: const Color(0xFF252A34),
-      ),
-      bodyMedium: GoogleFonts.comicNeue(
-        fontSize: 14,
-        fontWeight: FontWeight.normal,
-        color: const Color(0xFFFF2E63),
-      ),
-      bodySmall: GoogleFonts.singleDay(
-        fontSize: 12,
-        fontWeight: FontWeight.normal,
-        color: const Color(0xFF252A34),
-      ),
-    ),
-  scaffoldBackgroundColor: const Color(0xFFEAEAEA),
-  appBarTheme: AppBarTheme(
-    backgroundColor: const Color(0xFFEAEAEA),
-    titleTextStyle: GoogleFonts.singleDay(
-      fontSize: 22,
-      fontWeight: FontWeight.w500,
-      color: const Color(0xFF252A34),
-    ),
-    elevation: 0,
-  ),
-  );
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -163,6 +58,15 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    if (themeProvider.isLoading) {
+      return const MaterialApp(
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+
     return MaterialApp(
       locale: _selectLocale,
       supportedLocales: const [Locale('en'), Locale('ru')],
@@ -175,7 +79,9 @@ class _MainAppState extends State<MainApp> {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Fish Masters',
-      theme: MainApp.themeData,
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: themeProvider.themeMode,
       initialRoute: '/',
       routes: {
         '/': (context) => FutureBuilder<bool>(

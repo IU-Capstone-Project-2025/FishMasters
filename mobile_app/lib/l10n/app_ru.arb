@@ -62,5 +62,10 @@
   "noDiscussionContent": "Нет доступных обсуждений для этого водоема. Хотите начать новое?",
   "cancelLabel": "Отмена",
   "createDiscussionLabel": "Создать обсуждение",
-  "errorCreatingDiscussion": "Ошибка при создании обсуждения"
+  "errorCreatingDiscussion": "Ошибка при создании обсуждения",
+  "darkMode": "Тёмная тема",
+  "darkModeEnabled": "Темный режим включен",
+  "lightModeEnabled": "Светлый режим включен",
+  "useSystemTheme": "Использовать системную тему",
+  "systemModeEnabled": "Системная тема включена"
 }

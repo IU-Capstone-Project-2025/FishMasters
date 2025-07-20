@@ -199,4 +199,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get errorCreatingDiscussion => 'Ошибка при создании обсуждения';
+
+  @override
+  String get darkMode => 'Тёмная тема';
+
+  @override
+  String get darkModeEnabled => 'Темный режим включен';
+
+  @override
+  String get lightModeEnabled => 'Светлый режим включен';
+
+  @override
+  String get useSystemTheme => 'Использовать системную тему';
+
+  @override
+  String get systemModeEnabled => 'Системная тема включена';
 }

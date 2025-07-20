@@ -18,15 +18,16 @@ class CatchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         Container(
           width: double.infinity,
-          color: Colors.grey.shade400,
+          color: Theme.of(context).colorScheme.primary,
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
           child: Text(
             date,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: textTheme.bodySmall,
           ),
         ),
         Card(
@@ -44,6 +45,7 @@ class CatchItem extends StatelessWidget {
                     Text(
                       "${duration != 0 ? duration : 'Less than an'} hour"
                       "${duration < 2 ? '' : 's'} - $fishCount fish",
+                      style: textTheme.bodySmall,
                     ),
                   ],
                 ),
@@ -54,7 +56,7 @@ class CatchItem extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (fishNames.isEmpty) const Text('No fish caught'),
+                        if (fishNames.isEmpty) Text('No fish caught', style: textTheme.bodySmall),
                         if (fishNames.isNotEmpty)
                           FishItem(name: fishNames[0], highlighted: true),
                         if (fishNames.length > 1)
@@ -71,7 +73,7 @@ class CatchItem extends StatelessWidget {
                       SnackBar(content: Text('Details not implemented yet')),
                     );
                   },
-                  child: Text('View Details'),
+                  child: Text('View Details', style: textTheme.bodySmall,),
                 ),
               ],
             ),

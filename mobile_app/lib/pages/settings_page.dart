@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:mobile_app/Theme/theme_provider.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key, required this.onLocaleChange});
@@ -14,6 +16,8 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    var colorScheme = Theme.of(context).colorScheme;
     var localizations = AppLocalizations.of(context);
 
     if (!Hive.isBoxOpen('settings')) {
@@ -36,16 +40,75 @@ class _SettingsPageState extends State<SettingsPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      localizations.darkModeLabel,
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    Switch(value: false, onChanged: null),
-                  ],
-                ),
+                 Container(
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(localizations.darkMode, style: theme.textTheme.titleMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  )),
+                  Switch(
+                    value: themeProvider.isDarkMode,
+                    onChanged: (value) async {
+                      themeProvider.setThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+                      setState(() {});
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: colorScheme.inverseSurface,
+                          content: Text(
+                            value ? localizations.darkModeEnabled : localizations.lightModeEnabled,
+                            style: TextStyle(color: colorScheme.onInverseSurface),
+                          ),
+                          duration: const Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                    //activeThumbColor: colorScheme.primary,
+                    activeTrackColor: colorScheme.primaryContainer,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8.0),
+            // System Theme Switch
+            Container(
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(localizations.useSystemTheme, style: theme.textTheme.titleMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  )),
+                  Switch(
+                    value: themeProvider.isSystemMode,
+                    onChanged: (value) async {
+                      themeProvider.setThemeMode(value ? ThemeMode.system : ThemeMode.light);
+                      setState(() {});
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: colorScheme.inverseSurface,
+                          content: Text(
+                            value ? localizations.systemModeEnabled : localizations.lightModeEnabled,
+                            style: TextStyle(color: colorScheme.onInverseSurface),
+                          ),
+                          duration: const Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                    activeTrackColor: colorScheme.primaryContainer,
+                  ),
+                ],
+              ),
+            ),
                 const SizedBox(height: 8.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

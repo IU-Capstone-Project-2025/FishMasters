@@ -199,4 +199,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorCreatingDiscussion => 'Error creating discussion';
+
+  @override
+  String get darkMode => 'Dark Mode';
+
+  @override
+  String get darkModeEnabled => 'Dark mode enabled';
+
+  @override
+  String get lightModeEnabled => 'Ligth mode enabled';
+
+  @override
+  String get useSystemTheme => 'Use System Theme';
+
+  @override
+  String get systemModeEnabled => 'System mode enabled';
 }
