@@ -76,7 +76,7 @@ class MainApp extends StatefulWidget {
       ),
       titleMedium: GoogleFonts.comicNeue(
         fontSize: 16,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.normal,
         color: const Color(0xFF08D9D6),
       ),
       titleSmall: GoogleFonts.comicNeue(

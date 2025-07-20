@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Login failed: ${response.reasonPhrase}'),
+            content: Text('Login failed: ${response.statusCode}'),
             duration: const Duration(seconds: 1),
           ),
         );
@@ -122,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: double.infinity,
                             child: TextFormField(
                               controller: _emailController,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               focusNode: FocusNode(),
                               autofocus: false,
                               obscureText: false,
@@ -190,7 +191,8 @@ class _LoginPageState extends State<LoginPage> {
                               controller: _passwordController,
                               focusNode: FocusNode(),
                               autofocus: false,
-                              obscureText: false,
+                              obscureText: true,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               decoration: InputDecoration(
                                 isDense: true,
                                 labelStyle: textScheme.labelMedium,
