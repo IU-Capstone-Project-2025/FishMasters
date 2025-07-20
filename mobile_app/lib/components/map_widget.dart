@@ -137,7 +137,7 @@ class MarkerUnit {
                 if (response.statusCode == 200) {
                   final discussionId = jsonDecode(response.body);
                   if (!context.mounted) return;
-                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).pop();
                   Navigator.pushNamed(
                     context,
                     '/discussion',
