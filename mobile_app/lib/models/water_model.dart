@@ -6,7 +6,7 @@ class WaterModel {
   final double id;
   final double x;
   final double y;
-  final DiscussionModel? discussion;
+  final DiscussionOfWaterModel? discussion;
 
   WaterModel({
     required this.id,
@@ -21,7 +21,9 @@ class WaterModel {
       x: (json['x'] as num).toDouble(),
       y: (json['y'] as num).toDouble(),
       discussion: json['discussion'] != null
-          ? DiscussionModel.fromJson(json['discussion'] as Map<String, dynamic>)
+          ? DiscussionOfWaterModel.fromJson(
+              json['discussion'] as Map<String, dynamic>,
+            )
           : null,
     );
   }

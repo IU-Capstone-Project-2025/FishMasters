@@ -110,7 +110,11 @@ class MarkerUnit {
 
     if (water.discussion != null) {
       if (!context.mounted) return;
-      Navigator.pushNamed(context, '/discussion', arguments: water.discussion);
+      Navigator.pushNamed(
+        context,
+        '/discussion',
+        arguments: water.discussion?.id,
+      );
     } else {
       if (!context.mounted) return;
       Navigator.of(context).pop();

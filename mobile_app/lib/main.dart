@@ -91,7 +91,10 @@ class _MainAppState extends State<MainApp> {
         '/menu': (context) => const MenuPage(),
         '/catch': (context) => const CatchPage(),
         '/notifications': (context) => const NotificationsPage(),
-        '/discussion': (context) => const ChatPage(),
+        '/discussion': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as int;
+          return ChatPage(discussionId: args);
+        },
         '/fishing': (context) => const FishingPage(),
         '/developer': (context) => const DeveloperPage(),
       },

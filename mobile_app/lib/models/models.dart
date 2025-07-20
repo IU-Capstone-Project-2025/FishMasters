@@ -7,3 +7,4 @@ export 'fish_prediction_model.dart';
 export 'fish_search_model.dart';
 export 'discussion_model.dart';
 export 'leaderboard_model.dart';
+export 'message_model.dart';
