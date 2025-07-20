@@ -199,4 +199,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorCreatingDiscussion => 'Error creating discussion';
+
+  @override
+  String get leaderboardText => 'Leaderboard';
+
+  @override
+  String get searchPlayersPlaceholder => 'Search players by name or email...';
+
+  @override
+  String get backToTopButton => 'Back to Top';
+
+  @override
+  String get findMeButton => 'Find Me';
+
+  @override
+  String get top10Badge => 'TOP 10';
+
+  @override
+  String get pointsLabel => 'points';
+
+  @override
+  String get searchingLabel => 'Searching...';
+
+  @override
+  String get playerNotFound => 'Player not found';
+
+  @override
+  String get loadingLeaderboard => 'Loading leaderboard...';
 }

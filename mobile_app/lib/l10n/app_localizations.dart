@@ -478,6 +478,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error creating discussion'**
   String get errorCreatingDiscussion;
+
+  /// No description provided for @leaderboardText.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaderboard'**
+  String get leaderboardText;
+
+  /// No description provided for @searchPlayersPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search players by name or email...'**
+  String get searchPlayersPlaceholder;
+
+  /// No description provided for @backToTopButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Top'**
+  String get backToTopButton;
+
+  /// No description provided for @findMeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Find Me'**
+  String get findMeButton;
+
+  /// No description provided for @top10Badge.
+  ///
+  /// In en, this message translates to:
+  /// **'TOP 10'**
+  String get top10Badge;
+
+  /// No description provided for @pointsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'points'**
+  String get pointsLabel;
+
+  /// No description provided for @searchingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching...'**
+  String get searchingLabel;
+
+  /// No description provided for @playerNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Player not found'**
+  String get playerNotFound;
+
+  /// No description provided for @loadingLeaderboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading leaderboard...'**
+  String get loadingLeaderboard;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -62,5 +62,14 @@
   "noDiscussionContent": "There are no discussions available for this water body. Want to start one?",
   "cancelLabel": "Cancel",
   "createDiscussionLabel": "Create Discussion",
-  "errorCreatingDiscussion": "Error creating discussion"
+  "errorCreatingDiscussion": "Error creating discussion",
+  "leaderboardText": "Leaderboard",
+  "searchPlayersPlaceholder": "Search players by name or email...",
+  "backToTopButton": "Back to Top",
+  "findMeButton": "Find Me",
+  "top10Badge": "TOP 10",
+  "pointsLabel": "points",
+  "searchingLabel": "Searching...",
+  "playerNotFound": "Player not found",
+  "loadingLeaderboard": "Loading leaderboard..."
 }

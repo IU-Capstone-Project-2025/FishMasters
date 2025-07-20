@@ -90,7 +90,7 @@ class _MainAppState extends State<MainApp> {
         '/about': (context) => const AboutPage(),
         '/menu': (context) => const MenuPage(),
         '/catch': (context) => const CatchPage(),
-        '/notifications': (context) => const NotificationsPage(),
+        '/notifications': (context) => const LeaderboardPage(),
         '/discussion': (context) {
           final args = ModalRoute.of(context)?.settings.arguments as int;
           return ChatPage(discussionId: args);

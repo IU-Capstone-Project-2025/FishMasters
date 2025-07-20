@@ -12,22 +12,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get appTitle => 'FishMasters';
 
   @override
-  String get appDescription => 'FishMasters - это приложение, созданное сообществом для любителей рыбалки. Связывайтесь с другими рыбаками, делитесь своими уловами и исследуйте лучшие места для рыбалки.';
+  String get appDescription => 'FishMasters - это приложение для рыболовов. Общайтесь с другими рыбаками, делитесь уловами и исследуйте лучшие места для рыбалки.';
 
   @override
   String get homePageTitle => 'Добро пожаловать в FishMasters';
 
   @override
-  String get loginText => 'Логин';
+  String get loginText => 'Вход';
 
   @override
-  String get loginTitle => 'Войдите в свой аккаунт';
+  String get loginTitle => 'Войти в аккаунт';
 
   @override
   String get loginButton => 'Войти';
 
   @override
-  String get emailLabel => 'Электронная почта';
+  String get emailLabel => 'Email';
 
   @override
   String get passwordLabel => 'Пароль';
@@ -36,7 +36,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get needRegister => 'Нет аккаунта? Зарегистрируйтесь';
 
   @override
-  String get needLogin => 'Уже есть аккаунт? Войдите';
+  String get needLogin => 'Уже есть аккаунт? Войти';
 
   @override
   String get registerTitle => 'Создать новый аккаунт';
@@ -54,7 +54,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get registerText => 'Регистрация';
 
   @override
-  String get startFishingButton => 'НАЧАТЬ';
+  String get startFishingButton => 'СТАРТ';
 
   @override
   String get menuText => 'Меню';
@@ -66,7 +66,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get aboutLabel => 'О приложении';
 
   @override
-  String get darkModeLabel => 'Темный режим';
+  String get darkModeLabel => 'Тёмная тема';
 
   @override
   String get languageLabel => 'Язык';
@@ -87,16 +87,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get logoutButton => 'Выйти';
 
   @override
-  String get profilePictureEditTitle => 'Изменить фотографию профиля';
+  String get profilePictureEditTitle => 'Изменить фото профиля';
 
   @override
-  String get uploadPictureButton => 'Загрузить фотографию';
+  String get uploadPictureButton => 'Загрузить фото';
 
   @override
   String get myCatchText => 'Мой улов';
 
   @override
-  String get notificationsText => 'УвеСОМления';
+  String get notificationsText => 'Уведомления';
 
   @override
   String get replyLabel => 'Ответить';
@@ -129,7 +129,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get stopFishingButton => 'Остановить рыбалку';
 
   @override
-  String get elapsedTime => 'Прошедшее время';
+  String get elapsedTime => 'Прошло времени';
 
   @override
   String get fishCaught => 'Поймано рыбы';
@@ -199,4 +199,31 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get errorCreatingDiscussion => 'Ошибка при создании обсуждения';
+
+  @override
+  String get leaderboardText => 'Таблица лидеров';
+
+  @override
+  String get searchPlayersPlaceholder => 'Поиск игроков по имени или email...';
+
+  @override
+  String get backToTopButton => 'Наверх';
+
+  @override
+  String get findMeButton => 'Найти меня';
+
+  @override
+  String get top10Badge => 'ТОП 10';
+
+  @override
+  String get pointsLabel => 'очков';
+
+  @override
+  String get searchingLabel => 'Поиск...';
+
+  @override
+  String get playerNotFound => 'Игрок не найден';
+
+  @override
+  String get loadingLeaderboard => 'Загрузка таблицы лидеров...';
 }
