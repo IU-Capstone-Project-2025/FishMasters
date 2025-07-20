@@ -108,16 +108,15 @@ class MarkerUnit {
       jsonDecode(response.body) as Map<String, dynamic>,
     );
 
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
     if (water.discussion != null) {
-      if (!context.mounted) return;
       Navigator.pushNamed(
         context,
         '/discussion',
         arguments: water.discussion?.id,
       );
     } else {
-      if (!context.mounted) return;
-      Navigator.of(context).pop();
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
