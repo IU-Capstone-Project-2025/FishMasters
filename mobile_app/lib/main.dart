@@ -62,9 +62,9 @@ class MainApp extends StatefulWidget {
         fontWeight: FontWeight.normal,
         color: const Color(0xFF252A34),
       ),
-      headlineSmall: GoogleFonts.singleDay(
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
+      headlineSmall: GoogleFonts.comicNeue(
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
         color: const Color(0xFF252A34),
       ),
 
