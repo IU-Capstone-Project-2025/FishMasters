@@ -46,7 +46,7 @@
   "uploadFishImageButton": "Загрузить изображение",
   "loadingMarkersLabel": "Загрузка мест для рыбалки...",
   "fishingLocationLabel": "Место рыбалки",
-  "fishNameLabel": "Рыба",
+  "fishNameLabel": "Рыбов",
   "noFishNameLabel": "Загрузите изображение, чтобы получить название рыбы",
   "loadingFishName": "Загрузка названия рыбы...",
   "manualUploadButton": "Загрузка вручную",
@@ -72,4 +72,13 @@
   "searchingLabel": "Поиск...",
   "playerNotFound": "Игрок не найден",
   "loadingLeaderboard": "Загрузка таблицы лидеров..."
+  "darkMode": "Тёмная тема",
+  "darkModeEnabled": "Темный режим включен",
+  "lightModeEnabled": "Светлый режим включен",
+  "useSystemTheme": "Использовать системную тему",
+  "systemModeEnabled": "Системная тема включена",
+  "lessThan": "Меньше",
+  "hour": "часа",
+  "noFishCought": "Рыб не поймано",
+  "viewDetails": "Посмотреть детали"
 }

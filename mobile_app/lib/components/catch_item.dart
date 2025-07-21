@@ -106,11 +106,13 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
+    var localizations = AppLocalizations.of(context);
     return Column(
       children: [
         Container(
           width: double.infinity,
-          color: Colors.grey.shade400,
+          color: Theme.of(context).colorScheme.primary,
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
           child: Text(
             widget.date,

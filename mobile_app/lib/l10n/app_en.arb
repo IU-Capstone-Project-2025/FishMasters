@@ -72,4 +72,13 @@
   "searchingLabel": "Searching...",
   "playerNotFound": "Player not found",
   "loadingLeaderboard": "Loading leaderboard..."
+  "darkMode": "Dark Mode",
+  "darkModeEnabled": "Dark mode enabled",
+  "lightModeEnabled": "Ligth mode enabled",
+  "useSystemTheme": "Use System Theme",
+  "systemModeEnabled": "System mode enabled",
+  "lessThan": "Less than an",
+  "hour": "hour",
+  "noFishCought": "No fish caught",
+  "viewDetails": "View Details"
 }

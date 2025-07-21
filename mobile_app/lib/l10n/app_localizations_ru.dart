@@ -150,7 +150,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get fishingLocationLabel => 'Место рыбалки';
 
   @override
-  String get fishNameLabel => 'Рыба';
+  String get fishNameLabel => 'Рыбов';
 
   @override
   String get noFishNameLabel => 'Загрузите изображение, чтобы получить название рыбы';
@@ -226,4 +226,30 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get loadingLeaderboard => 'Загрузка таблицы лидеров...';
+  
+  String get darkMode => 'Тёмная тема';
+
+  @override
+  String get darkModeEnabled => 'Темный режим включен';
+
+  @override
+  String get lightModeEnabled => 'Светлый режим включен';
+
+  @override
+  String get useSystemTheme => 'Использовать системную тему';
+
+  @override
+  String get systemModeEnabled => 'Системная тема включена';
+
+  @override
+  String get lessThan => 'Меньше';
+
+  @override
+  String get hour => 'часа';
+
+  @override
+  String get noFishCought => 'Рыб не поймано';
+
+  @override
+  String get viewDetails => 'Посмотреть детали';
 }

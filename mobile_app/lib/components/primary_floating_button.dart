@@ -18,8 +18,9 @@ class PrimaryFloatingButton extends StatelessWidget {
     return SafeArea(
       child: FloatingActionButton(
         heroTag: heroTag,
+        backgroundColor: colorScheme.secondary,
         shape: CircleBorder(
-          side: BorderSide(color: colorScheme.primary, width: 2.0),
+          side: BorderSide(color: colorScheme.onPrimary, width: 3.0),
         ),
         onPressed: () {
           Navigator.pushNamed(context, page);
