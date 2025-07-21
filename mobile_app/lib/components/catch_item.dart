@@ -39,11 +39,22 @@ class CatchItem extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.access_time),
+                    Icon(
+                      duration == -1
+                          ? Icons.radio_button_checked
+                          : Icons.access_time,
+                      color: duration == -1 ? Colors.green : null,
+                    ),
                     SizedBox(width: 8),
                     Text(
-                      "${duration != 0 ? duration : 'Less than an'} hour"
-                      "${duration < 2 ? '' : 's'} - $fishCount fish",
+                      duration == -1
+                          ? "Ongoing session - $fishCount fish"
+                          : "${duration != 0 ? duration : 'Less than an'} hour"
+                                "${duration < 2 ? '' : 's'} - $fishCount fish",
+                      style: TextStyle(
+                        color: duration == -1 ? Colors.green : null,
+                        fontWeight: duration == -1 ? FontWeight.bold : null,
+                      ),
                     ),
                   ],
                 ),

@@ -191,14 +191,14 @@ class _CatchPageState extends State<CatchPage> {
                   if (date.isEmpty) {
                     date = 'Unknown Date';
                   }
-                  // TODO: Show ongoing fishing event if endTime is null
+                  // Show ongoing fishing event if endTime is null
                   var duration = _catches[index].endTime != null
                       ? DateTime.parse(_catches[index].endTime!)
                             .difference(
                               DateTime.parse(_catches[index].startTime),
                             )
                             .inHours
-                      : 0;
+                      : -1; // Use -1 to indicate ongoing session
                   var fishCount = _catches[index].caughtFish.length;
                   var caughtFish = _catches[index].caughtFish;
                   final fishCounts = <String, int>{};
