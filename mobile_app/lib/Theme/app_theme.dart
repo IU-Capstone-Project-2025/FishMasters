@@ -53,7 +53,7 @@ class AppThemes {
       ),
 
       // Title Styles
-      titleLarge: GoogleFonts.singleDay(
+      titleLarge: GoogleFonts.comicNeue(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF252A34),
@@ -167,7 +167,7 @@ class AppThemes {
       ),
 
       // Title Styles
-      titleLarge: GoogleFonts.singleDay(
+      titleLarge: GoogleFonts.comicNeue(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: const Color(0xFFEAEAEA),
