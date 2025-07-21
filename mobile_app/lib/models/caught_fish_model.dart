@@ -7,6 +7,7 @@ class CaughtFishModel {
   final double avgWeight;
   final String? photo;
   final FishModel fish;
+  final FishingModel? fishing;
 
   CaughtFishModel({
     required this.id,
@@ -14,6 +15,7 @@ class CaughtFishModel {
     required this.avgWeight,
     this.photo,
     required this.fish,
+    this.fishing,
   });
 
   factory CaughtFishModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,8 @@ class CaughtFishModel {
       avgWeight: (json['avgWeight'] as num).toDouble(),
       photo: json['photo'] as String?,
       fish: FishModel.fromJson(json['fish'] as Map<String, dynamic>),
+      fishing:
+          null, // Avoid circular reference when parsing from fishing session
     );
   }
 
@@ -33,6 +37,7 @@ class CaughtFishModel {
       'avgWeight': avgWeight,
       'photo': photo,
       'fish': fish.toJson(),
+      'fishing': fishing?.toJson(),
     };
   }
 

@@ -141,27 +141,55 @@ class _CatchPageState extends State<CatchPage> {
     }
     final box = Hive.box('settings');
     final email = box.get('email', defaultValue: '');
+
+    if (email.isEmpty) {
+      debugPrint(
+        'Warning: No email found in settings. User might not be logged in.',
+      );
+      throw Exception('User email not found. Please log in again.');
+    }
+
+    debugPrint('Fetching catches for email: $email');
+
     try {
       final response = await http.get(
         Uri.parse('https://capstone.aquaf1na.fun/api/fishing/email/$email'),
       );
-      debugPrint('Fetching catches for $email');
+      debugPrint('API Response Status: ${response.statusCode}');
+      debugPrint('API Response Body: ${response.body}');
+
       if (response.statusCode == 200) {
-        debugPrint(response.body);
         final List<dynamic> data = response.body.isNotEmpty
             ? (jsonDecode(response.body) as List)
             : [];
-        _catches = data
-            .map((e) => FishingModel.fromJson(e as Map<String, dynamic>))
-            .toList()
-            .reversed
-            .toList();
-        debugPrint('Fetched ${_catches.length} catches');
+
+        debugPrint('Raw data length: ${data.length}');
+        debugPrint('First item: ${data.isNotEmpty ? data.first : 'No data'}');
+
+        try {
+          setState(() {
+            _catches = data
+                .map((e) {
+                  debugPrint('Parsing item: $e');
+                  return FishingModel.fromJson(e as Map<String, dynamic>);
+                })
+                .toList()
+                .reversed
+                .toList();
+          });
+          debugPrint('Successfully parsed ${_catches.length} catches');
+        } catch (parseError) {
+          debugPrint('Parsing error: $parseError');
+          throw Exception('Failed to parse fishing data: $parseError');
+        }
       } else {
-        throw Exception('Failed to load catches ${response.statusCode}');
+        throw Exception(
+          'Failed to load catches: ${response.statusCode} - ${response.reasonPhrase}',
+        );
       }
     } catch (e) {
       debugPrint('Error fetching catches: $e');
+      throw e; // Re-throw to let FutureBuilder handle the error
     }
   }
 
@@ -183,6 +211,80 @@ class _CatchPageState extends State<CatchPage> {
               if (asyncSnapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
+
+              if (asyncSnapshot.hasError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: Colors.red.shade400,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Error loading catches',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red.shade600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Please check your connection and try again',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _fetchCatchesFuture = _fetchCatches();
+                          });
+                        },
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              if (_catches.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.set_meal,
+                        size: 64,
+                        color: Colors.grey.shade400,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No fishing sessions yet',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Start fishing to see your catches here!',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
               return ListView.builder(
                 controller: _controller,
                 itemCount: _catches.length,
@@ -214,6 +316,7 @@ class _CatchPageState extends State<CatchPage> {
                     duration: duration,
                     fishCount: fishCount,
                     fishNames: uniqueFishList,
+                    caughtFish: caughtFish,
                   );
                 },
               );
