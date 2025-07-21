@@ -575,17 +575,53 @@ abstract class AppLocalizations {
   /// **'hour'**
   String get hour;
 
-  /// No description provided for @noFishCought.
+  /// No description provided for @noFishCaught.
   ///
   /// In en, this message translates to:
   /// **'No fish caught'**
-  String get noFishCought;
+  String get noFishCaught;
+
+  /// No description provided for @noFishCaughtYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No fish caught yet'**
+  String get noFishCaughtYet;
 
   /// No description provided for @viewDetails.
   ///
   /// In en, this message translates to:
   /// **'View Details'**
   String get viewDetails;
+
+  /// No description provided for @allCaughtFish.
+  ///
+  /// In en, this message translates to:
+  /// **'All caught fish'**
+  String get allCaughtFish;
+
+  /// No description provided for @weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get weight;
+
+  /// No description provided for @kg.
+  ///
+  /// In en, this message translates to:
+  /// **'kg'**
+  String get kg;
+
+  /// No description provided for @showLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get showLess;
+
+  /// No description provided for @ongoingSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing session'**
+  String get ongoingSession;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

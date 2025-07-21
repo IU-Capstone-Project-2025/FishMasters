@@ -197,9 +197,10 @@ class _CatchPageState extends State<CatchPage> {
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
+    var textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations!.myCatchText),
+        title: Text(localizations!.myCatchText, style: textTheme.displayMedium),
         backgroundColor: colorScheme.secondary,
         foregroundColor: colorScheme.onSecondary,
       ),
@@ -287,6 +288,7 @@ class _CatchPageState extends State<CatchPage> {
 
               return ListView.builder(
                 controller: _controller,
+                padding: const EdgeInsets.all(16.0),
                 itemCount: _catches.length,
                 itemBuilder: (context, index) {
                   var date = _catches[index].startTime.split('T')[0];
@@ -311,12 +313,15 @@ class _CatchPageState extends State<CatchPage> {
                   final sortedFish = fishCounts.entries.toList()
                     ..sort((a, b) => b.value.compareTo(a.value));
                   final uniqueFishList = sortedFish.map((e) => e.key).toList();
-                  return CatchItem(
-                    date: date,
-                    duration: duration,
-                    fishCount: fishCount,
-                    fishNames: uniqueFishList,
-                    caughtFish: caughtFish,
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: CatchItem(
+                      date: date,
+                      duration: duration,
+                      fishCount: fishCount,
+                      fishNames: uniqueFishList,
+                      caughtFish: caughtFish,
+                    ),
                   );
                 },
               );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppThemes {
-   static var lightTheme = ThemeData(
+  static var lightTheme = ThemeData(
     colorScheme: ColorScheme(
       brightness: Brightness.light,
       primary: const Color(0xFFEAEAEA),
@@ -13,8 +13,10 @@ class AppThemes {
       onSecondary: const Color(0xFF000000),
       onSurface: const Color(0xFF252A34),
       error: const Color(0xFFFF2E63),
-      onError:const Color(0xFF252A34),
-      tertiary: const Color(0x00FFFFFF)
+      onError: const Color(0xFF252A34),
+      tertiary: const Color(0x00FFFFFF),
+      tertiaryContainer: const Color(0xFF252A34),
+      
     ),
     useMaterial3: true,
     textTheme: TextTheme(
@@ -104,16 +106,16 @@ class AppThemes {
         color: const Color(0xFF252A34),
       ),
     ),
-  scaffoldBackgroundColor: const Color(0xFFEAEAEA),
-  appBarTheme: AppBarTheme(
-    backgroundColor: const Color(0xFFEAEAEA),
-    titleTextStyle: GoogleFonts.singleDay(
-      fontSize: 22,
-      fontWeight: FontWeight.w500,
-      color: const Color(0xFF252A34),
+    scaffoldBackgroundColor: const Color(0xFFEAEAEA),
+    appBarTheme: AppBarTheme(
+      backgroundColor: const Color(0xFFEAEAEA),
+      titleTextStyle: GoogleFonts.singleDay(
+        fontSize: 22,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF252A34),
+      ),
+      elevation: 0,
     ),
-    elevation: 0,
-  ),
   );
 
   static var darkTheme = ThemeData(
@@ -128,7 +130,8 @@ class AppThemes {
       onSurface: const Color(0xFFEAEAEA),
       error: const Color(0xFFFF2E63),
       onError: const Color(0xFFFFFFFF),
-      tertiary: const Color(0x00FFFFFF)
+      tertiary: const Color(0x00FFFFFF),
+      tertiaryContainer: const Color(0xFF252A34),
     ),
     useMaterial3: true,
     textTheme: TextTheme(
@@ -218,15 +221,15 @@ class AppThemes {
         color: const Color(0xFFEAEAEA),
       ),
     ),
-  scaffoldBackgroundColor: const Color(0xFFEAEAEA),
-  appBarTheme: AppBarTheme(
-    backgroundColor: const Color(0xFFEAEAEA),
-    titleTextStyle: GoogleFonts.singleDay(
-      fontSize: 22,
-      fontWeight: FontWeight.w500,
-      color: const Color(0xFF252A34),
+    scaffoldBackgroundColor: const Color(0xFFEAEAEA),
+    appBarTheme: AppBarTheme(
+      backgroundColor: const Color(0xFFEAEAEA),
+      titleTextStyle: GoogleFonts.singleDay(
+        fontSize: 22,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF252A34),
+      ),
+      elevation: 0,
     ),
-    elevation: 0,
-  ),
   );
 }

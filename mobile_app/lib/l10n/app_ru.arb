@@ -79,6 +79,12 @@
   "systemModeEnabled": "Системная тема включена",
   "lessThan": "Меньше",
   "hour": "часа",
-  "noFishCought": "Рыб не поймано",
-  "viewDetails": "Посмотреть детали"
+  "noFishCaught": "Рыб не поймано",
+  "noFishCaughtYet": "Рыб еще не поймано",
+  "viewDetails": "Посмотреть детали",
+  "allCaughtFish": "Все пойманные рыбы",
+  "weight": "Вес",
+  "kg": "кг",
+  "showLess": "Скрыть детали",
+  "ongoingSession": "Сессия в процессе"
 }

@@ -249,8 +249,26 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hour => 'часа';
 
   @override
-  String get noFishCought => 'Рыб не поймано';
+  String get noFishCaught => 'Рыб не поймано';
+
+  @override
+  String get noFishCaughtYet => 'Рыб еще не поймано';
 
   @override
   String get viewDetails => 'Посмотреть детали';
+
+  @override
+  String get allCaughtFish => 'Все пойманные рыбы';
+
+  @override
+  String get weight => 'Вес';
+
+  @override
+  String get kg => 'кг';
+
+  @override
+  String get showLess => 'Скрыть детали';
+
+  @override
+  String get ongoingSession => 'Сессия в процессе';
 }
