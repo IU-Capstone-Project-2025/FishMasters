@@ -91,8 +91,8 @@ class _PrimaryBodyState extends State<PrimaryBody> {
           bottom: 25,
           left: 25,
           child: PrimaryFloatingButton(
-            heroTag: 'notificationsButton',
-            icon: const Icon(Icons.notifications, size: 30,),
+            heroTag: 'leaderboardButton',
+            icon: const Icon(Icons.leaderboard),
             page: '/notifications',
           ),
         ),

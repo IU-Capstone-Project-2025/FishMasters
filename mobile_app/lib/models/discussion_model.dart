@@ -1,10 +1,10 @@
-class DiscussionModel {
+class DiscussionOfWaterModel {
   final int id;
 
-  DiscussionModel({required this.id});
+  DiscussionOfWaterModel({required this.id});
 
-  factory DiscussionModel.fromJson(Map<String, dynamic> json) {
-    return DiscussionModel(id: json['id'] as int);
+  factory DiscussionOfWaterModel.fromJson(Map<String, dynamic> json) {
+    return DiscussionOfWaterModel(id: json['id'] as int);
   }
 
   Map<String, dynamic> toJson() {

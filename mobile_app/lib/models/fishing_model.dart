@@ -19,16 +19,36 @@ class FishingModel {
   });
 
   factory FishingModel.fromJson(Map<String, dynamic> json) {
-    return FishingModel(
-      id: json['id'] as int,
-      userEmail: json['userEmail'] as String,
-      startTime: json['startTime'] as String,
-      endTime: json['endTime'] as String?,
-      caughtFish: (json['caughtFish'] as List)
-          .map((e) => CaughtFishModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      water: WaterModel.fromJson(json['water'] as Map<String, dynamic>),
-    );
+    try {
+      return FishingModel(
+        id: json['id'] as int,
+        userEmail: json['userEmail'] as String,
+        startTime: json['startTime'] as String,
+        endTime: json['endTime'] as String?,
+        caughtFish: json['caughtFish'] != null
+            ? (json['caughtFish'] as List)
+                  .where((e) => e != null)
+                  .map((e) {
+                    try {
+                      return CaughtFishModel.fromJson(
+                        e as Map<String, dynamic>,
+                      );
+                    } catch (e) {
+                      print('Error parsing caught fish: $e');
+                      return null;
+                    }
+                  })
+                  .where((e) => e != null)
+                  .cast<CaughtFishModel>()
+                  .toList()
+            : [],
+        water: WaterModel.fromJson(json['water'] as Map<String, dynamic>),
+      );
+    } catch (e) {
+      print('Error parsing FishingModel: $e');
+      print('JSON data: $json');
+      rethrow;
+    }
   }
 
   Map<String, dynamic> toJson() {

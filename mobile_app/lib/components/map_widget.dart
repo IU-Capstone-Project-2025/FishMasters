@@ -108,12 +108,15 @@ class MarkerUnit {
       jsonDecode(response.body) as Map<String, dynamic>,
     );
 
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
     if (water.discussion != null) {
-      if (!context.mounted) return;
-      Navigator.pushNamed(context, '/discussion', arguments: water.discussion);
+      Navigator.pushNamed(
+        context,
+        '/discussion',
+        arguments: water.discussion?.id,
+      );
     } else {
-      if (!context.mounted) return;
-      Navigator.of(context).pop();
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -134,7 +137,7 @@ class MarkerUnit {
                 if (response.statusCode == 200) {
                   final discussionId = jsonDecode(response.body);
                   if (!context.mounted) return;
-                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).pop();
                   Navigator.pushNamed(
                     context,
                     '/discussion',

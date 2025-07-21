@@ -57,7 +57,6 @@ class _LoginPageState extends State<LoginPage> {
       final responseJson = jsonDecode(response.body);
       final fullName = '${responseJson['name']} ${responseJson['surname']}';
       settingsBox.put('fullName', fullName);
-      settingsBox.put('score', responseJson['score'] ?? 0);
       settingsBox.put('photo', responseJson['photo']);
 
       if (!mounted) return;
@@ -258,7 +257,31 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.pushReplacementNamed(context, '/register'),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, '/register'),
+                  child: Text(localizations.needRegister),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (!Hive.isBoxOpen('settings')) {
+                      await Hive.openBox('settings');
+                    }
+                    final settingsBox = Hive.box('settings');
+                    settingsBox.put('email', 'dev@local.test');
+                    settingsBox.put('fullName', 'Developer Mode');
+
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Logged in as developer'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                    await setLoggedIn(true);
+                    if (!context.mounted) return;
+                    Navigator.pushReplacementNamed(context, '/home');
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.tertiary,
                     foregroundColor: colorScheme.tertiary,

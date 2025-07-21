@@ -479,59 +479,59 @@ abstract class AppLocalizations {
   /// **'Error creating discussion'**
   String get errorCreatingDiscussion;
 
-  /// No description provided for @darkMode.
+  /// No description provided for @leaderboardText.
   ///
   /// In en, this message translates to:
-  /// **'Dark Mode'**
-  String get darkMode;
+  /// **'Leaderboard'**
+  String get leaderboardText;
 
-  /// No description provided for @darkModeEnabled.
+  /// No description provided for @searchPlayersPlaceholder.
   ///
   /// In en, this message translates to:
-  /// **'Dark mode enabled'**
-  String get darkModeEnabled;
+  /// **'Search players by name or email...'**
+  String get searchPlayersPlaceholder;
 
-  /// No description provided for @lightModeEnabled.
+  /// No description provided for @backToTopButton.
   ///
   /// In en, this message translates to:
-  /// **'Ligth mode enabled'**
-  String get lightModeEnabled;
+  /// **'Back to Top'**
+  String get backToTopButton;
 
-  /// No description provided for @useSystemTheme.
+  /// No description provided for @findMeButton.
   ///
   /// In en, this message translates to:
-  /// **'Use System Theme'**
-  String get useSystemTheme;
+  /// **'Find Me'**
+  String get findMeButton;
 
-  /// No description provided for @systemModeEnabled.
+  /// No description provided for @top10Badge.
   ///
   /// In en, this message translates to:
-  /// **'System mode enabled'**
-  String get systemModeEnabled;
+  /// **'TOP 10'**
+  String get top10Badge;
 
-  /// No description provided for @lessThan.
+  /// No description provided for @pointsLabel.
   ///
   /// In en, this message translates to:
-  /// **'Less than an'**
-  String get lessThan;
+  /// **'points'**
+  String get pointsLabel;
 
-  /// No description provided for @hour.
+  /// No description provided for @searchingLabel.
   ///
   /// In en, this message translates to:
-  /// **'hour'**
-  String get hour;
+  /// **'Searching...'**
+  String get searchingLabel;
 
-  /// No description provided for @noFishCought.
+  /// No description provided for @playerNotFound.
   ///
   /// In en, this message translates to:
-  /// **'No fish caught'**
-  String get noFishCought;
+  /// **'Player not found'**
+  String get playerNotFound;
 
-  /// No description provided for @viewDetails.
+  /// No description provided for @loadingLeaderboard.
   ///
   /// In en, this message translates to:
-  /// **'View Details'**
-  String get viewDetails;
+  /// **'Loading leaderboard...'**
+  String get loadingLeaderboard;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
