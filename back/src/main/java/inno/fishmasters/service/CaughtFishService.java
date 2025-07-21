@@ -2,7 +2,6 @@ package inno.fishmasters.service;
 
 import inno.fishmasters.dto.request.fishing.CaughtFishRequest;
 import inno.fishmasters.entity.CaughtFish;
-import inno.fishmasters.entity.Fish;
 import inno.fishmasters.entity.Fisher;
 import inno.fishmasters.entity.Fishing;
 import inno.fishmasters.repository.CaughtFishRepository;
@@ -20,20 +19,17 @@ public class CaughtFishService {
 
     private final CaughtFishRepository caughtFishRepository;
     private final FishingRepository fishingRepository;
-    private final FishRepository fishRepository;
     private final FisherRepository fisherRepository;
 
     @Transactional
     public CaughtFish createCaughtFish(CaughtFishRequest request, MultipartFile photo) {
         Fishing fishing = fishingRepository.findById(request.fishingId())
                 .orElseThrow(() -> new IllegalArgumentException("Fishing event not found"));
-        Fish fish = fishRepository.findById(request.fishId())
-                .orElseThrow(() -> new IllegalArgumentException("Fish type not found"));
         CaughtFish caughtFish = new CaughtFish();
         caughtFish.setFisher(request.fisherEmail());
         caughtFish.setAvgWeight(request.weight());
         caughtFish.setFishing(fishing);
-        caughtFish.setFish(fish);
+        caughtFish.setFishName(request.fishName());
         if (photo != null && !photo.isEmpty()) {
             try {
                 caughtFish.setPhoto(photo.getBytes());

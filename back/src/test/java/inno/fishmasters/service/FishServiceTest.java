@@ -44,8 +44,9 @@ class FishServiceTest {
         Long fishId = 2L;
         double weight = 1.5;
         String fisherEmail = "user@mail.com";
+        String fishName = "Fish";
 
-        CaughtFishRequest request = new CaughtFishRequest (fishingId, fishId, weight, "photo");
+        CaughtFishRequest request = new CaughtFishRequest (fishingId, fishId, weight, "photo", fishName);
 
         Fishing fishing = new Fishing();
         fishing.setId(fishingId);
@@ -77,7 +78,7 @@ class FishServiceTest {
 
     @Test
     void addCaughtFish_shouldThrow_whenFishingNotFound() {
-        CaughtFishRequest request = new CaughtFishRequest(1L, 2L, 1.5, "photo");
+        CaughtFishRequest request = new CaughtFishRequest(1L, 2L, 1.5, "photo", "Fish");
 
         when(fishingRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -92,7 +93,7 @@ class FishServiceTest {
         fishing.setId(1L);
         fishing.setEndTime(LocalDateTime.now());
 
-        CaughtFishRequest request = new CaughtFishRequest(1L, 2L, 1.5, "photo");
+        CaughtFishRequest request = new CaughtFishRequest(1L, 2L, 1.5, "photo", "Fish");
 
         when(fishingRepository.findById(1L)).thenReturn(Optional.of(fishing));
 
@@ -108,7 +109,7 @@ class FishServiceTest {
         fishing.setStartTime(LocalDateTime.now());
         fishing.setUserEmail("user@mail.com");
 
-        CaughtFishRequest request = new CaughtFishRequest(1L, 2L, 1.5, "photo");
+        CaughtFishRequest request = new CaughtFishRequest(1L, 2L, 1.5, "photo", "Fish");
 
         when(fishingRepository.findById(1L)).thenReturn(Optional.of(fishing));
         when(fishRepository.findById(2L)).thenReturn(Optional.empty());

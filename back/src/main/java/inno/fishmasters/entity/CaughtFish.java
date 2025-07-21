@@ -28,6 +28,9 @@ public class CaughtFish {
     @Column(name = "photo")
     private byte[] photo;
 
+    @Column(name = "fish_name")
+    private String fishName;
+
     @ManyToOne
     @JoinColumn(name = "fishing_id", nullable = false)
     @JsonBackReference
