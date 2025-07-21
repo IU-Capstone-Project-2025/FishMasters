@@ -508,6 +508,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System mode enabled'**
   String get systemModeEnabled;
+
+  /// No description provided for @lessThan.
+  ///
+  /// In en, this message translates to:
+  /// **'Less than an'**
+  String get lessThan;
+
+  /// No description provided for @hour.
+  ///
+  /// In en, this message translates to:
+  /// **'hour'**
+  String get hour;
+
+  /// No description provided for @noFishCought.
+  ///
+  /// In en, this message translates to:
+  /// **'No fish caught'**
+  String get noFishCought;
+
+  /// No description provided for @viewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View Details'**
+  String get viewDetails;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

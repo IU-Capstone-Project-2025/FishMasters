@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
 import 'dart:math';
 
+import 'package:mobile_app/l10n/app_localizations.dart';
+
 class CatchItem extends StatelessWidget {
   const CatchItem({
     super.key,
@@ -19,6 +21,7 @@ class CatchItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
+    var localizations = AppLocalizations.of(context);
     return Column(
       children: [
         Container(
@@ -43,8 +46,8 @@ class CatchItem extends StatelessWidget {
                     Icon(Icons.access_time),
                     SizedBox(width: 8),
                     Text(
-                      "${duration != 0 ? duration : 'Less than an'} hour"
-                      "${duration < 2 ? '' : 's'} - $fishCount fish",
+                      "${duration != 0 ? duration : localizations!.lessThan} ${localizations!.hour}"
+                      "${duration < 2 ? '' : 's'} - $fishCount ${localizations.fishNameLabel}",
                       style: textTheme.bodySmall,
                     ),
                   ],
@@ -56,7 +59,7 @@ class CatchItem extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (fishNames.isEmpty) Text('No fish caught', style: textTheme.bodySmall),
+                        if (fishNames.isEmpty) Text(localizations.noFishCought, style: textTheme.bodySmall),
                         if (fishNames.isNotEmpty)
                           FishItem(name: fishNames[0], highlighted: true),
                         if (fishNames.length > 1)
@@ -73,7 +76,7 @@ class CatchItem extends StatelessWidget {
                       SnackBar(content: Text('Details not implemented yet')),
                     );
                   },
-                  child: Text('View Details', style: textTheme.bodySmall,),
+                  child: Text(localizations.viewDetails, style: textTheme.bodySmall,),
                 ),
               ],
             ),

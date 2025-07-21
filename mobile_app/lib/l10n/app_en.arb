@@ -67,5 +67,9 @@
   "darkModeEnabled": "Dark mode enabled",
   "lightModeEnabled": "Ligth mode enabled",
   "useSystemTheme": "Use System Theme",
-  "systemModeEnabled": "System mode enabled"
+  "systemModeEnabled": "System mode enabled",
+  "lessThan": "Less than an",
+  "hour": "hour",
+  "noFishCought": "No fish caught",
+  "viewDetails": "View Details"
 }
