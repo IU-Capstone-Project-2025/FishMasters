@@ -101,7 +101,6 @@ class AppThemes {
       ),
       bodySmall: GoogleFonts.bellota(
         fontSize: 16,
-
         fontWeight: FontWeight.bold,
         color: const Color(0xFF252A34),
       ),

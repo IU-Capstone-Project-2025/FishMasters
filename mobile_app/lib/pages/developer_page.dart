@@ -9,6 +9,7 @@ class DeveloperPage extends StatelessWidget {
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      backgroundColor: colorScheme.primary,
       appBar: AppBar(
         backgroundColor: colorScheme.secondary,
         automaticallyImplyLeading: true,

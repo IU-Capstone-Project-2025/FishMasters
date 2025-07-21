@@ -153,11 +153,19 @@ class _FishingPageState extends State<FishingPage> {
   @override
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context);
+    var colorScheme = Theme.of(context).colorScheme;
+    var textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
-        title: Text(localizations!.fishingText),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        foregroundColor: Theme.of(context).colorScheme.onSecondary,
+        backgroundColor: colorScheme.secondary,
+        automaticallyImplyLeading: true,
+        title: Text(
+          localizations!.fishingText,
+          style: textTheme.displayMedium,
+        ),
+        centerTitle: true,
+        elevation: 0,
       ),
       body: Center(
         child: Column(
@@ -165,23 +173,23 @@ class _FishingPageState extends State<FishingPage> {
           children: [
             Text(
               localizations.fishingInProgress,
-              style: const TextStyle(fontSize: 24),
+              style: textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _stopFishing(context),
-              child: Text(localizations.stopFishingButton),
+              child: Text(localizations.stopFishingButton, style: textTheme.titleSmall,),
             ),
             const SizedBox(height: 30),
             Text(
               '${localizations.elapsedTime}: ${_formatDuration(_elapsedSeconds)}',
-              style: const TextStyle(fontSize: 20),
+              style: textTheme.titleLarge,
             ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(localizations.fishCaught),
+                Text(localizations.fishCaught, style: textTheme.labelLarge,),
                 const SizedBox(width: 10),
                 ValueListenableBuilder(
                   valueListenable: Hive.box(
@@ -192,10 +200,7 @@ class _FishingPageState extends State<FishingPage> {
                         box.get('fishCaught', defaultValue: 0) as int;
                     return Text(
                       '$fishCaught',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: textTheme.bodySmall,
                     );
                   },
                 ),
@@ -213,6 +218,7 @@ class _FishingPageState extends State<FishingPage> {
                     title: Text(
                       localizations.uploadFishImageText,
                       textAlign: TextAlign.center,
+                      style: textTheme.titleLarge,
                     ),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -221,7 +227,7 @@ class _FishingPageState extends State<FishingPage> {
                   ),
                 );
               },
-              child: Text(localizations.addFishButton),
+              child: Text(localizations.addFishButton, style: textTheme.titleSmall),
             ),
             SizedBox(height: 30),
             // Text("Uploaded pictures:", style: const TextStyle(fontSize: 20),),
@@ -351,6 +357,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
   @override
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context);
+    var textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         GestureDetector(
@@ -376,14 +383,13 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
         const SizedBox(height: 8),
         Container(
           child: _image == null
-              ? Text(localizations!.noFishNameLabel)
+              ? Text(localizations!.noFishNameLabel, style: textTheme.bodySmall,)
               : _isLoading
-              ? Text(localizations!.loadingFishName)
+              ? Text(localizations!.loadingFishName, style: textTheme.bodySmall)
               : _fishName == null
-              ? Text('Error: ${localizations!.noFishNameLabel}')
+              ? Text('Error: ${localizations!.noFishNameLabel}', style: textTheme.bodySmall)
               : Text(
-                  '${localizations!.fishNameLabel}: $_fishName',
-                  style: const TextStyle(fontSize: 16),
+                  '${localizations!.fishNameLabel}: $_fishName', style: textTheme.bodySmall
                 ),
         ),
         const SizedBox(height: 8),
@@ -414,7 +420,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
               );
             }
           },
-          child: Text(localizations.uploadFishImageButton),
+          child: Text(localizations.uploadFishImageButton, style: textTheme.bodySmall),
         ),
         TextButton(
           onPressed: () {
@@ -424,7 +430,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
               builder: (context) => ManualUploadDialog(),
             );
           },
-          child: Text(localizations.manualUploadButton),
+          child: Text(localizations.manualUploadButton, style: textTheme.bodySmall),
         ),
       ],
     );
@@ -494,6 +500,7 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
   @override
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context)!;
+    var textTheme = Theme.of(context).textTheme;
 
     return AlertDialog(
       title: Text(localizations.manualUploadButton),
@@ -507,7 +514,9 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
               decoration: InputDecoration(
                 labelText: localizations.fishNameLabel,
                 border: const OutlineInputBorder(),
+                labelStyle: textTheme.titleLarge
               ),
+              style: textTheme.titleLarge
             ),
             const SizedBox(height: 16),
             TextField(
@@ -516,8 +525,10 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
                 labelText: localizations.fishDescriptionLabel,
                 border: const OutlineInputBorder(),
                 hintText: 'e.g., "Small silver fish with blue fins"',
+                labelStyle: textTheme.titleLarge
               ),
               maxLines: 3,
+              style: textTheme.titleLarge
             ),
             const SizedBox(height: 16),
             SizedBox(
@@ -534,17 +545,17 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           ),
                           const SizedBox(width: 8),
-                          Text(localizations.searchingFishLabel),
+                          Text(localizations.searchingFishLabel, style: textTheme.titleSmall,),
                         ],
                       )
-                    : Text(localizations.searchByDescriptionButton),
+                    : Text(localizations.searchByDescriptionButton, style: textTheme.titleSmall),
               ),
             ),
             if (_searchResults.isNotEmpty) ...[
               const SizedBox(height: 16),
               Text(
                 localizations.selectFishLabel,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: textTheme.bodySmall,
               ),
               const SizedBox(height: 8),
               SizedBox(
@@ -562,13 +573,14 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
                             ).primaryColor.withValues(alpha: 0.2)
                           : null,
                       child: ListTile(
-                        title: Text(fish.name),
+                        title: Text(fish.name, style: textTheme.labelSmall,),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('${fish.genus} ${fish.species}'),
+                            Text('${fish.genus} ${fish.species}', style: textTheme.labelSmall,),
                             Text(
                               '${localizations.similarityScoreLabel}: ${fish.similarityScore.toStringAsFixed(2) * 100}%',
+                              style: textTheme.labelSmall
                             ),
                           ],
                         ),
@@ -586,7 +598,7 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
             ] else if (_isSearching == false &&
                 _descriptionController.text.isNotEmpty) ...[
               const SizedBox(height: 16),
-              Text(localizations.noResultsFoundLabel),
+              Text(localizations.noResultsFoundLabel, style: textTheme.labelLarge,),
             ],
           ],
         ),
@@ -596,7 +608,7 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text(localizations.cancelButton),
+          child: Text(localizations.cancelButton, style: textTheme.labelLarge,),
         ),
         ElevatedButton(
           onPressed: _fishNameController.text.trim().isEmpty
