@@ -83,5 +83,6 @@
   "viewDetails": "Посмотреть детали",
   "saveLocationLabel": "Выбрать это место для рыбалки",
   "select": "Выбрать",
-  "selected": "Выбранно"
+  "selected": "Выбранно",
+  "noMessages": "Тихо тут..."
 }

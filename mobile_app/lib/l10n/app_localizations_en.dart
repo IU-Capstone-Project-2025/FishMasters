@@ -262,4 +262,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selected => 'Selected';
+
+  @override
+  String get noMessages => 'No messages yet';
 }
