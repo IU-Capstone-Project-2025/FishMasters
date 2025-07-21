@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
 import 'package:mobile_app/models/models.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 import 'dart:convert';
 import 'dart:math';
 

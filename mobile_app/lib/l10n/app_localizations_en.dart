@@ -226,6 +226,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loadingLeaderboard => 'Loading leaderboard...';
+
+  @override
   String get darkMode => 'Dark Mode';
 
   @override

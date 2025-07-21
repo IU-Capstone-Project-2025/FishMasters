@@ -226,7 +226,8 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get loadingLeaderboard => 'Загрузка таблицы лидеров...';
-  
+
+  @override
   String get darkMode => 'Тёмная тема';
 
   @override
