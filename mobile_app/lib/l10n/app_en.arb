@@ -80,5 +80,8 @@
   "lessThan": "Less than an",
   "hour": "hour",
   "noFishCought": "No fish caught",
-  "viewDetails": "View Details"
+  "viewDetails": "View Details",
+  "saveLocationLabel": "Choose this location for fishing",
+  "select": "Select",
+  "selected": "Selected"
 }

@@ -80,5 +80,8 @@
   "lessThan": "Меньше",
   "hour": "часа",
   "noFishCought": "Рыб не поймано",
-  "viewDetails": "Посмотреть детали"
+  "viewDetails": "Посмотреть детали",
+  "saveLocationLabel": "Выбрать это место для рыбалки",
+  "select": "Выбрать",
+  "selected": "Выбранно"
 }

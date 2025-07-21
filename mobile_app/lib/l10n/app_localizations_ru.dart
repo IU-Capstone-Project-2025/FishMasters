@@ -253,4 +253,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get viewDetails => 'Посмотреть детали';
+
+  @override
+  String get saveLocationLabel => 'Выбрать это место для рыбалки';
+
+  @override
+  String get select => 'Выбрать';
+
+  @override
+  String get selected => 'Выбранно';
 }

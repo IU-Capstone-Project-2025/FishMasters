@@ -253,4 +253,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get viewDetails => 'View Details';
+
+  @override
+  String get saveLocationLabel => 'Choose this location for fishing';
+
+  @override
+  String get select => 'Select';
+
+  @override
+  String get selected => 'Selected';
 }
