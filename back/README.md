@@ -6,9 +6,9 @@ Requires PostgreSQL database to run.
 ## Usage
 For local application deployment, you need Docker version 2 or higher installed and running.
 Create a .env file in the project root and specify the following values:
-- POSTGRES_DB=<Database name>
-- POSTGRES_USER=<Your PostgreSQL username>
-- POSTGRES_PASSWORD=<User password>
+- POSTGRES_DB=fish_masters
+- POSTGRES_USER=postgres
+- POSTGRES_PASSWORD=postgres
 
 ### Deployment
 Requires Java 21, Maven, and Docker installed.
