@@ -259,40 +259,7 @@ class _LoginPageState extends State<LoginPage> {
                 TextButton(
                   onPressed: () =>
                       Navigator.pushReplacementNamed(context, '/register'),
-                  child: Text(localizations.needRegister),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (!Hive.isBoxOpen('settings')) {
-                      await Hive.openBox('settings');
-                    }
-                    final settingsBox = Hive.box('settings');
-                    settingsBox.put('email', 'dev@local.test');
-                    settingsBox.put('fullName', 'Developer Mode');
-
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Logged in as developer'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                    await setLoggedIn(true);
-                    if (!context.mounted) return;
-                    Navigator.pushReplacementNamed(context, '/home');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: colorScheme.tertiary,
-                    foregroundColor: colorScheme.tertiary,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                  ),
-                  child: Text(localizations.needRegister, style: textScheme.titleMedium,),
+                  child: Text(localizations.needRegister, style: textScheme.titleMedium),
                 ),
               ],
             ),

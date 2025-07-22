@@ -463,6 +463,8 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
         ),
         TextButton(
           onPressed: () {
+            // Dismiss keyboard before showing dialog
+            FocusScope.of(context).unfocus();
             Navigator.of(context).pop();
             showDialog(
               context: context,
@@ -510,6 +512,9 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
 
   Future<void> _searchFishByDescription() async {
     if (_descriptionController.text.trim().isEmpty) return;
+
+    // Dismiss keyboard before starting search
+    FocusScope.of(context).unfocus();
 
     setState(() {
       _isSearching = true;
@@ -705,7 +710,7 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
                               style: textTheme.labelSmall,
                             ),
                             Text(
-                              '${localizations.similarityScoreLabel}: ${fish.similarityScore.toStringAsFixed(2) * 100}%',
+                              '${localizations.similarityScoreLabel}: ${(fish.similarityScore * 100).toStringAsFixed(2)}%',
                               style: textTheme.labelSmall,
                             ),
                           ],

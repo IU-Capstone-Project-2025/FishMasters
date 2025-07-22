@@ -300,25 +300,27 @@ class _LeaderboardPageState extends State<LeaderboardPage>
             )
           : FadeTransition(
               opacity: _fadeAnimation,
-              child: ListView.builder(
-                controller: _scrollController,
-                padding: const EdgeInsets.all(8.0),
-                itemCount: _filteredPlayers.length,
-                itemBuilder: (context, index) {
-                  final player = _filteredPlayers[index];
-                  final originalPosition = _allPlayers.indexOf(player) + 1;
-                  final isCurrentUser = player.email == _currentUserEmail;
-                  final isTop3 = originalPosition <= 3;
-                  final isTop10 = originalPosition <= 10;
+              child: SafeArea(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.all(8.0),
+                  itemCount: _filteredPlayers.length,
+                  itemBuilder: (context, index) {
+                    final player = _filteredPlayers[index];
+                    final originalPosition = _allPlayers.indexOf(player) + 1;
+                    final isCurrentUser = player.email == _currentUserEmail;
+                    final isTop3 = originalPosition <= 3;
+                    final isTop10 = originalPosition <= 10;
 
-                  return LeaderboardPlayerCard(
-                    player: player,
-                    position: originalPosition,
-                    isCurrentUser: isCurrentUser,
-                    isTop3: isTop3,
-                    isTop10: isTop10,
-                  );
-                },
+                    return LeaderboardPlayerCard(
+                      player: player,
+                      position: originalPosition,
+                      isCurrentUser: isCurrentUser,
+                      isTop3: isTop3,
+                      isTop10: isTop10,
+                    );
+                  },
+                ),
               ),
             ),
     );
