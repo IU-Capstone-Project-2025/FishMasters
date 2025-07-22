@@ -43,96 +43,6 @@ class _CatchPageState extends State<CatchPage> {
     super.dispose();
   }
 
-  final List<String> dates = const [
-    'March 13, 2025',
-    'March 14, 2025',
-    'March 15, 2025',
-    'March 16, 2025',
-    'March 17, 2025',
-    'March 18, 2025',
-  ];
-
-  // var _catches = <FishingModel>[
-  //   FishingModel(
-  //     id: 1,
-  //     startTime: '2025-03-13T08:00:00',
-  //     endTime: '2025-03-13T08:30:00',
-  //     userEmail: 'i.ivanov@example.com',
-  //     water: WaterModel(id: 1, x: 0.1, y: 0.2),
-  //     caughtFish: [
-  //       CaughtFishModel(
-  //         id: 1,
-  //         fisher: 'i.ivanov@example.com',
-  //         avgWeight: 3.0,
-  //         fish: FishModel(
-  //           id: 1,
-  //           name: 'CARP',
-  //           photo: 'https://example.com/carp.jpg',
-  //         ),
-  //       ),
-  //       CaughtFishModel(
-  //         id: 3,
-  //         fisher: 'j.smith@example.com',
-  //         avgWeight: 1.8,
-  //         fish: FishModel(
-  //           id: 3,
-  //           name: 'PIKE',
-  //           photo: 'https://example.com/pike.jpg',
-  //         ),
-  //       ),
-  //       CaughtFishModel(
-  //         id: 4,
-  //         fisher: 'a.jones@example.com',
-  //         avgWeight: 2.2,
-  //         fish: FishModel(
-  //           id: 4,
-  //           name: 'PERCH',
-  //           photo: 'https://example.com/perch.jpg',
-  //         ),
-  //       ),
-  //       CaughtFishModel(
-  //         id: 5,
-  //         fisher: 'm.brown@example.com',
-  //         avgWeight: 2.9,
-  //         fish: FishModel(
-  //           id: 5,
-  //           name: 'BREAM',
-  //           photo: 'https://example.com/bream.jpg',
-  //         ),
-  //       ),
-  //       CaughtFishModel(
-  //         id: 6,
-  //         fisher: 'm.brown@example.com',
-  //         avgWeight: 2.9,
-  //         fish: FishModel(
-  //           id: 5,
-  //           name: 'BREAM',
-  //           photo: 'https://example.com/bream.jpg',
-  //         ),
-  //       ),
-  //     ],
-  //   ),
-  //   FishingModel(
-  //     id: 2,
-  //     userEmail: 'b.ivanov',
-  //     startTime: '2025-03-14T09:00:00',
-  //     endTime: '2025-03-14T15:00:00',
-  //     caughtFish: [
-  //       CaughtFishModel(
-  //         id: 2,
-  //         fisher: 'sadfasj',
-  //         avgWeight: 2.5,
-  //         fish: FishModel(
-  //           id: 2,
-  //           name: 'STURGEON',
-  //           photo: 'https://example.com/sturgeon.jpg',
-  //         ),
-  //       ),
-  //     ],
-  //     water: WaterModel(id: 2, x: 0.3, y: 0.4),
-  //   ),
-  // ];
-
   var _catches = <FishingModel>[];
 
   Future<void> _fetchCatches() async {
@@ -189,7 +99,7 @@ class _CatchPageState extends State<CatchPage> {
       }
     } catch (e) {
       debugPrint('Error fetching catches: $e');
-      throw e; // Re-throw to let FutureBuilder handle the error
+      rethrow; // Re-throw to let FutureBuilder handle the error
     }
   }
 

@@ -108,10 +108,10 @@ class _PrimaryBodyState extends State<PrimaryBody> {
               bottom: 25,
               left:
                   MediaQuery.of(context).size.width / 2 -
-                  (fishingStarted ? 100 : 50),
+                  (fishingStarted ? 100 : 75),
               child: SafeArea(
                 child: SizedBox(
-                  width: fishingStarted ? 200 : 100,
+                  width: fishingStarted ? 200 : 150,
                   height: fishingStarted ? 80 : 60,
                   child: ElevatedButton(
                     onPressed: () => _startFishing(context),

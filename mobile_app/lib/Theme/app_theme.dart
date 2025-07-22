@@ -24,17 +24,17 @@ class AppThemes {
     useMaterial3: true,
     textTheme: TextTheme(
       // Display Styles
-      displayLarge: GoogleFonts.singleDay(
+      displayLarge: GoogleFonts.pangolin(
         fontSize: 64,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF252A34),
       ),
-      displayMedium: GoogleFonts.singleDay(
+      displayMedium: GoogleFonts.pangolin(
         fontSize: 55,
         fontWeight: FontWeight.normal,
         color: const Color(0xFF252A34),
       ),
-      displaySmall: GoogleFonts.singleDay(
+      displaySmall: GoogleFonts.pangolin(
         fontSize: 36,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF252A34),
@@ -92,7 +92,7 @@ class AppThemes {
       ),
 
       // Body Styles
-      bodyLarge: GoogleFonts.singleDay(
+      bodyLarge: GoogleFonts.pangolin(
         fontSize: 16,
         fontWeight: FontWeight.normal,
         color: const Color(0xFF252A34),
@@ -111,7 +111,7 @@ class AppThemes {
     scaffoldBackgroundColor: const Color(0xFFEAEAEA),
     appBarTheme: AppBarTheme(
       backgroundColor: const Color(0xFFEAEAEA),
-      titleTextStyle: GoogleFonts.singleDay(
+      titleTextStyle: GoogleFonts.pangolin(
         fontSize: 22,
         fontWeight: FontWeight.w500,
         color: const Color(0xFF252A34),
@@ -139,17 +139,17 @@ class AppThemes {
     useMaterial3: true,
     textTheme: TextTheme(
       // Display Styles
-      displayLarge: GoogleFonts.singleDay(
+      displayLarge: GoogleFonts.pangolin(
         fontSize: 64,
         fontWeight: FontWeight.w600,
         color: const Color(0xFFEAEAEA),
       ),
-      displayMedium: GoogleFonts.singleDay(
+      displayMedium: GoogleFonts.pangolin(
         fontSize: 55,
         fontWeight: FontWeight.normal,
         color: const Color(0xFF1A1A1A),
       ),
-      displaySmall: GoogleFonts.singleDay(
+      displaySmall: GoogleFonts.pangolin(
         fontSize: 36,
         fontWeight: FontWeight.w600,
         color: const Color(0xFFEAEAEA),
@@ -207,7 +207,7 @@ class AppThemes {
       ),
 
       // Body Styles
-      bodyLarge: GoogleFonts.singleDay(
+      bodyLarge: GoogleFonts.pangolin(
         fontSize: 16,
         fontWeight: FontWeight.normal,
         color: const Color(0xFFEAEAEA),
@@ -227,7 +227,7 @@ class AppThemes {
     scaffoldBackgroundColor: const Color(0xFFEAEAEA),
     appBarTheme: AppBarTheme(
       backgroundColor: const Color(0xFFEAEAEA),
-      titleTextStyle: GoogleFonts.singleDay(
+      titleTextStyle: GoogleFonts.pangolin(
         fontSize: 22,
         fontWeight: FontWeight.w500,
         color: const Color(0xFF252A34),

@@ -112,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: IconButton(
-              icon: Icon(Icons.edit, color: colorScheme.primary),
+              icon: Icon(Icons.edit, color: const Color(0xFF252A34)),
               onPressed: () {
                 showDialog(
                   context: context,
@@ -202,7 +202,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         Text(
                           '${localizations.scoreLabel}: ',
-                          style: Theme.of(context).textTheme.headlineMedium,
+                          style: textTheme.headlineMedium,
                         ),
                         const SizedBox(width: 8),
                         const SizedBox(
@@ -215,12 +215,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   } else if (snapshot.hasError) {
                     return Text(
                       '${localizations.scoreLabel}: --',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: textTheme.headlineMedium,
                     );
                   } else {
                     return Text(
                       '${localizations.scoreLabel}: ${snapshot.data}',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: textTheme.headlineMedium,
                     );
                   }
                 },
