@@ -6,11 +6,19 @@ class DeveloperPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+    var textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      backgroundColor: colorScheme.primary,
       appBar: AppBar(
-        title: const Text('Developer Page'),
-        backgroundColor: Theme.of(context).colorScheme.tertiary,
-        foregroundColor: Theme.of(context).colorScheme.onTertiary,
+        backgroundColor: colorScheme.secondary,
+        automaticallyImplyLeading: true,
+        title: Text(
+          'Developer Page',
+          style: textTheme.displayMedium,
+        ),
+        centerTitle: true,
+        elevation: 0,
       ),
       body: Center(
         child: Padding(
@@ -32,7 +40,7 @@ class DeveloperPage extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text('Reset Fishing Location'),
+                child: Text('Reset Fishing Location', style: textTheme.titleSmall,),
               ),
             ],
           ),

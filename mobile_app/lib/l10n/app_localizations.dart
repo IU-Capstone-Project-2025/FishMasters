@@ -448,6 +448,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upload'**
   String get uploadButton;
+
+  /// No description provided for @noDiscussionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No discussion'**
+  String get noDiscussionTitle;
+
+  /// No description provided for @noDiscussionContent.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no discussions available for this water body. Want to start one?'**
+  String get noDiscussionContent;
+
+  /// No description provided for @cancelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelLabel;
+
+  /// No description provided for @createDiscussionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Discussion'**
+  String get createDiscussionLabel;
+
+  /// No description provided for @errorCreatingDiscussion.
+  ///
+  /// In en, this message translates to:
+  /// **'Error creating discussion'**
+  String get errorCreatingDiscussion;
+
+  /// No description provided for @leaderboardText.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaderboard'**
+  String get leaderboardText;
+
+  /// No description provided for @searchPlayersPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search players by name or email...'**
+  String get searchPlayersPlaceholder;
+
+  /// No description provided for @backToTopButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Top'**
+  String get backToTopButton;
+
+  /// No description provided for @findMeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Find Me'**
+  String get findMeButton;
+
+  /// No description provided for @top10Badge.
+  ///
+  /// In en, this message translates to:
+  /// **'TOP 10'**
+  String get top10Badge;
+
+  /// No description provided for @pointsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'points'**
+  String get pointsLabel;
+
+  /// No description provided for @searchingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching...'**
+  String get searchingLabel;
+
+  /// No description provided for @playerNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Player not found'**
+  String get playerNotFound;
+
+  /// No description provided for @loadingLeaderboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading leaderboard...'**
+  String get loadingLeaderboard;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get darkMode;
+
+  /// No description provided for @darkModeEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode enabled'**
+  String get darkModeEnabled;
+
+  /// No description provided for @lightModeEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Ligth mode enabled'**
+  String get lightModeEnabled;
+
+  /// No description provided for @useSystemTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Use System Theme'**
+  String get useSystemTheme;
+
+  /// No description provided for @systemModeEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'System mode enabled'**
+  String get systemModeEnabled;
+
+  /// No description provided for @lessThan.
+  ///
+  /// In en, this message translates to:
+  /// **'Less than an'**
+  String get lessThan;
+
+  /// No description provided for @hour.
+  ///
+  /// In en, this message translates to:
+  /// **'hour'**
+  String get hour;
+
+  /// No description provided for @noFishCaught.
+  ///
+  /// In en, this message translates to:
+  /// **'No fish caught'**
+  String get noFishCaught;
+
+  /// No description provided for @noFishCaughtYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No fish caught yet'**
+  String get noFishCaughtYet;
+
+  /// No description provided for @viewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View Details'**
+  String get viewDetails;
+
+  /// No description provided for @allCaughtFish.
+  ///
+  /// In en, this message translates to:
+  /// **'All caught fish'**
+  String get allCaughtFish;
+
+  /// No description provided for @weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get weight;
+
+  /// No description provided for @kg.
+  ///
+  /// In en, this message translates to:
+  /// **'kg'**
+  String get kg;
+
+  /// No description provided for @showLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get showLess;
+
+  /// No description provided for @ongoingSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing session'**
+  String get ongoingSession;
+
+  /// No description provided for @saveLocationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose this location for fishing'**
+  String get saveLocationLabel;
+
+  /// No description provided for @select.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get select;
+
+  /// No description provided for @selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get selected;
+
+  /// No description provided for @noMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get noMessages;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

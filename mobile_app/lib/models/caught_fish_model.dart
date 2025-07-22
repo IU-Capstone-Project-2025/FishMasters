@@ -5,13 +5,19 @@ class CaughtFishModel {
   final int id;
   final String fisher;
   final double avgWeight;
+  final String? photo;
   final FishModel fish;
+  final String fishName;
+  final FishingModel? fishing;
 
   CaughtFishModel({
     required this.id,
     required this.fisher,
     required this.avgWeight,
+    this.photo,
     required this.fish,
+    required this.fishName,
+    this.fishing,
   });
 
   factory CaughtFishModel.fromJson(Map<String, dynamic> json) {
@@ -19,7 +25,10 @@ class CaughtFishModel {
       id: json['id'] as int,
       fisher: json['fisher'] as String,
       avgWeight: (json['avgWeight'] as num).toDouble(),
+      photo: json['photo'] as String?,
       fish: FishModel.fromJson(json['fish'] as Map<String, dynamic>),
+      fishing: null, // Avoid circular reference when parsing from fishing session
+      fishName: json['fishName'] as String,
     );
   }
 
@@ -28,7 +37,10 @@ class CaughtFishModel {
       'id': id,
       'fisher': fisher,
       'avgWeight': avgWeight,
+      'photo': photo,
       'fish': fish.toJson(),
+      'fishing': fishing?.toJson(),
+      'fishName': fishName,
     };
   }
 

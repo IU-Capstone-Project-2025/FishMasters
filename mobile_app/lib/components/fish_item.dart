@@ -9,25 +9,28 @@ class FishItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Icon(FontAwesomeIcons.fishFins, size: 18),
-        const SizedBox(width: 6),
-        Text(
-          name,
-          style: TextStyle(
-            fontWeight: highlighted ? FontWeight.bold : FontWeight.normal,
-            backgroundColor: highlighted
-                ? Colors.grey.shade300
-                : Colors.transparent,
+    var colorTheme = Theme.of(context).colorScheme;
+    var textTheme = Theme.of(context).textTheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      child: Row(
+        children: [
+          Icon(
+            FontAwesomeIcons.fishFins,
+            size: 16,
+            color: colorTheme.onSurface,
           ),
-        ),
-        if (highlighted)
-          const Padding(
-            padding: EdgeInsets.only(left: 4.0),
-            child: Text("•", style: TextStyle(fontSize: 20)),
+          const SizedBox(width: 6),
+          Text(
+            name,
+            style: textTheme.labelLarge?.copyWith(
+              color: highlighted ? colorTheme.onPrimary : colorTheme.onSurface,
+              fontWeight: highlighted ? FontWeight.bold : FontWeight.normal,
+            ),
           ),
-      ],
+        ],
+      ),
     );
   }
 }

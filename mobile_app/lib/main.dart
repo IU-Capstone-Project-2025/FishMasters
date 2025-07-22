@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/Theme/app_theme.dart';
+import 'package:mobile_app/Theme/theme_provider.dart';
 import 'package:mobile_app/pages/pages.dart';
 import 'package:mobile_app/functions/functions.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 
 void main() async {
@@ -11,16 +14,17 @@ void main() async {
   final appDocDir = await getApplicationDocumentsDirectory();
   Hive.init(appDocDir.path);
   await Hive.openBox('settings');
-  runApp(MainApp());
+  final themeProvider = ThemeProvider();
+  await themeProvider.initialize();
+  runApp(ChangeNotifierProvider.value(
+      value: themeProvider,
+      child: MainApp(),
+      )
+  );
 }
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
-
-  static var themeData = ThemeData(
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
-    useMaterial3: true,
-  );
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -54,6 +58,15 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    if (themeProvider.isLoading) {
+      return const MaterialApp(
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+
     return MaterialApp(
       locale: _selectLocale,
       supportedLocales: const [Locale('en'), Locale('ru')],
@@ -66,7 +79,9 @@ class _MainAppState extends State<MainApp> {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Fish Masters',
-      theme: MainApp.themeData,
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: themeProvider.themeMode,
       initialRoute: '/',
       routes: {
         '/': (context) => FutureBuilder<bool>(
@@ -90,8 +105,11 @@ class _MainAppState extends State<MainApp> {
         '/about': (context) => const AboutPage(),
         '/menu': (context) => const MenuPage(),
         '/catch': (context) => const CatchPage(),
-        '/notifications': (context) => const NotificationsPage(),
-        '/discussion': (context) => const ChatPage(),
+        '/notifications': (context) => const LeaderboardPage(),
+        '/discussion': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as int;
+          return ChatPage(discussionId: args);
+        },
         '/fishing': (context) => const FishingPage(),
         '/developer': (context) => const DeveloperPage(),
       },
