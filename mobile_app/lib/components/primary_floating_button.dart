@@ -25,6 +25,7 @@ class PrimaryFloatingButton extends StatelessWidget {
         onPressed: () {
           Navigator.pushNamed(context, page);
         },
+        foregroundColor: colorScheme.onPrimary,
         child: icon,
       ),
     );
