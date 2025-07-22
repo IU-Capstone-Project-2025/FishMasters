@@ -7,6 +7,7 @@ class AppThemes {
       brightness: Brightness.light,
       primary: const Color(0xFFEAEAEA),
       secondary: const Color(0xFF08D9D6),
+      secondaryContainer: const Color.fromARGB(255, 50, 205, 192),
       surface: const Color(0xFFEAEAEA),
       surfaceBright: const Color(0xFFFFFFFF),
       onPrimary: const Color(0xFF252A34),
@@ -16,7 +17,6 @@ class AppThemes {
       onError: const Color(0xFF252A34),
       tertiary: const Color(0x00FFFFFF),
       tertiaryContainer: const Color(0xFF252A34),
-      
     ),
     useMaterial3: true,
     textTheme: TextTheme(
@@ -123,6 +123,7 @@ class AppThemes {
       brightness: Brightness.dark,
       primary: const Color(0xFF1A1A1A),
       secondary: const Color(0xFF00C2BF),
+      secondaryContainer: const Color(0xFFCD7F32),
       surface: const Color(0xFF252525),
       surfaceBright: const Color(0xFF2E2E2E),
       onPrimary: const Color(0xFFEAEAEA),

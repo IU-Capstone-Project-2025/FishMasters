@@ -182,12 +182,16 @@ class _LeaderboardPageState extends State<LeaderboardPage>
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     final localizations = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations.leaderboardText),
+        title: Text(
+          localizations.leaderboardText,
+          style: textTheme.displaySmall,
+        ),
         backgroundColor: colorScheme.secondary,
         foregroundColor: colorScheme.onSecondary,
         actions: [
@@ -214,8 +218,8 @@ class _LeaderboardPageState extends State<LeaderboardPage>
                     controller: _searchController,
                     decoration: InputDecoration(
                       hintText: localizations.searchPlayersPlaceholder,
-                      hintStyle: TextStyle(
-                        color: colorScheme.onSurface.withValues(alpha: 0.6),
+                      hintStyle: textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.onSurface.withValues(alpha: 0.8),
                       ),
                       prefixIcon: Icon(
                         Icons.search,
@@ -244,7 +248,7 @@ class _LeaderboardPageState extends State<LeaderboardPage>
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0),
                         borderSide: BorderSide(
-                          color: colorScheme.primary,
+                          color: colorScheme.outline,
                           width: 2,
                         ),
                       ),
@@ -284,7 +288,10 @@ class _LeaderboardPageState extends State<LeaderboardPage>
                 children: [
                   const CircularProgressIndicator(),
                   const SizedBox(height: 16),
-                  Text(localizations.loadingLeaderboard),
+                  Text(
+                    localizations.loadingLeaderboard,
+                    style: textTheme.bodySmall,
+                  ),
                 ],
               ),
             )
@@ -373,11 +380,7 @@ class LeaderboardPlayerCard extends StatelessWidget {
     Color? borderColor;
     double elevation = 2;
 
-    if (isCurrentUser) {
-      cardColor = colorScheme.primaryContainer;
-      borderColor = colorScheme.primary;
-      elevation = 4;
-    } else if (isTop3) {
+    if (isTop3) {
       // Different colors for each top 3 position
       switch (position) {
         case 1:
@@ -395,8 +398,16 @@ class LeaderboardPlayerCard extends StatelessWidget {
       }
       elevation = 6;
     } else if (isTop10) {
-      cardColor = colorScheme.tertiaryContainer;
+      cardColor = colorScheme.surface;
+      borderColor = colorScheme.secondary;
       elevation = 3;
+    } else {
+      cardColor = colorScheme.surface;
+      borderColor = colorScheme.outline;
+      elevation = 2;
+    }
+    if (isCurrentUser) {
+      elevation = 4;
     }
 
     return Container(
@@ -404,14 +415,18 @@ class LeaderboardPlayerCard extends StatelessWidget {
       child: Card(
         elevation: elevation,
         color: cardColor,
-        shape: borderColor != null
-            ? RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                side: BorderSide(color: borderColor, width: 2.0),
-              )
-            : null,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          side: BorderSide(
+            color: borderColor ?? colorScheme.outline,
+            width: isCurrentUser || isTop3 ? 2.0 : 1.0,
+          ),
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: EdgeInsets.symmetric(
+            vertical: position == 1 ? 24.0 : 12,
+            horizontal: 16.0,
+          ),
           child: Row(
             children: [
               // Position and badge
@@ -428,7 +443,10 @@ class LeaderboardPlayerCard extends StatelessWidget {
                           ? BoxDecoration(
                               color: _getPositionColor(position),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.white, width: 2),
+                              border: Border.all(
+                                color: colorScheme.onPrimary,
+                                width: 2,
+                              ),
                             )
                           : null,
                       child: Text(
@@ -438,7 +456,9 @@ class LeaderboardPlayerCard extends StatelessWidget {
                           fontWeight: isTop3
                               ? FontWeight.w900
                               : FontWeight.bold,
-                          color: isTop3 ? Colors.white : colorScheme.primary,
+                          color: isTop3
+                              ? colorScheme.onPrimary
+                              : colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -449,14 +469,18 @@ class LeaderboardPlayerCard extends StatelessWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: colorScheme.tertiary,
-                          borderRadius: BorderRadius.circular(4),
+                          color: colorScheme.secondary,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: colorScheme.outline,
+                            width: 1.0,
+                          ),
                         ),
                         child: Text(
                           localizations.top10Badge,
                           style: TextStyle(
                             fontSize: 10,
-                            color: colorScheme.onTertiary,
+                            color: colorScheme.onSecondary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -472,15 +496,16 @@ class LeaderboardPlayerCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isCurrentUser
-                        ? colorScheme.primary
+                    color: isTop3
+                        ? (borderColor ?? colorScheme.secondary)
                         : colorScheme.outline,
-                    width: isCurrentUser ? 2.0 : 1.0,
+                    width: isCurrentUser || isTop3 ? 2.0 : 1.5,
                   ),
                 ),
                 child: CircleAvatar(
                   radius: 24,
                   backgroundImage: _getProfileImage(player.photo),
+                  backgroundColor: colorScheme.surface,
                   onBackgroundImageError: (exception, stackTrace) {
                     debugPrint('Error loading profile image: $exception');
                   },
@@ -523,40 +548,64 @@ class LeaderboardPlayerCard extends StatelessWidget {
               ),
 
               // Score
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: isTop3
-                      ? colorScheme.secondary
-                      : colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      '${player.score}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: isTop3
-                            ? colorScheme.onSecondary
-                            : colorScheme.onSurface,
+              Row(
+                children: [
+                  if (isCurrentUser)
+                    Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: colorScheme.secondary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.person,
+                        size: 16,
+                        color: colorScheme.onSecondary,
                       ),
                     ),
-                    Text(
-                      localizations.pointsLabel,
-                      style: TextStyle(
-                        fontSize: 10,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isTop3
+                          ? colorScheme.secondary
+                          : colorScheme.surfaceBright,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
                         color: isTop3
-                            ? colorScheme.onSecondary
-                            : colorScheme.onSurface,
+                            ? colorScheme.outline
+                            : colorScheme.outline.withValues(alpha: 0.5),
+                        width: 1.0,
                       ),
                     ),
-                  ],
-                ),
+                    child: Column(
+                      children: [
+                        Text(
+                          '${player.score}',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: isTop3
+                                ? colorScheme.onSecondary
+                                : colorScheme.onSurface,
+                          ),
+                        ),
+                        Text(
+                          localizations.pointsLabel,
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: isTop3
+                                ? colorScheme.onSecondary
+                                : colorScheme.onSurface.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
