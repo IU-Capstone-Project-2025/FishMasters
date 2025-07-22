@@ -17,6 +17,8 @@ class AppThemes {
       onError: const Color(0xFF252A34),
       tertiary: const Color(0x00FFFFFF),
       tertiaryContainer: const Color(0xFF252A34),
+      onPrimaryContainer: const Color(0xFF42A5F5),
+      primaryContainer: const Color(0xFFEEEEEE)
     ),
     useMaterial3: true,
     textTheme: TextTheme(
@@ -38,51 +40,51 @@ class AppThemes {
       ),
 
       // Headline Styles
-      headlineLarge: GoogleFonts.comicNeue(
+      headlineLarge: GoogleFonts.bellota(
         fontSize: 32,
         fontWeight: FontWeight.normal,
         color: const Color(0xFF252A34),
       ),
-      headlineMedium: GoogleFonts.comicNeue(
+      headlineMedium: GoogleFonts.bellota(
         fontSize: 30, // 28
         fontWeight: FontWeight.normal,
         color: const Color(0xFF252A34),
       ),
-      headlineSmall: GoogleFonts.comicNeue(
+      headlineSmall: GoogleFonts.bellota(
         fontSize: 28,
         fontWeight: FontWeight.bold,
         color: const Color(0xFF252A34),
       ),
 
       // Title Styles
-      titleLarge: GoogleFonts.singleDay(
+      titleLarge: GoogleFonts.bellota(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF252A34),
       ),
-      titleMedium: GoogleFonts.comicNeue(
+      titleMedium: GoogleFonts.bellota(
         fontSize: 20,
         fontWeight: FontWeight.normal,
         color: const Color(0xFF08D9D6),
       ),
-      titleSmall: GoogleFonts.comicNeue(
+      titleSmall: GoogleFonts.bellota(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF252A34),
       ),
 
       // Label Styles
-      labelLarge: GoogleFonts.comicNeue(
+      labelLarge: GoogleFonts.bellota(
         fontSize: 16,
         fontWeight: FontWeight.normal,
         color: const Color(0xFF000000),
       ),
-      labelMedium: GoogleFonts.comicNeue(
+      labelMedium: GoogleFonts.bellota(
         fontSize: 14,
         fontWeight: FontWeight.normal,
         color: const Color(0xFF000000),
       ),
-      labelSmall: GoogleFonts.comicNeue(
+      labelSmall: GoogleFonts.bellota(
         fontSize: 12,
         fontWeight: FontWeight.normal,
         color: const Color(0xFF000000),
@@ -94,14 +96,13 @@ class AppThemes {
         fontWeight: FontWeight.normal,
         color: const Color(0xFF252A34),
       ),
-      bodyMedium: GoogleFonts.comicNeue(
+      bodyMedium: GoogleFonts.bellota(
         fontSize: 14,
         fontWeight: FontWeight.normal,
         color: const Color(0xFFFF2E63),
       ),
-      bodySmall: GoogleFonts.comicNeue(
+      bodySmall: GoogleFonts.bellota(
         fontSize: 16,
-
         fontWeight: FontWeight.bold,
         color: const Color(0xFF252A34),
       ),
@@ -154,51 +155,51 @@ class AppThemes {
       ),
 
       // Headline Styles
-      headlineLarge: GoogleFonts.comicNeue(
+      headlineLarge: GoogleFonts.bellota(
         fontSize: 32,
         fontWeight: FontWeight.normal,
         color: const Color(0xFFEAEAEA),
       ),
-      headlineMedium: GoogleFonts.comicNeue(
+      headlineMedium: GoogleFonts.bellota(
         fontSize: 30, // 28
         fontWeight: FontWeight.normal,
         color: const Color(0xFFEAEAEA),
       ),
-      headlineSmall: GoogleFonts.comicNeue(
+      headlineSmall: GoogleFonts.bellota(
         fontSize: 28,
         fontWeight: FontWeight.bold,
         color: const Color(0xFFEAEAEA),
       ),
 
       // Title Styles
-      titleLarge: GoogleFonts.singleDay(
+      titleLarge: GoogleFonts.bellota(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: const Color(0xFFEAEAEA),
       ),
-      titleMedium: GoogleFonts.comicNeue(
+      titleMedium: GoogleFonts.bellota(
         fontSize: 20,
         fontWeight: FontWeight.normal,
         color: const Color(0xFF08D9D6),
       ),
-      titleSmall: GoogleFonts.comicNeue(
+      titleSmall: GoogleFonts.bellota(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: const Color(0xFFEAEAEA),
       ),
 
       // Label Styles
-      labelLarge: GoogleFonts.comicNeue(
+      labelLarge: GoogleFonts.bellota(
         fontSize: 16,
         fontWeight: FontWeight.normal,
         color: const Color(0xFFEAEAEA),
       ),
-      labelMedium: GoogleFonts.comicNeue(
+      labelMedium: GoogleFonts.bellota(
         fontSize: 14,
         fontWeight: FontWeight.normal,
         color: const Color(0xFFEAEAEA),
       ),
-      labelSmall: GoogleFonts.comicNeue(
+      labelSmall: GoogleFonts.bellota(
         fontSize: 12,
         fontWeight: FontWeight.normal,
         color: const Color(0xFFEAEAEA),
@@ -210,12 +211,12 @@ class AppThemes {
         fontWeight: FontWeight.normal,
         color: const Color(0xFFEAEAEA),
       ),
-      bodyMedium: GoogleFonts.comicNeue(
+      bodyMedium: GoogleFonts.bellota(
         fontSize: 14,
         fontWeight: FontWeight.normal,
         color: const Color(0xFFFF2E63),
       ),
-      bodySmall: GoogleFonts.comicNeue(
+      bodySmall: GoogleFonts.bellota(
         fontSize: 16,
 
         fontWeight: FontWeight.bold,

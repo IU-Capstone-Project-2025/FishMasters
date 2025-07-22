@@ -622,6 +622,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ongoing session'**
   String get ongoingSession;
+
+  /// No description provided for @saveLocationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose this location for fishing'**
+  String get saveLocationLabel;
+
+  /// No description provided for @select.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get select;
+
+  /// No description provided for @selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get selected;
+
+  /// No description provided for @noMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get noMessages;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

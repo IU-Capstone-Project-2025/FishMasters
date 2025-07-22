@@ -7,14 +7,15 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context);
-
-    var theme = Theme.of(context);
+    var colorScheme = Theme.of(context).colorScheme;
+    var textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations!.aboutLabel),
-        backgroundColor: theme.colorScheme.tertiary,
-        foregroundColor: theme.colorScheme.onTertiary,
+        title: Text(localizations!.aboutLabel, style: textTheme.displayMedium),
+        backgroundColor: colorScheme.secondary,
+        centerTitle: true,
       ),
+      backgroundColor: colorScheme.surface,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -23,7 +24,7 @@ class AboutPage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               localizations.appDescription,
-              style: theme.textTheme.bodyMedium,
+              style: textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
           ),
@@ -31,7 +32,7 @@ class AboutPage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               'v1.0.0-alpha',
-              style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+              style: textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
           ),

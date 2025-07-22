@@ -150,7 +150,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildMessageList(ColorScheme colorScheme) {
     if (_discussion.isEmpty) {
-      return const Center(child: Text('No messages yet'));
+      return Center(child: Text(AppLocalizations.of(context)!.noMessages));
     }
 
     return ListView.builder(
@@ -172,8 +172,9 @@ class _ChatPageState extends State<ChatPage> {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: isMe
-                    ? colorScheme.primaryContainer
-                    : colorScheme.secondaryContainer,
+                // TODO: Choose proper colors
+                    ? colorScheme.onPrimaryContainer
+                    : colorScheme.primaryContainer,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(16),
                   topRight: const Radius.circular(16),
@@ -205,8 +206,19 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
+    var textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBar(title: Text(localizations!.chatText)),
+      backgroundColor: colorScheme.primary,
+      appBar: AppBar(
+        backgroundColor: colorScheme.secondary,
+        automaticallyImplyLeading: true,
+        title: Text(
+          localizations!.chatText,
+          style: textTheme.displayMedium,
+        ),
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: Column(
         children: [
           Expanded(
@@ -232,11 +244,7 @@ class _ChatPageState extends State<ChatPage> {
                         border: OutlineInputBorder(),
                         isDense: true,
                       ),
-                      style: TextStyle(
-                        color: _isSending
-                            ? colorScheme.onSurface.withValues(alpha: 0.5)
-                            : null,
-                      ),
+                      style: textTheme.titleSmall,
                     ),
                   ),
                   const SizedBox(width: 8),

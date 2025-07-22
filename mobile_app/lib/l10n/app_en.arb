@@ -86,5 +86,9 @@
   "weight": "Weight",
   "kg": "kg",
   "showLess": "Show less",
-  "ongoingSession": "Ongoing session"
+  "ongoingSession": "Ongoing session",
+  "saveLocationLabel": "Choose this location for fishing",
+  "select": "Select",
+  "selected": "Selected",
+  "noMessages": "No messages yet"
 }

@@ -41,6 +41,7 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     // Fetch list of WaterPoints from the server
+    var themeMode = Theme.of(context).colorScheme.brightness == Brightness.light ? "light" : "dark";
     return Center(
       child: FlutterMap(
         options: MapOptions(
@@ -52,7 +53,7 @@ class _MapWidgetState extends State<MapWidget> {
           TileLayer(
             retinaMode: true,
             urlTemplate:
-                'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+                'https://{s}.basemaps.cartocdn.com/${themeMode}_all/{z}/{x}/{y}{r}.png',
             subdomains: const ['a', 'b', 'c'],
           ),
           FutureBuilder<List<Marker>>(
@@ -61,12 +62,6 @@ class _MapWidgetState extends State<MapWidget> {
               return snapshot.connectionState == ConnectionState.waiting
                   ? Stack(
                       children: [
-                        // Darken the map background
-                        Positioned.fill(
-                          child: Container(
-                            color: Colors.black.withValues(alpha: 0.2),
-                          ),
-                        ),
                         Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -78,6 +73,7 @@ class _MapWidgetState extends State<MapWidget> {
                                 AppLocalizations.of(
                                   context,
                                 )!.loadingMarkersLabel,
+                                style: Theme.of(context).textTheme.headlineSmall,
                               ),
                             ],
                           ),
@@ -101,6 +97,7 @@ class MarkerUnit {
   MarkerUnit({required this.x, required this.y});
 
   void _handleDiscussion(BuildContext context) async {
+    var textTheme = Theme.of(context).textTheme;
     final response = await http.get(
       Uri.parse('https://capstone.aquaf1na.fun/api/water/$id'),
     );
@@ -120,8 +117,8 @@ class MarkerUnit {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(AppLocalizations.of(context)!.noDiscussionTitle),
-          content: Text(AppLocalizations.of(context)!.noDiscussionContent),
+          title: Text(AppLocalizations.of(context)!.noDiscussionTitle, style: textTheme.headlineSmall,),
+          content: Text(AppLocalizations.of(context)!.noDiscussionContent, style: textTheme.headlineSmall),
           actions: [
             TextButton(
               onPressed: () {
@@ -154,7 +151,7 @@ class MarkerUnit {
                   );
                 }
               },
-              child: Text(AppLocalizations.of(context)!.createDiscussionLabel),
+              child: Text(AppLocalizations.of(context)!.createDiscussionLabel, style: textTheme.headlineSmall,),
             ),
           ],
         ),
@@ -163,6 +160,12 @@ class MarkerUnit {
   }
 
   Marker build(BuildContext context) {
+    if (!Hive.isBoxOpen('settings')) {
+      Hive.openBox('settings');
+    }
+    var box = Hive.box('settings');
+    var choosenId = box.get("fishingLocationId");
+    choosenId ??= -1;
     id = x * 1000 + y;
     var localizations = AppLocalizations.of(context);
     return Marker(
@@ -172,69 +175,103 @@ class MarkerUnit {
           showDialog(
             context: context,
             builder: (context) {
+              var textTheme = Theme.of(context).textTheme;
               bool discussionIsLoading = false;
               return StatefulBuilder(
                 builder: (context, setState) => AlertDialog(
-                  title: Text(localizations!.fishingLocationLabel),
-                  content: Text(
-                    '$x, $y\n\n'
-                    'Здесь могла быть ваша рыбалка (placeholder)!',
+                  titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+                  contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                  actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  title: Text(localizations!.fishingLocationLabel, style: textTheme.headlineSmall,),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$x, $y',
+                        style: textTheme.titleSmall,
+                      ),
+                    ],
                   ),
                   actions: [
-                    Card(
-                      child: IconButton(
-                        onPressed: () {
-                          if (!Hive.isBoxOpen('settings')) {
-                            Hive.openBox('settings');
-                          }
-                          var box = Hive.box('settings');
-                          box.put('fishingLocationId', id);
-                          box.put('fishingLocationX', x);
-                          box.put('fishingLocationY', y);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Fishing location selected (id: $id).',
-                              ),
-                              duration: Duration(seconds: 1),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.place_outlined),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        setState(() {
-                          discussionIsLoading = true;
-                        });
-                        _handleDiscussion(context);
-                      },
-                      child: discussionIsLoading
-                          ? const SizedBox(
-                              width: 40,
-                              height: 20,
-                              child: Center(
-                                child: SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
+                    // First row for icon actions
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Save location button
+                        Tooltip(
+                          message: localizations.saveLocationLabel,
+                          child: choosenId == id
+                          ? Text(localizations.selected, style: textTheme.titleSmall,)
+                          : TextButton(
+                            onPressed: () {
+                              if (!Hive.isBoxOpen('settings')) {
+                                Hive.openBox('settings');
+                              }
+                              var box = Hive.box('settings');
+                              box.put('fishingLocationId', id);
+                              box.put('fishingLocationX', x);
+                              box.put('fishingLocationY', y);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Fishing location selected (id: $id).',
                                   ),
+                                  duration: const Duration(seconds: 1),
                                 ),
-                              ),
-                            )
-                          : SizedBox(
-                              width: 40,
-                              height: 20,
-                              child: Center(
-                                child: Text(localizations.chatLabel),
-                              ),
-                            ),
+                              );
+                            },
+                            child: Text(localizations.select, style: textTheme.titleSmall),
+                          ),
+                        ),
+                        
+                        // Close button
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                          ),
+                          child: Text(localizations.closeLabel, style: textTheme.titleSmall,),
+                        ),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text(localizations.closeLabel),
+                    
+                    // Second row for the main action button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            discussionIsLoading = true;
+                          });
+                          _handleDiscussion(context);
+                        },
+                        child: discussionIsLoading
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.chat_outlined, size: 20, color: Theme.of(context).colorScheme.onPrimary),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    localizations.chatLabel,
+                                    style: textTheme.titleSmall,
+                                  ),
+                                ],
+                              ),
+                      ),
                     ),
                   ],
                 ),
@@ -242,7 +279,7 @@ class MarkerUnit {
             },
           );
         },
-        child: const Icon(Icons.location_on, color: Colors.red, size: 40.0),
+        child: Icon(Icons.location_on, color: Theme.of(context).colorScheme.error, size: 40.0),
       ),
     );
   }

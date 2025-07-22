@@ -271,4 +271,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ongoingSession => 'Ongoing session';
+
+  @override
+  String get saveLocationLabel => 'Choose this location for fishing';
+
+  @override
+  String get select => 'Select';
+
+  @override
+  String get selected => 'Selected';
+
+  @override
+  String get noMessages => 'No messages yet';
 }

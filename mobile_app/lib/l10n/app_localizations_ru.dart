@@ -237,7 +237,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get lightModeEnabled => 'Светлый режим включен';
 
   @override
-  String get useSystemTheme => 'Использовать системную тему';
+  String get useSystemTheme => 'Системная тема';
 
   @override
   String get systemModeEnabled => 'Системная тема включена';
@@ -271,4 +271,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get ongoingSession => 'Сессия в процессе';
+
+  @override
+  String get saveLocationLabel => 'Выбрать это место для рыбалки';
+
+  @override
+  String get select => 'Выбрать';
+
+  @override
+  String get selected => 'Выбранно';
+
+  @override
+  String get noMessages => 'Тихо тут...';
 }

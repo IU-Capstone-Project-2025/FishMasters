@@ -75,7 +75,7 @@
   "darkMode": "Тёмная тема",
   "darkModeEnabled": "Темный режим включен",
   "lightModeEnabled": "Светлый режим включен",
-  "useSystemTheme": "Использовать системную тему",
+  "useSystemTheme": "Системная тема",
   "systemModeEnabled": "Системная тема включена",
   "lessThan": "Меньше",
   "hour": "часа",
@@ -86,5 +86,9 @@
   "weight": "Вес",
   "kg": "кг",
   "showLess": "Скрыть детали",
-  "ongoingSession": "Сессия в процессе"
+  "ongoingSession": "Сессия в процессе",
+  "saveLocationLabel": "Выбрать это место для рыбалки",
+  "select": "Выбрать",
+  "selected": "Выбранно",
+  "noMessages": "Тихо тут..."
 }
