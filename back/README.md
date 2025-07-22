@@ -17,15 +17,6 @@ Requires Java 21, Maven, and Docker installed.
 
           docker-compose up --build
 
-- If you need to clear the database on restart, run:
-
-          docker-compose down -v
-- To check database entries, execute:
-
-        docker exec -it <POSTGRES_DB> bash
-        psql -U <POSTGRES_USER> -d <POSTGRES_DB>
-
-- Then enter your user password and run necessary SQL queries
 
 ### API Documentation
 After application startup, documentation will be available at:
