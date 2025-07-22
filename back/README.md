@@ -15,7 +15,7 @@ Requires Java 21, Maven, and Docker installed.
 
 - In the terminal, run the command:
 
-          docker compose up --build
+          docker-compose up --build
 
 - If you need to clear the database on restart, run:
 
