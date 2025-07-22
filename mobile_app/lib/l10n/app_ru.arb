@@ -63,7 +63,7 @@
   "cancelLabel": "Отмена",
   "createDiscussionLabel": "Создать обсуждение",
   "errorCreatingDiscussion": "Ошибка при создании обсуждения",
-  "leaderboardText": "Таблица лидеров",
+  "leaderboardText": "Лидеры",
   "searchPlayersPlaceholder": "Поиск игроков по имени или email...",
   "backToTopButton": "Наверх",
   "findMeButton": "Найти меня",

@@ -201,7 +201,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get errorCreatingDiscussion => 'Ошибка при создании обсуждения';
 
   @override
-  String get leaderboardText => 'Таблица лидеров';
+  String get leaderboardText => 'Лидеры';
 
   @override
   String get searchPlayersPlaceholder => 'Поиск игроков по имени или email...';
