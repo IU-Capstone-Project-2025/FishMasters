@@ -189,12 +189,14 @@ class _LeaderboardPageState extends State<LeaderboardPage>
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
+        backgroundColor: colorScheme.secondary,
+        automaticallyImplyLeading: true,
         title: Text(
           localizations.leaderboardText,
-          style: textTheme.displaySmall,
+          style: textTheme.displayMedium!.copyWith(fontSize: 40),
         ),
-        backgroundColor: colorScheme.secondary,
-        foregroundColor: colorScheme.onSecondary,
+        centerTitle: true,
+        elevation: 0,
         actions: [
           if (_currentUserPosition != null)
             IconButton(

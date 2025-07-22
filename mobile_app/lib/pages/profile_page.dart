@@ -75,6 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
+    var textTheme = Theme.of(context).textTheme;
 
     if (!Hive.isBoxOpen('settings')) {
       Hive.openBox('settings');
@@ -97,21 +98,27 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     return Scaffold(
+      backgroundColor: colorScheme.primary,
       appBar: AppBar(
-        title: Text(localizations!.profileText),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        foregroundColor: colorScheme.onSecondary,
+        backgroundColor: colorScheme.secondary,
+        automaticallyImplyLeading: true,
+        title: Text(
+          localizations!.profileText,
+          style: textTheme.displayMedium,
+        ),
+        centerTitle: true,
+        elevation: 0,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: IconButton(
-              icon: const Icon(Icons.edit),
+              icon: Icon(Icons.edit, color: colorScheme.primary),
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: Text(localizations.profilePictureEditTitle),
+                      title: Text(localizations.profilePictureEditTitle, style: textTheme.titleLarge),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -185,11 +192,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                'Bio: Fishing enthusiast, love exploring new spots!',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
               const SizedBox(height: 16),
               FutureBuilder<int>(
                 future: _getUserScore(email, fullName),
@@ -234,7 +236,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     (route) => false,
                   );
                 },
-                child: Text(localizations.logoutButton),
+                child: Text(localizations.logoutButton, style: textTheme.titleLarge,),
               ),
             ],
           ),
@@ -424,7 +426,7 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 )
-              : Text(localizations!.uploadPictureButton),
+              : Text(localizations!.uploadPictureButton, style: Theme.of(context).textTheme.titleLarge,),
         ),
       ],
     );
