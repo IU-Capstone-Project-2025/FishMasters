@@ -705,7 +705,7 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
                               style: textTheme.labelSmall,
                             ),
                             Text(
-                              '${localizations.similarityScoreLabel}: ${fish.similarityScore.toStringAsFixed(2) * 100}%',
+                              '${localizations.similarityScoreLabel}: ${(fish.similarityScore * 100).toStringAsFixed(2)}%',
                               style: textTheme.labelSmall,
                             ),
                           ],
