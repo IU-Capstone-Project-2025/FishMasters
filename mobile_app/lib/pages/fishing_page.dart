@@ -230,8 +230,6 @@ class _FishingPageState extends State<FishingPage> {
               ),
             ),
             SizedBox(height: 30),
-            // Text("Uploaded pictures:", style: const TextStyle(fontSize: 20),),
-            // TODO: Show all uploaded pictures
           ],
         ),
       ),
@@ -750,7 +748,7 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
                   }
                   await _uploadFish(_fishNameController.text.trim());
 
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Fish added successfully!'),

@@ -34,7 +34,6 @@ class FishingModel {
                         e as Map<String, dynamic>,
                       );
                     } catch (e) {
-                      print('Error parsing caught fish: $e');
                       return null;
                     }
                   })
@@ -45,8 +44,6 @@ class FishingModel {
         water: WaterModel.fromJson(json['water'] as Map<String, dynamic>),
       );
     } catch (e) {
-      print('Error parsing FishingModel: $e');
-      print('JSON data: $json');
       rethrow;
     }
   }
