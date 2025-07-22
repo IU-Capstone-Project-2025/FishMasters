@@ -94,10 +94,10 @@ class _LeaderboardPageState extends State<LeaderboardPage>
         throw Exception('Failed to load leaderboard');
       }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
       if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error loading leaderboard: $e')),
         );
