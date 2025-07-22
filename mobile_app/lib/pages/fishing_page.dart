@@ -160,10 +160,7 @@ class _FishingPageState extends State<FishingPage> {
       appBar: AppBar(
         backgroundColor: colorScheme.secondary,
         automaticallyImplyLeading: true,
-        title: Text(
-          localizations!.fishingText,
-          style: textTheme.displayMedium,
-        ),
+        title: Text(localizations!.fishingText, style: textTheme.displayMedium),
         centerTitle: true,
         elevation: 0,
       ),
@@ -178,7 +175,10 @@ class _FishingPageState extends State<FishingPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _stopFishing(context),
-              child: Text(localizations.stopFishingButton, style: textTheme.titleSmall,),
+              child: Text(
+                localizations.stopFishingButton,
+                style: textTheme.titleSmall,
+              ),
             ),
             const SizedBox(height: 30),
             Text(
@@ -189,7 +189,7 @@ class _FishingPageState extends State<FishingPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(localizations.fishCaught, style: textTheme.labelLarge,),
+                Text(localizations.fishCaught, style: textTheme.labelLarge),
                 const SizedBox(width: 10),
                 ValueListenableBuilder(
                   valueListenable: Hive.box(
@@ -198,10 +198,7 @@ class _FishingPageState extends State<FishingPage> {
                   builder: (context, Box box, _) {
                     int fishCaught =
                         box.get('fishCaught', defaultValue: 0) as int;
-                    return Text(
-                      '$fishCaught',
-                      style: textTheme.bodySmall,
-                    );
+                    return Text('$fishCaught', style: textTheme.bodySmall);
                   },
                 ),
               ],
@@ -227,7 +224,10 @@ class _FishingPageState extends State<FishingPage> {
                   ),
                 );
               },
-              child: Text(localizations.addFishButton, style: textTheme.titleSmall),
+              child: Text(
+                localizations.addFishButton,
+                style: textTheme.titleSmall,
+              ),
             ),
             SizedBox(height: 30),
             // Text("Uploaded pictures:", style: const TextStyle(fontSize: 20),),
@@ -250,9 +250,11 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
   File? _image;
   String? _fishName;
   bool _isLoading = true;
+  bool _hasNetworkError = false;
 
   Future<void> _pickImage() async {
     _fishName = null;
+    _hasNetworkError = false;
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: ImageSource.gallery);
 
@@ -260,38 +262,47 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
       setState(() => _image = File(picked.path));
       debugPrint("Fetching fish name...");
 
-      final request = http.MultipartRequest(
-        'POST',
-        Uri.parse('http://ml.aquaf1na.fun:5001/search_image'),
-      );
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'image',
-          _image!.path,
-          filename: _image!.path.split('/').last,
-          contentType: MediaType('image', 'jpeg'),
-        ),
-      );
-
-      var streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
-      if (response.statusCode == 200) {
-        final prediction = FishSearchResponseModel.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>,
+      try {
+        final request = http.MultipartRequest(
+          'POST',
+          Uri.parse('http://ml.aquaf1na.fun:5001/search_image'),
         );
-        setState(() {
-          _fishName = prediction.results.isNotEmpty
-              ? prediction.results.first.name.replaceAll('_', ' ')
-              : null;
-          debugPrint('Fish prediction: $_fishName');
-          _isLoading = false;
-        });
-      } else {
-        debugPrint('Fish prediction failed: ${response.statusCode}');
-        debugPrint('Response body: ${response.body}');
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'image',
+            _image!.path,
+            filename: _image!.path.split('/').last,
+            contentType: MediaType('image', 'jpeg'),
+          ),
+        );
+
+        var streamedResponse = await request.send();
+        final response = await http.Response.fromStream(streamedResponse);
+        if (response.statusCode == 200) {
+          final prediction = FishSearchResponseModel.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>,
+          );
+          setState(() {
+            _fishName = prediction.results.isNotEmpty
+                ? prediction.results.first.name.replaceAll('_', ' ')
+                : null;
+            debugPrint('Fish prediction: $_fishName');
+            _isLoading = false;
+          });
+        } else {
+          debugPrint('Fish prediction failed: ${response.statusCode}');
+          debugPrint('Response body: ${response.body}');
+          setState(() {
+            _fishName = null;
+            _isLoading = false;
+          });
+        }
+      } catch (e) {
+        debugPrint('ML service unreachable: $e');
         setState(() {
           _fishName = null;
           _isLoading = false;
+          _hasNetworkError = true;
         });
       }
     }
@@ -304,9 +315,8 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
 
     final settingsBox = Hive.box('settings');
     final fishingId = settingsBox.get("last_fishing_id");
-    // TODO: Fix hardcoded fish ID and weight
-    final fishId = 2;
-    final weight = 5;
+    final fishId = 1;
+    final weight = 1.0;
     final email = settingsBox.get('email', defaultValue: '').toString();
     debugPrint(
       'Uploading fish: fishingId: $fishingId, fishId: $fishId, weight: $weight, email: $email',
@@ -323,6 +333,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
           "fishingId": fishingId,
           "fishId": fishId,
           "weight": weight,
+          "fishName": _fishName ?? '',
           "fisherEmail": email,
         }),
         filename: 'data.json',
@@ -383,19 +394,28 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
         const SizedBox(height: 8),
         Container(
           child: _image == null
-              ? Text(localizations!.noFishNameLabel, style: textTheme.bodySmall,)
+              ? Text(localizations!.noFishNameLabel, style: textTheme.bodySmall)
               : _isLoading
               ? Text(localizations!.loadingFishName, style: textTheme.bodySmall)
+              : _hasNetworkError
+              ? Text(
+                  'Service unavailable. Please use manual upload.',
+                  style: textTheme.bodySmall,
+                )
               : _fishName == null
-              ? Text('Error: ${localizations!.noFishNameLabel}', style: textTheme.bodySmall)
+              ? Text(
+                  'Fish not recognized. Please use manual upload.',
+                  style: textTheme.bodySmall,
+                )
               : Text(
-                  '${localizations!.fishNameLabel}: $_fishName', style: textTheme.bodySmall
+                  '${localizations!.fishNameLabel}: $_fishName',
+                  style: textTheme.bodySmall,
                 ),
         ),
         const SizedBox(height: 8),
         ElevatedButton(
           onPressed: () {
-            if (_image != null) {
+            if (_image != null && !_isLoading && _fishName != null) {
               uploadFish();
 
               var box = Hive.box('settings');
@@ -411,16 +431,37 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
                 _image = null;
               });
               Navigator.of(context).pop();
-            } else {
+            } else if (_image == null) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Error: attach image first!'),
                   duration: Duration(seconds: 1),
                 ),
               );
+            } else if (_isLoading) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Please wait for fish identification to complete',
+                  ),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+            } else if (_fishName == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Fish identification failed or service unavailable. Please use manual upload.',
+                  ),
+                  duration: Duration(seconds: 3),
+                ),
+              );
             }
           },
-          child: Text(localizations.uploadFishImageButton, style: textTheme.bodySmall),
+          child: Text(
+            localizations!.uploadFishImageButton,
+            style: textTheme.bodySmall,
+          ),
         ),
         TextButton(
           onPressed: () {
@@ -430,7 +471,10 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
               builder: (context) => ManualUploadDialog(),
             );
           },
-          child: Text(localizations.manualUploadButton, style: textTheme.bodySmall),
+          child: Text(
+            localizations.manualUploadButton,
+            style: textTheme.bodySmall,
+          ),
         ),
       ],
     );
@@ -450,6 +494,21 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
   List<FishResultModel> _searchResults = [];
   bool _isSearching = false;
   FishResultModel? _selectedFish;
+
+  @override
+  void initState() {
+    super.initState();
+    _fishNameController.addListener(() {
+      setState(() {}); // Trigger rebuild when text changes
+    });
+  }
+
+  @override
+  void dispose() {
+    _fishNameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   Future<void> _searchFishByDescription() async {
     if (_descriptionController.text.trim().isEmpty) return;
@@ -497,10 +556,67 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
     }
   }
 
+  Future<void> _uploadFish(String fishName) async {
+    if (!Hive.isBoxOpen('settings')) {
+      await Hive.openBox('settings');
+    }
+
+    final settingsBox = Hive.box('settings');
+    final fishingId = settingsBox.get("last_fishing_id");
+    final fishId = 1;
+    final weight = 1.0;
+    final email = settingsBox.get('email', defaultValue: '').toString();
+    debugPrint(
+      'Uploading fish: fishingId: $fishingId, fishId: $fishId, weight: $weight, email: $email, fishName: $fishName',
+    );
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse('https://capstone.aquaf1na.fun/api/caught-fish'),
+    );
+    request.headers['Content-Type'] = 'multipart/form-data';
+    request.files.add(
+      http.MultipartFile.fromString(
+        'data',
+        jsonEncode({
+          "fishingId": fishingId,
+          "fishId": fishId,
+          "weight": weight,
+          "fishName": fishName,
+          "fisherEmail": email,
+        }),
+        filename: 'data.json',
+        contentType: MediaType('application', 'json'),
+      ),
+    );
+
+    final response = await request.send();
+    if (response.statusCode != 200) {
+      debugPrint(
+        'Manual upload failed: ${response.statusCode} ${response.reasonPhrase}',
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Manual upload failed: ${response.reasonPhrase}'),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+      return;
+    }
+
+    // Increment fish caught counter
+    var box = Hive.box('settings');
+    int fishCaught = box.get('fishCaught', defaultValue: 0) as int;
+    box.put('fishCaught', fishCaught + 1);
+
+    debugPrint('Manual upload successful');
+  }
+
   @override
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context)!;
     var textTheme = Theme.of(context).textTheme;
+    var colorTheme = Theme.of(context).colorScheme;
 
     return AlertDialog(
       title: Text(localizations.manualUploadButton),
@@ -514,9 +630,12 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
               decoration: InputDecoration(
                 labelText: localizations.fishNameLabel,
                 border: const OutlineInputBorder(),
-                labelStyle: textTheme.titleLarge
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: colorTheme.outline, width: 2.0),
+                ),
+                labelStyle: textTheme.titleLarge,
               ),
-              style: textTheme.titleLarge
+              style: textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             TextField(
@@ -524,11 +643,14 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
               decoration: InputDecoration(
                 labelText: localizations.fishDescriptionLabel,
                 border: const OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: colorTheme.outline, width: 2.0),
+                ),
                 hintText: 'e.g., "Small silver fish with blue fins"',
-                labelStyle: textTheme.titleLarge
+                labelStyle: textTheme.titleLarge,
               ),
               maxLines: 3,
-              style: textTheme.titleLarge
+              style: textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             SizedBox(
@@ -545,18 +667,21 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           ),
                           const SizedBox(width: 8),
-                          Text(localizations.searchingFishLabel, style: textTheme.titleSmall,),
+                          Text(
+                            localizations.searchingFishLabel,
+                            style: textTheme.titleSmall,
+                          ),
                         ],
                       )
-                    : Text(localizations.searchByDescriptionButton, style: textTheme.titleSmall),
+                    : Text(
+                        localizations.searchByDescriptionButton,
+                        style: textTheme.titleSmall,
+                      ),
               ),
             ),
             if (_searchResults.isNotEmpty) ...[
               const SizedBox(height: 16),
-              Text(
-                localizations.selectFishLabel,
-                style: textTheme.bodySmall,
-              ),
+              Text(localizations.selectFishLabel, style: textTheme.bodySmall),
               const SizedBox(height: 8),
               SizedBox(
                 height: 200,
@@ -573,14 +698,17 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
                             ).primaryColor.withValues(alpha: 0.2)
                           : null,
                       child: ListTile(
-                        title: Text(fish.name, style: textTheme.labelSmall,),
+                        title: Text(fish.name, style: textTheme.labelSmall),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('${fish.genus} ${fish.species}', style: textTheme.labelSmall,),
+                            Text(
+                              '${fish.genus} ${fish.species}',
+                              style: textTheme.labelSmall,
+                            ),
                             Text(
                               '${localizations.similarityScoreLabel}: ${fish.similarityScore.toStringAsFixed(2) * 100}%',
-                              style: textTheme.labelSmall
+                              style: textTheme.labelSmall,
                             ),
                           ],
                         ),
@@ -598,7 +726,10 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
             ] else if (_isSearching == false &&
                 _descriptionController.text.isNotEmpty) ...[
               const SizedBox(height: 16),
-              Text(localizations.noResultsFoundLabel, style: textTheme.labelLarge,),
+              Text(
+                localizations.noResultsFoundLabel,
+                style: textTheme.labelLarge,
+              ),
             ],
           ],
         ),
@@ -608,23 +739,34 @@ class _ManualUploadDialogState extends State<ManualUploadDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text(localizations.cancelButton, style: textTheme.labelLarge,),
+          child: Text(localizations.cancelButton, style: textTheme.labelLarge),
         ),
         ElevatedButton(
           onPressed: _fishNameController.text.trim().isEmpty
               ? null
-              : () {
+              : () async {
+                  if (_selectedFish != null) {
+                    _fishNameController.text = _selectedFish!.name;
+                  }
+                  await _uploadFish(_fishNameController.text.trim());
+
+                  if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Mock upload of ${_fishNameController.text}',
-                      ),
-                      duration: const Duration(seconds: 1),
+                    const SnackBar(
+                      content: Text('Fish added successfully!'),
+                      duration: Duration(seconds: 1),
                     ),
                   );
                   Navigator.of(context).pop();
                 },
-          child: Text(localizations.uploadButton),
+          child: Text(
+            localizations.uploadButton,
+            style: TextStyle(
+              color: _fishNameController.text.trim().isEmpty
+                  ? colorTheme.onSurface
+                  : colorTheme.onPrimary,
+            ),
+          ),
         ),
       ],
     );
