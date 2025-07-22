@@ -25,7 +25,7 @@ class FishSearchRequestModel {
 class FishResultModel {
   final int id;
   final String name;
-  final int similarityScore;
+  final double similarityScore;
   final String genus;
   final String species;
   final String fbname;
@@ -45,7 +45,7 @@ class FishResultModel {
     return FishResultModel(
       id: json['id'] as int,
       name: json['name'] as String? ?? '',
-      similarityScore: (json['similarity_score'] as num).toInt(),
+      similarityScore: (json['similarity_score'] as num).toDouble(),
       genus: json['genus'] as String? ?? '',
       species: json['species'] as String? ?? '',
       fbname: json['fbname'] as String? ?? '',

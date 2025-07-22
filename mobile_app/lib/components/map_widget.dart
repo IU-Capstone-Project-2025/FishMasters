@@ -7,9 +7,14 @@ import 'package:http/http.dart' as http;
 import 'package:mobile_app/models/water_model.dart';
 import 'dart:convert';
 
-class MapWidget extends StatelessWidget {
+class MapWidget extends StatefulWidget {
   const MapWidget({super.key});
 
+  @override
+  State<MapWidget> createState() => _MapWidgetState();
+}
+
+class _MapWidgetState extends State<MapWidget> {
   Future<List<WaterModel>> _fetchWaterPoints() async {
     final response = await http.get(
       Uri.parse('https://capstone.aquaf1na.fun/api/water/all'),
@@ -36,18 +41,21 @@ class MapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Fetch list of WaterPoints from the server
+    var themeMode = Theme.of(context).colorScheme.brightness == Brightness.light
+        ? "light"
+        : "dark";
     return Center(
       child: FlutterMap(
         options: MapOptions(
-          initialCenter: LatLng(55.775000, 49.123611),
-          initialZoom: 13.0,
+          initialCenter: LatLng(55.904749, 48.726576),
+          initialZoom: 15.0,
           onTap: null,
         ),
         children: [
           TileLayer(
             retinaMode: true,
             urlTemplate:
-                'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+                'https://{s}.basemaps.cartocdn.com/${themeMode}_all/{z}/{x}/{y}{r}.png',
             subdomains: const ['a', 'b', 'c'],
           ),
           FutureBuilder<List<Marker>>(
@@ -56,12 +64,6 @@ class MapWidget extends StatelessWidget {
               return snapshot.connectionState == ConnectionState.waiting
                   ? Stack(
                       children: [
-                        // Darken the map background
-                        Positioned.fill(
-                          child: Container(
-                            color: Colors.black.withValues(alpha: 0.2),
-                          ),
-                        ),
                         Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -73,13 +75,16 @@ class MapWidget extends StatelessWidget {
                                 AppLocalizations.of(
                                   context,
                                 )!.loadingMarkersLabel,
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.headlineSmall,
                               ),
                             ],
                           ),
                         ),
                       ],
                     )
-                  : MarkerLayer(markers: snapshot.data ?? []);
+                  : MarkerLayer(markers: snapshot.data ?? [], rotate: true);
             },
           ),
         ],
@@ -95,7 +100,85 @@ class MarkerUnit {
 
   MarkerUnit({required this.x, required this.y});
 
+  void _handleDiscussion(BuildContext context) async {
+    var textTheme = Theme.of(context).textTheme;
+    final response = await http.get(
+      Uri.parse('https://capstone.aquaf1na.fun/api/water/$id'),
+    );
+    final water = WaterModel.fromJson(
+      jsonDecode(response.body) as Map<String, dynamic>,
+    );
+
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
+    if (water.discussion != null) {
+      Navigator.pushNamed(
+        context,
+        '/discussion',
+        arguments: water.discussion?.id,
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            AppLocalizations.of(context)!.noDiscussionTitle,
+            style: textTheme.headlineSmall,
+          ),
+          content: Text(
+            AppLocalizations.of(context)!.noDiscussionContent,
+            style: textTheme.headlineSmall,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(AppLocalizations.of(context)!.cancelLabel),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                http.Response response = await http.post(
+                  Uri.parse('https://capstone.aquaf1na.fun/api/discussion/$id'),
+                );
+                if (response.statusCode == 200) {
+                  final discussionId = jsonDecode(response.body);
+                  if (!context.mounted) return;
+                  Navigator.of(context).pop();
+                  Navigator.pushNamed(
+                    context,
+                    '/discussion',
+                    arguments: discussionId,
+                  );
+                } else {
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        AppLocalizations.of(context)!.errorCreatingDiscussion,
+                      ),
+                    ),
+                  );
+                }
+              },
+              child: Text(
+                AppLocalizations.of(context)!.createDiscussionLabel,
+                style: textTheme.headlineSmall,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   Marker build(BuildContext context) {
+    if (!Hive.isBoxOpen('settings')) {
+      Hive.openBox('settings');
+    }
+    var box = Hive.box('settings');
+    var choosenId = box.get("fishingLocationId");
+    choosenId ??= -1;
     id = x * 1000 + y;
     var localizations = AppLocalizations.of(context);
     return Marker(
@@ -104,48 +187,132 @@ class MarkerUnit {
         onTap: () {
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
-              title: Text(localizations!.fishingLocationLabel),
-              content: Text(
-                '$x, $y\n\n'
-                'Здесь могла быть ваша рыбалка (placeholder)!',
-              ),
-              actions: [
-                Card(
-                  child: IconButton(
-                    onPressed: () {
-                      if (!Hive.isBoxOpen('settings')) {
-                        Hive.openBox('settings');
-                      }
-                      var box = Hive.box('settings');
-                      box.put('fishingLocationId', id);
-                      box.put('fishingLocationX', x);
-                      box.put('fishingLocationY', y);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Fishing location selected (id: $id).'),
-                          duration: Duration(seconds: 1),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.place_outlined),
+            builder: (context) {
+              var textTheme = Theme.of(context).textTheme;
+              bool discussionIsLoading = false;
+              return StatefulBuilder(
+                builder: (context, setState) => AlertDialog(
+                  titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+                  contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                  actionsPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
                   ),
+                  title: Text(
+                    localizations!.fishingLocationLabel,
+                    style: textTheme.headlineSmall,
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [Text('$x, $y', style: textTheme.titleSmall)],
+                  ),
+                  actions: [
+                    // First row for icon actions
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Save location button
+                        Tooltip(
+                          message: localizations.saveLocationLabel,
+                          child: choosenId == id
+                              ? Text(
+                                  localizations.selected,
+                                  style: textTheme.titleSmall,
+                                )
+                              : TextButton(
+                                  onPressed: () {
+                                    if (!Hive.isBoxOpen('settings')) {
+                                      Hive.openBox('settings');
+                                    }
+                                    var box = Hive.box('settings');
+                                    box.put('fishingLocationId', id);
+                                    box.put('fishingLocationX', x);
+                                    box.put('fishingLocationY', y);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Fishing location selected (id: $id).',
+                                        ),
+                                        duration: const Duration(seconds: 1),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    localizations.select,
+                                    style: textTheme.titleSmall,
+                                  ),
+                                ),
+                        ),
+
+                        // Close button
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                          ),
+                          child: Text(
+                            localizations.closeLabel,
+                            style: textTheme.titleSmall,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // Second row for the main action button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            discussionIsLoading = true;
+                          });
+                          _handleDiscussion(context);
+                        },
+                        child: discussionIsLoading
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.chat_outlined,
+                                    size: 20,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimary,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    localizations.chatLabel,
+                                    style: textTheme.titleSmall,
+                                  ),
+                                ],
+                              ),
+                      ),
+                    ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/discussion');
-                  },
-                  child: Text(localizations.chatLabel),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(localizations.closeLabel),
-                ),
-              ],
-            ),
+              );
+            },
           );
         },
-        child: const Icon(Icons.location_on, color: Colors.red, size: 40.0),
+        child: Icon(
+          Icons.location_on,
+          color: Theme.of(context).colorScheme.error,
+          size: 40.0,
+        ),
       ),
     );
   }

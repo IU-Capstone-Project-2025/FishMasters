@@ -43,96 +43,6 @@ class _CatchPageState extends State<CatchPage> {
     super.dispose();
   }
 
-  final List<String> dates = const [
-    'March 13, 2025',
-    'March 14, 2025',
-    'March 15, 2025',
-    'March 16, 2025',
-    'March 17, 2025',
-    'March 18, 2025',
-  ];
-
-  // var _catches = <FishingModel>[
-  //   FishingModel(
-  //     id: 1,
-  //     startTime: '2025-03-13T08:00:00',
-  //     endTime: '2025-03-13T08:30:00',
-  //     userEmail: 'i.ivanov@example.com',
-  //     water: WaterModel(id: 1, x: 0.1, y: 0.2),
-  //     caughtFish: [
-  //       CaughtFishModel(
-  //         id: 1,
-  //         fisher: 'i.ivanov@example.com',
-  //         avgWeight: 3.0,
-  //         fish: FishModel(
-  //           id: 1,
-  //           name: 'CARP',
-  //           photo: 'https://example.com/carp.jpg',
-  //         ),
-  //       ),
-  //       CaughtFishModel(
-  //         id: 3,
-  //         fisher: 'j.smith@example.com',
-  //         avgWeight: 1.8,
-  //         fish: FishModel(
-  //           id: 3,
-  //           name: 'PIKE',
-  //           photo: 'https://example.com/pike.jpg',
-  //         ),
-  //       ),
-  //       CaughtFishModel(
-  //         id: 4,
-  //         fisher: 'a.jones@example.com',
-  //         avgWeight: 2.2,
-  //         fish: FishModel(
-  //           id: 4,
-  //           name: 'PERCH',
-  //           photo: 'https://example.com/perch.jpg',
-  //         ),
-  //       ),
-  //       CaughtFishModel(
-  //         id: 5,
-  //         fisher: 'm.brown@example.com',
-  //         avgWeight: 2.9,
-  //         fish: FishModel(
-  //           id: 5,
-  //           name: 'BREAM',
-  //           photo: 'https://example.com/bream.jpg',
-  //         ),
-  //       ),
-  //       CaughtFishModel(
-  //         id: 6,
-  //         fisher: 'm.brown@example.com',
-  //         avgWeight: 2.9,
-  //         fish: FishModel(
-  //           id: 5,
-  //           name: 'BREAM',
-  //           photo: 'https://example.com/bream.jpg',
-  //         ),
-  //       ),
-  //     ],
-  //   ),
-  //   FishingModel(
-  //     id: 2,
-  //     userEmail: 'b.ivanov',
-  //     startTime: '2025-03-14T09:00:00',
-  //     endTime: '2025-03-14T15:00:00',
-  //     caughtFish: [
-  //       CaughtFishModel(
-  //         id: 2,
-  //         fisher: 'sadfasj',
-  //         avgWeight: 2.5,
-  //         fish: FishModel(
-  //           id: 2,
-  //           name: 'STURGEON',
-  //           photo: 'https://example.com/sturgeon.jpg',
-  //         ),
-  //       ),
-  //     ],
-  //     water: WaterModel(id: 2, x: 0.3, y: 0.4),
-  //   ),
-  // ];
-
   var _catches = <FishingModel>[];
 
   Future<void> _fetchCatches() async {
@@ -141,25 +51,55 @@ class _CatchPageState extends State<CatchPage> {
     }
     final box = Hive.box('settings');
     final email = box.get('email', defaultValue: '');
+
+    if (email.isEmpty) {
+      debugPrint(
+        'Warning: No email found in settings. User might not be logged in.',
+      );
+      throw Exception('User email not found. Please log in again.');
+    }
+
+    debugPrint('Fetching catches for email: $email');
+
     try {
       final response = await http.get(
         Uri.parse('https://capstone.aquaf1na.fun/api/fishing/email/$email'),
       );
-      debugPrint('Fetching catches for $email');
+      debugPrint('API Response Status: ${response.statusCode}');
+      debugPrint('API Response Body: ${response.body}');
+
       if (response.statusCode == 200) {
-        debugPrint(response.body);
         final List<dynamic> data = response.body.isNotEmpty
             ? (jsonDecode(response.body) as List)
             : [];
-        _catches = data
-            .map((e) => FishingModel.fromJson(e as Map<String, dynamic>))
-            .toList();
-        debugPrint('Fetched ${_catches.length} catches');
+
+        debugPrint('Raw data length: ${data.length}');
+        debugPrint('First item: ${data.isNotEmpty ? data.first : 'No data'}');
+
+        try {
+          setState(() {
+            _catches = data
+                .map((e) {
+                  debugPrint('Parsing item: $e');
+                  return FishingModel.fromJson(e as Map<String, dynamic>);
+                })
+                .toList()
+                .reversed
+                .toList();
+          });
+          debugPrint('Successfully parsed ${_catches.length} catches');
+        } catch (parseError) {
+          debugPrint('Parsing error: $parseError');
+          throw Exception('Failed to parse fishing data: $parseError');
+        }
       } else {
-        throw Exception('Failed to load catches ${response.statusCode}');
+        throw Exception(
+          'Failed to load catches: ${response.statusCode} - ${response.reasonPhrase}',
+        );
       }
     } catch (e) {
       debugPrint('Error fetching catches: $e');
+      rethrow; // Re-throw to let FutureBuilder handle the error
     }
   }
 
@@ -167,9 +107,11 @@ class _CatchPageState extends State<CatchPage> {
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
+    var textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      backgroundColor: colorScheme.primary,
       appBar: AppBar(
-        title: Text(localizations!.myCatchText),
+        title: Text(localizations!.myCatchText, style: textTheme.displayMedium),
         backgroundColor: colorScheme.secondary,
         foregroundColor: colorScheme.onSecondary,
       ),
@@ -181,37 +123,116 @@ class _CatchPageState extends State<CatchPage> {
               if (asyncSnapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
+
+              if (asyncSnapshot.hasError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: Colors.red.shade400,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Error loading catches',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red.shade600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Please check your connection and try again',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _fetchCatchesFuture = _fetchCatches();
+                          });
+                        },
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              if (_catches.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.set_meal,
+                        size: 64,
+                        color: Colors.grey.shade400,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No fishing sessions yet',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Start fishing to see your catches here!',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
               return ListView.builder(
                 controller: _controller,
+                padding: const EdgeInsets.all(16.0),
                 itemCount: _catches.length,
                 itemBuilder: (context, index) {
                   var date = _catches[index].startTime.split('T')[0];
                   if (date.isEmpty) {
                     date = 'Unknown Date';
                   }
-                  // TODO: Show ongoing fishing event if endTime is null
+                  // Show ongoing fishing event if endTime is null
                   var duration = _catches[index].endTime != null
                       ? DateTime.parse(_catches[index].endTime!)
                             .difference(
                               DateTime.parse(_catches[index].startTime),
                             )
                             .inHours
-                      : 0;
+                      : -1; // Use -1 to indicate ongoing session
                   var fishCount = _catches[index].caughtFish.length;
                   var caughtFish = _catches[index].caughtFish;
                   final fishCounts = <String, int>{};
                   for (var fish in caughtFish) {
-                    final name = fish.fish.name;
+                    final name = fish.fishName;
                     fishCounts[name] = (fishCounts[name] ?? 0) + 1;
                   }
                   final sortedFish = fishCounts.entries.toList()
                     ..sort((a, b) => b.value.compareTo(a.value));
                   final uniqueFishList = sortedFish.map((e) => e.key).toList();
-                  return CatchItem(
-                    date: date,
-                    duration: duration,
-                    fishCount: fishCount,
-                    fishNames: uniqueFishList,
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: CatchItem(
+                      date: date,
+                      duration: duration,
+                      fishCount: fishCount,
+                      fishNames: uniqueFishList,
+                      caughtFish: caughtFish,
+                    ),
                   );
                 },
               );

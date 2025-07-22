@@ -3,15 +3,15 @@ import 'dart:convert';
 class FishModel {
   final int id;
   final String name;
-  final String photo;
+  final String? photo;
 
-  FishModel({required this.id, required this.name, required this.photo});
+  FishModel({required this.id, required this.name, this.photo});
 
   factory FishModel.fromJson(Map<String, dynamic> json) {
     return FishModel(
       id: json['id'] as int,
       name: json['name'] as String,
-      photo: json['photo'] as String,
+      photo: json['photo'] as String?,
     );
   }
 

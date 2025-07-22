@@ -9,7 +9,7 @@ class PrimaryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: MainAppBar(), body: PrimaryBody());
+    return Scaffold(body: PrimaryBody());
   }
 }
 
@@ -42,9 +42,7 @@ class _PrimaryBodyState extends State<PrimaryBody> {
       return;
     }
 
-    box.put('fishingStarted', true);
-
-    debugPrint('Fishing started');
+    debugPrint('Fishing...');
 
     if (!context.mounted) return;
     Navigator.pushNamed(context, '/fishing');
@@ -54,6 +52,7 @@ class _PrimaryBodyState extends State<PrimaryBody> {
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context);
     var colorScheme = Theme.of(context).colorScheme;
+    var textScheme = Theme.of(context).textTheme;
     return Stack(
       children: [
         Positioned.fill(child: MapWidget()),
@@ -63,7 +62,7 @@ class _PrimaryBodyState extends State<PrimaryBody> {
           left: 25,
           child: PrimaryFloatingButton(
             heroTag: 'menuButton',
-            icon: const Icon(Icons.menu),
+            icon: const Icon(Icons.menu, size: 40.0,),
             page: '/menu',
           ),
         ),
@@ -73,7 +72,7 @@ class _PrimaryBodyState extends State<PrimaryBody> {
           right: 25,
           child: PrimaryFloatingButton(
             heroTag: 'profileButton',
-            icon: const Icon(Icons.person),
+            icon: const Icon(Icons.person, size: 35.0,),
             page: '/profile',
           ),
         ),
@@ -83,7 +82,7 @@ class _PrimaryBodyState extends State<PrimaryBody> {
           right: 25,
           child: PrimaryFloatingButton(
             heroTag: 'catchButton',
-            icon: const Icon(FontAwesomeIcons.fishFins),
+            icon: const Icon(FontAwesomeIcons.fishFins, size: 25,),
             page: '/catch',
           ),
         ),
@@ -92,8 +91,8 @@ class _PrimaryBodyState extends State<PrimaryBody> {
           bottom: 25,
           left: 25,
           child: PrimaryFloatingButton(
-            heroTag: 'notificationsButton',
-            icon: const Icon(Icons.notifications),
+            heroTag: 'leaderboardButton',
+            icon: const Icon(Icons.leaderboard),
             page: '/notifications',
           ),
         ),
@@ -109,23 +108,23 @@ class _PrimaryBodyState extends State<PrimaryBody> {
               bottom: 25,
               left:
                   MediaQuery.of(context).size.width / 2 -
-                  (fishingStarted ? 100 : 50),
+                  (fishingStarted ? 100 : 75),
               child: SafeArea(
                 child: SizedBox(
-                  width: fishingStarted ? 200 : 100,
+                  width: fishingStarted ? 200 : 150,
                   height: fishingStarted ? 80 : 60,
                   child: ElevatedButton(
                     onPressed: () => _startFishing(context),
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all<Color>(
-                        colorScheme.primaryContainer,
+                        colorScheme.secondary,
                       ),
                       shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                           side: BorderSide(
-                            color: colorScheme.primary,
-                            width: 2.0,
+                            color: colorScheme.onPrimary,
+                            width: 3.0,
                           ),
                         ),
                       ),
@@ -134,11 +133,7 @@ class _PrimaryBodyState extends State<PrimaryBody> {
                       fishingStarted
                           ? localizations!.fishingInProgress
                           : localizations!.startFishingButton,
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
+                      style: textScheme.headlineSmall,
                     ),
                   ),
                 ),

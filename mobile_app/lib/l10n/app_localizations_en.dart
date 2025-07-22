@@ -184,4 +184,103 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get uploadButton => 'Upload';
+
+  @override
+  String get noDiscussionTitle => 'No discussion';
+
+  @override
+  String get noDiscussionContent => 'There are no discussions available for this water body. Want to start one?';
+
+  @override
+  String get cancelLabel => 'Cancel';
+
+  @override
+  String get createDiscussionLabel => 'Create Discussion';
+
+  @override
+  String get errorCreatingDiscussion => 'Error creating discussion';
+
+  @override
+  String get leaderboardText => 'Leaderboard';
+
+  @override
+  String get searchPlayersPlaceholder => 'Search players by name or email...';
+
+  @override
+  String get backToTopButton => 'Back to Top';
+
+  @override
+  String get findMeButton => 'Find Me';
+
+  @override
+  String get top10Badge => 'TOP 10';
+
+  @override
+  String get pointsLabel => 'points';
+
+  @override
+  String get searchingLabel => 'Searching...';
+
+  @override
+  String get playerNotFound => 'Player not found';
+
+  @override
+  String get loadingLeaderboard => 'Loading leaderboard...';
+
+  @override
+  String get darkMode => 'Dark Mode';
+
+  @override
+  String get darkModeEnabled => 'Dark mode enabled';
+
+  @override
+  String get lightModeEnabled => 'Ligth mode enabled';
+
+  @override
+  String get useSystemTheme => 'Use System Theme';
+
+  @override
+  String get systemModeEnabled => 'System mode enabled';
+
+  @override
+  String get lessThan => 'Less than an';
+
+  @override
+  String get hour => 'hour';
+
+  @override
+  String get noFishCaught => 'No fish caught';
+
+  @override
+  String get noFishCaughtYet => 'No fish caught yet';
+
+  @override
+  String get viewDetails => 'View Details';
+
+  @override
+  String get allCaughtFish => 'All caught fish';
+
+  @override
+  String get weight => 'Weight';
+
+  @override
+  String get kg => 'kg';
+
+  @override
+  String get showLess => 'Show less';
+
+  @override
+  String get ongoingSession => 'Ongoing session';
+
+  @override
+  String get saveLocationLabel => 'Choose this location for fishing';
+
+  @override
+  String get select => 'Select';
+
+  @override
+  String get selected => 'Selected';
+
+  @override
+  String get noMessages => 'No messages yet';
 }
