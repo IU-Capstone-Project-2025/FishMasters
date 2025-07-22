@@ -172,7 +172,6 @@ class _ChatPageState extends State<ChatPage> {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: isMe
-                // TODO: Choose proper colors
                     ? colorScheme.onPrimaryContainer
                     : colorScheme.primaryContainer,
                 borderRadius: BorderRadius.only(
