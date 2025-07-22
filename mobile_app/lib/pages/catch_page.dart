@@ -109,6 +109,7 @@ class _CatchPageState extends State<CatchPage> {
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      backgroundColor: colorScheme.primary,
       appBar: AppBar(
         title: Text(localizations!.myCatchText, style: textTheme.displayMedium),
         backgroundColor: colorScheme.secondary,
@@ -217,7 +218,7 @@ class _CatchPageState extends State<CatchPage> {
                   var caughtFish = _catches[index].caughtFish;
                   final fishCounts = <String, int>{};
                   for (var fish in caughtFish) {
-                    final name = fish.fish.name;
+                    final name = fish.fishName;
                     fishCounts[name] = (fishCounts[name] ?? 0) + 1;
                   }
                   final sortedFish = fishCounts.entries.toList()

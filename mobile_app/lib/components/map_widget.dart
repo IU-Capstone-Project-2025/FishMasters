@@ -41,7 +41,9 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     // Fetch list of WaterPoints from the server
-    var themeMode = Theme.of(context).colorScheme.brightness == Brightness.light ? "light" : "dark";
+    var themeMode = Theme.of(context).colorScheme.brightness == Brightness.light
+        ? "light"
+        : "dark";
     return Center(
       child: FlutterMap(
         options: MapOptions(
@@ -73,7 +75,9 @@ class _MapWidgetState extends State<MapWidget> {
                                 AppLocalizations.of(
                                   context,
                                 )!.loadingMarkersLabel,
-                                style: Theme.of(context).textTheme.headlineSmall,
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.headlineSmall,
                               ),
                             ],
                           ),
@@ -117,8 +121,14 @@ class MarkerUnit {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(AppLocalizations.of(context)!.noDiscussionTitle, style: textTheme.headlineSmall,),
-          content: Text(AppLocalizations.of(context)!.noDiscussionContent, style: textTheme.headlineSmall),
+          title: Text(
+            AppLocalizations.of(context)!.noDiscussionTitle,
+            style: textTheme.headlineSmall,
+          ),
+          content: Text(
+            AppLocalizations.of(context)!.noDiscussionContent,
+            style: textTheme.headlineSmall,
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -151,7 +161,10 @@ class MarkerUnit {
                   );
                 }
               },
-              child: Text(AppLocalizations.of(context)!.createDiscussionLabel, style: textTheme.headlineSmall,),
+              child: Text(
+                AppLocalizations.of(context)!.createDiscussionLabel,
+                style: textTheme.headlineSmall,
+              ),
             ),
           ],
         ),
@@ -181,17 +194,18 @@ class MarkerUnit {
                 builder: (context, setState) => AlertDialog(
                   titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
                   contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-                  actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  title: Text(localizations!.fishingLocationLabel, style: textTheme.headlineSmall,),
+                  actionsPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  title: Text(
+                    localizations!.fishingLocationLabel,
+                    style: textTheme.headlineSmall,
+                  ),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '$x, $y',
-                        style: textTheme.titleSmall,
-                      ),
-                    ],
+                    children: [Text('$x, $y', style: textTheme.titleSmall)],
                   ),
                   actions: [
                     // First row for icon actions
@@ -202,40 +216,49 @@ class MarkerUnit {
                         Tooltip(
                           message: localizations.saveLocationLabel,
                           child: choosenId == id
-                          ? Text(localizations.selected, style: textTheme.titleSmall,)
-                          : TextButton(
-                            onPressed: () {
-                              if (!Hive.isBoxOpen('settings')) {
-                                Hive.openBox('settings');
-                              }
-                              var box = Hive.box('settings');
-                              box.put('fishingLocationId', id);
-                              box.put('fishingLocationX', x);
-                              box.put('fishingLocationY', y);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Fishing location selected (id: $id).',
+                              ? Text(
+                                  localizations.selected,
+                                  style: textTheme.titleSmall,
+                                )
+                              : TextButton(
+                                  onPressed: () {
+                                    if (!Hive.isBoxOpen('settings')) {
+                                      Hive.openBox('settings');
+                                    }
+                                    var box = Hive.box('settings');
+                                    box.put('fishingLocationId', id);
+                                    box.put('fishingLocationX', x);
+                                    box.put('fishingLocationY', y);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Fishing location selected (id: $id).',
+                                        ),
+                                        duration: const Duration(seconds: 1),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    localizations.select,
+                                    style: textTheme.titleSmall,
                                   ),
-                                  duration: const Duration(seconds: 1),
                                 ),
-                              );
-                            },
-                            child: Text(localizations.select, style: textTheme.titleSmall),
-                          ),
                         ),
-                        
+
                         // Close button
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
                           style: TextButton.styleFrom(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                           ),
-                          child: Text(localizations.closeLabel, style: textTheme.titleSmall,),
+                          child: Text(
+                            localizations.closeLabel,
+                            style: textTheme.titleSmall,
+                          ),
                         ),
                       ],
                     ),
-                    
+
                     // Second row for the main action button
                     SizedBox(
                       width: double.infinity,
@@ -263,7 +286,13 @@ class MarkerUnit {
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.chat_outlined, size: 20, color: Theme.of(context).colorScheme.onPrimary),
+                                  Icon(
+                                    Icons.chat_outlined,
+                                    size: 20,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimary,
+                                  ),
                                   const SizedBox(width: 8),
                                   Text(
                                     localizations.chatLabel,
@@ -279,7 +308,11 @@ class MarkerUnit {
             },
           );
         },
-        child: Icon(Icons.location_on, color: Theme.of(context).colorScheme.error, size: 40.0),
+        child: Icon(
+          Icons.location_on,
+          color: Theme.of(context).colorScheme.error,
+          size: 40.0,
+        ),
       ),
     );
   }

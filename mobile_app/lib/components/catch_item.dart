@@ -293,12 +293,12 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
                                       i++
                                     ) {
                                       final fishName =
-                                          widget.caughtFish[i].fish.name;
+                                          widget.caughtFish[i].fishName;
                                       fishTypeCounts[fishName] =
                                           (fishTypeCounts[fishName] ?? 0) + 1;
                                       if (i <= index &&
-                                          widget.caughtFish[i].fish.name ==
-                                              caughtFish.fish.name) {
+                                          widget.caughtFish[i].fishName ==
+                                              caughtFish.fishName) {
                                         fishTypeCurrentIndex[fishName] =
                                             (fishTypeCurrentIndex[fishName] ??
                                                 0) +
@@ -308,11 +308,10 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
 
                                     final currentFishIndex =
                                         fishTypeCurrentIndex[caughtFish
-                                            .fish
-                                            .name] ??
+                                            .fishName] ??
                                         1;
                                     final totalFishCount =
-                                        fishTypeCounts[caughtFish.fish.name] ??
+                                        fishTypeCounts[caughtFish.fishName] ??
                                         1;
 
                                     return Card(
@@ -323,8 +322,8 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
                                         leading: _buildFishPhoto(caughtFish),
                                         title: Text(
                                           totalFishCount > 1
-                                              ? '${caughtFish.fish.name} ($currentFishIndex)'
-                                              : caughtFish.fish.name,
+                                              ? '${caughtFish.fishName} ($currentFishIndex)'
+                                              : caughtFish.fishName,
                                           style: textTheme.labelLarge?.copyWith(
                                             fontWeight: FontWeight.bold,
                                           ),

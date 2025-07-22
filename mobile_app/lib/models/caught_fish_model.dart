@@ -7,6 +7,7 @@ class CaughtFishModel {
   final double avgWeight;
   final String? photo;
   final FishModel fish;
+  final String fishName;
   final FishingModel? fishing;
 
   CaughtFishModel({
@@ -15,6 +16,7 @@ class CaughtFishModel {
     required this.avgWeight,
     this.photo,
     required this.fish,
+    required this.fishName,
     this.fishing,
   });
 
@@ -25,8 +27,8 @@ class CaughtFishModel {
       avgWeight: (json['avgWeight'] as num).toDouble(),
       photo: json['photo'] as String?,
       fish: FishModel.fromJson(json['fish'] as Map<String, dynamic>),
-      fishing:
-          null, // Avoid circular reference when parsing from fishing session
+      fishing: null, // Avoid circular reference when parsing from fishing session
+      fishName: json['fishName'] as String,
     );
   }
 
@@ -38,6 +40,7 @@ class CaughtFishModel {
       'photo': photo,
       'fish': fish.toJson(),
       'fishing': fishing?.toJson(),
+      'fishName': fishName,
     };
   }
 
