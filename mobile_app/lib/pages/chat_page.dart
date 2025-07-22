@@ -189,9 +189,7 @@ class _ChatPageState extends State<ChatPage> {
               child: Text(
                 message.content,
                 style: TextStyle(
-                  color: isMe
-                      ? colorScheme.onPrimaryContainer
-                      : colorScheme.onSecondaryContainer,
+                  color: colorScheme.onSecondaryContainer,
                   fontSize: 16,
                 ),
               ),
@@ -242,6 +240,9 @@ class _ChatPageState extends State<ChatPage> {
                       decoration: InputDecoration(
                         hintText: localizations.messagePlaceholder,
                         border: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: colorScheme.outline, width: 2.0),
+                        ),
                         isDense: true,
                       ),
                       style: textTheme.titleSmall,
