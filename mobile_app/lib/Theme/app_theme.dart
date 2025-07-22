@@ -18,7 +18,8 @@ class AppThemes {
       tertiary: const Color(0x00FFFFFF),
       tertiaryContainer: const Color(0xFF252A34),
       onPrimaryContainer: const Color(0xFF42A5F5),
-      primaryContainer: const Color(0xFFEEEEEE)
+      primaryContainer: const Color(0xFFEEEEEE),
+      surfaceContainerHighest: Colors.grey.shade100,
     ),
     useMaterial3: true,
     textTheme: TextTheme(
