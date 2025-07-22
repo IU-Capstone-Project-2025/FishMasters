@@ -249,8 +249,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hour => 'hour';
 
   @override
-  String get noFishCought => 'No fish caught';
+  String get noFishCaught => 'No fish caught';
+
+  @override
+  String get noFishCaughtYet => 'No fish caught yet';
 
   @override
   String get viewDetails => 'View Details';
+
+  @override
+  String get allCaughtFish => 'All caught fish';
+
+  @override
+  String get weight => 'Weight';
+
+  @override
+  String get kg => 'kg';
+
+  @override
+  String get showLess => 'Show less';
+
+  @override
+  String get ongoingSession => 'Ongoing session';
 }

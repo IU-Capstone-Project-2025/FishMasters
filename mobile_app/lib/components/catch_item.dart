@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/components.dart';
 import 'package:mobile_app/models/models.dart';
-import 'package:mobile_app/l10n/app_localizations.dart';
 import 'dart:convert';
 import 'dart:math';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class CatchItem extends StatefulWidget {
   const CatchItem({
@@ -92,15 +92,15 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
         // If base64 decoding fails, show default icon
         return CircleAvatar(
           backgroundColor: Colors.grey.shade300,
-          child: Icon(Icons.image_not_supported, color: Colors.grey.shade600),
           radius: 20,
+          child: Icon(Icons.image_not_supported, color: Colors.grey.shade600),
         );
       }
     } else {
       return CircleAvatar(
         backgroundColor: Colors.grey.shade300,
-        child: Icon(Icons.image_not_supported, color: Colors.grey.shade600),
         radius: 20,
+        child: Icon(Icons.image_not_supported, color: Colors.grey.shade600),
       );
     }
   }
@@ -108,63 +108,109 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
+    var colorTheme = Theme.of(context).colorScheme;
     var localizations = AppLocalizations.of(context);
+
     return Column(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          width: double.infinity,
-          color: Theme.of(context).colorScheme.primary,
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-          child: Text(
-            widget.date,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+        // Date header with new design
+        ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(0),
+            bottomRight: Radius.circular(0),
+            topLeft: Radius.circular(19),
+            topRight: Radius.circular(19),
+          ),
+          child: Container(
+            width: double.infinity,
+            height: 32,
+            decoration: BoxDecoration(
+              color: colorTheme.secondary,
+              border: Border(
+                top: BorderSide(color: colorTheme.outline, width: 1.0),
+                left: BorderSide(color: colorTheme.outline, width: 1.0),
+                right: BorderSide(color: colorTheme.outline, width: 1.0),
+              ),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(0),
+                bottomRight: Radius.circular(0),
+                topLeft: Radius.circular(19),
+                topRight: Radius.circular(19),
+              ),
+              shape: BoxShape.rectangle,
+            ),
+            child: Center(
+              child: Text(
+                widget.date,
+                textAlign: TextAlign.center,
+                style: textTheme.labelLarge?.copyWith(
+                  color: colorTheme.onPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
         ),
-        Card(
-          margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-          elevation: 2,
+        // Main content container with new design
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: colorTheme.surface,
+            border: Border.all(color: colorTheme.outline, width: 1.0),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(28),
+              bottomRight: Radius.circular(28),
+              topLeft: Radius.circular(0),
+              topRight: Radius.circular(0),
+            ),
+          ),
           child: Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Duration and fish count section
                 Row(
                   children: [
                     Icon(
                       widget.duration == -1
                           ? Icons.radio_button_checked
                           : Icons.access_time,
-                      color: widget.duration == -1 ? Colors.green : null,
+                      color: widget.duration == -1
+                          ? Colors.green
+                          : colorTheme.onSurface,
+                      size: 24,
                     ),
                     SizedBox(width: 8),
                     Text(
                       widget.duration == -1
-                          ? "Ongoing session - ${widget.fishCount} fish"
-                          : "${widget.duration != 0 ? widget.duration : 'Less than an'} hour"
-                                "${widget.duration < 2 ? '' : 's'} - ${widget.fishCount} fish",
-                      style: TextStyle(
-                        color: widget.duration == -1 ? Colors.green : null,
+                          ? "${localizations?.ongoingSession} - ${widget.fishCount} ${localizations?.fishNameLabel}"
+                          : "${widget.duration != 0 ? widget.duration : localizations?.lessThan} ${localizations?.hour}"
+                                "${widget.duration < 2 ? '' : 's'} - ${widget.fishCount} ${localizations?.fishNameLabel}",
+                      style: textTheme.titleMedium?.copyWith(
+                        letterSpacing: 0.1,
+                        color: widget.duration == -1
+                            ? Colors.green
+                            : colorTheme.onSurface,
                         fontWeight: widget.duration == -1
                             ? FontWeight.bold
-                            : null,
+                            : FontWeight.normal,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    SizedBox(width: 32),
-                    Column(
+                const SizedBox(height: 15),
+                // Fish list section
+                if (widget.fishNames.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(32, 0, 0, 0),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (widget.fishNames.isEmpty)
-                          const Text('No fish caught'),
-                        if (widget.fishNames.isNotEmpty)
-                          FishItem(
-                            name: widget.fishNames[0],
-                            highlighted: true,
-                          ),
+                        FishItem(name: widget.fishNames[0], highlighted: true),
                         if (widget.fishNames.length > 1)
                           for (
                             var i = 1;
@@ -174,8 +220,18 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
                             FishItem(name: widget.fishNames[i]),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                if (widget.fishNames.isEmpty)
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(32, 0, 0, 0),
+                    child: Text(
+                      localizations!.noFishCaught,
+                      style: textTheme.bodyLarge?.copyWith(
+                        letterSpacing: 0.1,
+                        color: colorTheme.onSurface,
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 8),
                 // Expandable details section with staggered animation
                 SizeTransition(
@@ -186,10 +242,9 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
                       const Divider(),
                       const SizedBox(height: 8),
                       Text(
-                        'All Caught Fish (${widget.caughtFish.length})',
-                        style: const TextStyle(
+                        '${localizations!.allCaughtFish} (${widget.caughtFish.length})',
+                        style: textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -212,10 +267,9 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
                                         ),
                                         const SizedBox(height: 8),
                                         Text(
-                                          'No fish caught yet',
-                                          style: TextStyle(
+                                          localizations.noFishCaughtYet,
+                                          style: textTheme.bodyMedium?.copyWith(
                                             color: Colors.grey.shade600,
-                                            fontSize: 16,
                                           ),
                                         ),
                                       ],
@@ -271,7 +325,7 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
                                           totalFishCount > 1
                                               ? '${caughtFish.fish.name} ($currentFishIndex)'
                                               : caughtFish.fish.name,
-                                          style: const TextStyle(
+                                          style: textTheme.labelLarge?.copyWith(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -280,10 +334,8 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Weight: ${caughtFish.avgWeight.toStringAsFixed(1)} kg',
-                                            ),
-                                            Text(
-                                              'Fisher: ${caughtFish.fisher}',
+                                              '${localizations.weight}: ${caughtFish.avgWeight.toStringAsFixed(1)} ${localizations.kg}',
+                                              style: textTheme.labelLarge,
                                             ),
                                           ],
                                         ),
@@ -297,14 +349,29 @@ class _CatchItemState extends State<CatchItem> with TickerProviderStateMixin {
                   ),
                 ),
                 if (widget.caughtFish.isNotEmpty)
-                  TextButton.icon(
-                    onPressed: _toggleExpansion,
-                    icon: AnimatedRotation(
-                      turns: _isExpanded ? 0.5 : 0.0,
-                      duration: const Duration(milliseconds: 300),
-                      child: const Icon(Icons.expand_more),
+                  Center(
+                    child: TextButton.icon(
+                      onPressed: _toggleExpansion,
+                      icon: AnimatedRotation(
+                        turns: _isExpanded ? 0.5 : 0.0,
+                        duration: const Duration(milliseconds: 300),
+                        child: Icon(
+                          Icons.expand_more,
+                          color: colorTheme.onPrimary,
+                        ),
+                      ),
+                      label: Text(
+                        _isExpanded
+                            ? localizations.showLess
+                            : localizations.viewDetails,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colorTheme.onPrimary,
+                        ),
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor: colorTheme.secondary,
+                      ),
                     ),
-                    label: Text(_isExpanded ? 'Show Less' : 'View Details'),
                   ),
               ],
             ),

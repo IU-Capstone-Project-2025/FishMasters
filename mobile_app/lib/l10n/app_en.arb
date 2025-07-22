@@ -79,6 +79,12 @@
   "systemModeEnabled": "System mode enabled",
   "lessThan": "Less than an",
   "hour": "hour",
-  "noFishCought": "No fish caught",
-  "viewDetails": "View Details"
+  "noFishCaught": "No fish caught",
+  "noFishCaughtYet": "No fish caught yet",
+  "viewDetails": "View Details",
+  "allCaughtFish": "All caught fish",
+  "weight": "Weight",
+  "kg": "kg",
+  "showLess": "Show less",
+  "ongoingSession": "Ongoing session"
 }
