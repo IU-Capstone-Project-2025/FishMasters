@@ -1,39 +1,33 @@
 # FishMasters Backend
 
-Проект написан на Java 21 с использованием Spring Boot 3.
-Для работы требуется БД PostgreSQL.
+The project is written in Java 21 using Spring Boot 3.
+Requires PostgreSQL database to run.
 
-## Использование
-Для локального запуска приложения требуется установленный и запущенный Docker версии больше 2.
-В корне проекта нужно создать файл .env и прописать следующие значения:
-- POSTGRES_DB=<Название базы данных>
-- POSTGRES_USER=<Ваш пользователь в postgres>
-- POSTGRES_PASSWORD=<Пароль этого пользователя>
+## Usage
+For local application deployment, you need Docker version 2 or higher installed and running.
+Create a .env file in the project root and specify the following values:
+- POSTGRES_DB=<Database name>
+- POSTGRES_USER=<Your PostgreSQL username>
+- POSTGRES_PASSWORD=<User password>
 
-### Запуск
-Для этого потребуется установленные Java 21, Maven, Docker.
+### Deployment
+Requires Java 21, Maven, and Docker installed.
 
-- В терминале написать команду:
+- In the terminal, run the command:
 
           docker compose up --build
 
-- Если нужно очистить базу данных при перезапуске, то напишите команду:
+- If you need to clear the database on restart, run:
 
           docker-compose down -v
-- Если нужно проверить добавление элементов в базе данных, то пишем:
+- To check database entries, execute:
 
         docker exec -it <POSTGRES_DB> bash
         psql -U <POSTGRES_USER> -d <POSTGRES_DB>
 
-- Потом вводим пароль вашего пользователя и пишем необходимые SQL запросы
+- Then enter your user password and run necessary SQL queries
 
-
-
-### API документация
-После запуска приложения, документация будет доступна по адресу:
+### API Documentation
+After application startup, documentation will be available at:
 http://localhost:8080/swagger-ui/index.html#/
 
-### Postman коллекция
-Ссылка для скачивания Postman коллекции, чтобы протестировать:
-
-<тут будет ссылка>
