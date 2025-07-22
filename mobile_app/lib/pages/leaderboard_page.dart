@@ -187,6 +187,7 @@ class _LeaderboardPageState extends State<LeaderboardPage>
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(
           localizations.leaderboardText,
@@ -381,18 +382,24 @@ class LeaderboardPlayerCard extends StatelessWidget {
     double elevation = 2;
 
     if (isTop3) {
-      // Different colors for each top 3 position
+      // Different colors for each top 3 position - theme-aware
       switch (position) {
         case 1:
-          cardColor = const Color(0xFFFFFACD); // Solid light gold
+          cardColor = Theme.of(context).brightness == Brightness.dark
+              ? const Color(0xFF3D3D1A) // Dark gold tint
+              : const Color(0xFFFFFACD); // Light gold
           borderColor = const Color(0xFFFFD700);
           break;
         case 2:
-          cardColor = const Color(0xFFE8E8E8); // Solid light silver
+          cardColor = Theme.of(context).brightness == Brightness.dark
+              ? const Color(0xFF2E2E2E) // Dark silver tint
+              : const Color(0xFFE8E8E8); // Light silver
           borderColor = const Color(0xFFC0C0C0);
           break;
         case 3:
-          cardColor = const Color(0xFFDDD0C0); // Solid light bronze
+          cardColor = Theme.of(context).brightness == Brightness.dark
+              ? const Color(0xFF3D2E1F) // Dark bronze tint
+              : const Color(0xFFDDD0C0); // Light bronze
           borderColor = const Color(0xFFCD7F32);
           break;
       }
@@ -444,7 +451,7 @@ class LeaderboardPlayerCard extends StatelessWidget {
                               color: _getPositionColor(position),
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: colorScheme.onPrimary,
+                                color: Colors.black87,
                                 width: 2,
                               ),
                             )
@@ -457,7 +464,7 @@ class LeaderboardPlayerCard extends StatelessWidget {
                               ? FontWeight.w900
                               : FontWeight.bold,
                           color: isTop3
-                              ? colorScheme.onPrimary
+                              ? Colors.black87
                               : colorScheme.onSurface,
                         ),
                       ),
@@ -572,7 +579,7 @@ class LeaderboardPlayerCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: isTop3
                           ? colorScheme.secondary
-                          : colorScheme.surfaceBright,
+                          : colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: isTop3
